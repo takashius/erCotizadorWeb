@@ -1,0 +1,66 @@
+{
+  "title": "Er Cotizador",
+  "search": "Buscar",
+  "menu": {
+    "home": "Inicio",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión"
+  },
+  "login": {
+    "title": "Inicio de Sesión",
+    "username": "Nombre de usuario",
+    "usernameRequired": "¡Por favor ingrese su nombre de usuario!",
+    "password": "Contraseña",
+    "passwordRequired": "¡Por favor ingrese su contraseña!",
+    "rememberMe": "Recuérdame",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse"
+  },
+  "register": {
+    "title": "Registro",
+    "name": "Nombre",
+    "nameRequired": "¡Por favor ingrese su nombre!",
+    "email": "Correo",
+    "emailRequired": "¡Por favor ingrese un correo válido!",
+    "password": "Contraseña",
+    "passwordRequired": "¡Por favor ingrese su contraseña!",
+    "confirmPassword": "Repetir Contraseña",
+    "confirmPasswordRequired": "¡Por favor repita su contraseña!",
+    "passwordMismatch": "¡Las contraseñas no coinciden!",
+    "companyDetails": "Datos de la Empresa",
+    "companyName": "Nombre de la Empresa",
+    "companyNameRequired": "¡Por favor ingrese el nombre de la empresa!",
+    "rif": "RIF",
+    "rifRequired": "¡Por favor ingrese el RIF!",
+    "register": "Registrarse",
+    "backToLogin": "Volver al Login"
+  },
+  "recoverPassword": {
+    "title": "Recuperar Contraseña",
+    "email": "Correo",
+    "emailRequired": "¡Por favor ingrese un correo válido!",
+    "recover": "Recuperar Contraseña",
+    "backToLogin": "Volver al Login"
+  },
+  "recoverStep2": {
+    "title": "Verificar Código y Establecer Nueva Contraseña",
+    "newPassword": "Nueva Contraseña",
+    "passwordRequired": "¡Por favor ingrese su nueva contraseña!",
+    "confirmPassword": "Confirmar Nueva Contraseña",
+    "confirmPasswordRequired": "¡Por favor confirme su nueva contraseña!",
+    "passwordMismatch": "¡Las contraseñas no coinciden!",
+    "submit": "Enviar",
+    "backToLogin": "Volver al Login"
+  },
+  "home": {
+    "title": "Título",
+    "client": "Cliente",
+    "date": "Fecha",
+    "price": "Precio",
+    "actions": "Acciones",
+    "searchPlaceholder": "Buscar cotización",
+    "addQuote": "Agregar Cotización"
+  }
+}

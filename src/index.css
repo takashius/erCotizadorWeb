@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para el modo oscuro */
+body.dark {
+  background-color: #1a1a1a; /* bg-gray-900 */
+}
+
+body.dark .bg-blue-600 {
+  background-color: #1e3a8a; /* bg-blue-800 */
+}
+
+body.dark .text-white {
+  color: #d1d5db; /* text-gray-300 */
+}
+
+body.dark .bg-white {
+  background-color: #1f2937; /* bg-gray-800 */
+}
+
+/* Estilos generales */
+body {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+.ant-input,
+.ant-input-affix-wrapper {
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300;
+}
+
+.ant-btn {
+  @apply bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  @apply bg-blue-500 border-blue-500 dark:bg-blue-700 dark:border-blue-700;
+}
+
+.ant-checkbox-checked::after {
+  content: '';
+  display: block;
+  border: 1px solid #3182ce;
+}

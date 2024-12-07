@@ -1,0 +1,66 @@
+{
+  "title": "Er Cotizador",
+  "search": "Search",
+  "menu": {
+    "home": "Home",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "usernameRequired": "Please enter your username!",
+    "password": "Password",
+    "passwordRequired": "Please enter your password!",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "login": "Login",
+    "register": "Register"
+  },
+  "register": {
+    "title": "Register",
+    "name": "Name",
+    "nameRequired": "Please enter your name!",
+    "email": "Email",
+    "emailRequired": "Please enter a valid email!",
+    "password": "Password",
+    "passwordRequired": "Please enter your password!",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordRequired": "Please confirm your password!",
+    "passwordMismatch": "The passwords do not match!",
+    "companyDetails": "Company Details",
+    "companyName": "Company Name",
+    "companyNameRequired": "Please enter the company name!",
+    "rif": "RIF",
+    "rifRequired": "Please enter the RIF!",
+    "register": "Register",
+    "backToLogin": "Back to Login"
+  },
+  "recoverPassword": {
+    "title": "Recover Password",
+    "email": "Email",
+    "emailRequired": "Please enter a valid email!",
+    "recover": "Recover Password",
+    "backToLogin": "Back to Login"
+  },
+  "recoverStep2": {
+    "title": "Verify Code and Set New Password",
+    "newPassword": "New Password",
+    "passwordRequired": "Please enter your new password!",
+    "confirmPassword": "Confirm New Password",
+    "confirmPasswordRequired": "Please confirm your new password!",
+    "passwordMismatch": "The passwords do not match!",
+    "submit": "Submit",
+    "backToLogin": "Back to Login"
+  },
+  "home": {
+    "title": "Title",
+    "client": "Client",
+    "date": "Date",
+    "price": "Price",
+    "actions": "Actions",
+    "searchPlaceholder": "Search quotes",
+    "addQuote": "Add Quote"
+  }
+}
