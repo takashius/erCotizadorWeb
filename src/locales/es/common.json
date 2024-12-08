@@ -62,5 +62,23 @@
     "actions": "Acciones",
     "searchPlaceholder": "Buscar cotización",
     "addQuote": "Agregar Cotización"
+  },
+  "quotationFormModal": {
+    "title": "Crear Cotización",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Ingrese el título",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Ingrese la descripción",
+    "numberLabel": "Número",
+    "numberPlaceholder": "Ingrese el número",
+    "dateLabel": "Fecha",
+    "datePlaceholder": "Seleccione la fecha",
+    "customerLabel": "Cliente",
+    "customerPlaceholder": "Seleccionar Cliente",
+    "okButton": "Crear",
+    "cancelButton": "Cancelar",
+    "titleRequired": "Por favor ingrese el título",
+    "dateRequired": "Por favor seleccione la fecha",
+    "customerRequired": "Por favor seleccione el cliente"
   }
 }

@@ -62,5 +62,23 @@
     "actions": "Actions",
     "searchPlaceholder": "Search quotes",
     "addQuote": "Add Quote"
+  },
+  "quotationFormModal": {
+    "title": "Create Quotation",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter the title",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter the description",
+    "numberLabel": "Number",
+    "numberPlaceholder": "Enter the number",
+    "dateLabel": "Date",
+    "datePlaceholder": "Select the date",
+    "customerLabel": "Customer",
+    "customerPlaceholder": "Select Customer",
+    "okButton": "Create",
+    "cancelButton": "Cancel",
+    "titleRequired": "Please enter the title",
+    "dateRequired": "Please select the date",
+    "customerRequired": "Please select the customer"
   }
 }
