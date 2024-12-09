@@ -2,13 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const onFinish = (values: any) => {
     console.log('Success:', values)
+    navigate('/')
   }
 
   return (
