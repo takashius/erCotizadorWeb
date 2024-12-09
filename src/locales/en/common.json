@@ -80,5 +80,35 @@
     "titleRequired": "Please enter the title",
     "dateRequired": "Please select the date",
     "customerRequired": "Please select the customer"
+  },
+  "quotationDetails": {
+    "quotationTitle": "Quotation Title",
+    "invoiceNumber": "Invoice Number",
+    "date": "Date",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "exchangeRate": "Exchange Rate",
+    "customerTitle": "Customer Title",
+    "email": "Email",
+    "phone": "Phone",
+    "taxId": "Tax ID",
+    "addProductButton": "Add Product",
+    "productTableTitle": "Products"
+  },
+  "productForm": {
+    "addProductToQuotation": "Add Product to Quotation",
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "tax": "Tax",
+    "submitButtonText": "Add Product"
+  },
+  "floatingMenu": {
+    "edit": "Edit",
+    "generatePdf": "Generate PDF",
+    "pdfFormat": "PDF Format",
+    "updateRate": "Update Rate",
+    "sendEmail": "Send Email"
   }
 }

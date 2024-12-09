@@ -1,8 +1,11 @@
 // import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Menu, Dropdown } from 'antd'
-import { EditOutlined, DeleteOutlined, FilePdfOutlined, DollarOutlined, MailOutlined, MenuOutlined } from '@ant-design/icons'
+import { Table, Button, Descriptions, Card } from 'antd'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { QuotationDetail, Product } from '../types'
 import { useState } from 'react'
+import FloatingMenu from '../components/FloatingMenu'
+import ProductFormDrawer from '../components/ProductFormDrawer'
+import { useTranslation } from 'react-i18next'
 
 // Ejemplo de cotización para propósitos de demostración
 const exampleQuotation: QuotationDetail = {
@@ -78,7 +81,8 @@ const exampleQuotation: QuotationDetail = {
 const QuotationDetails = () => {
   // const { id } = useParams<{ id: string }>()
   const quotation = exampleQuotation;
-  const [menuVisible, setMenuVisible] = useState(false)
+  const [drawerVisible, setDrawerVisible] = useState(false)
+  const { t } = useTranslation()
 
   const columns = [
     {
@@ -120,69 +124,69 @@ const QuotationDetails = () => {
     },
   ]
 
-  const handleMenuClick = ({ key }: { key: string }) => {
-    // Aquí puedes manejar las acciones según la opción seleccionada
+  const handleMenuClick = (key: string) => {
     console.log(`Clicked menu item: ${key}`)
   }
 
-  const menu = (
-    <Menu onClick={handleMenuClick} className="bg-blue-500 text-white">
-      <Menu.Item key="edit" icon={<EditOutlined />} className="hover:bg-blue-600">
-        Editar
-      </Menu.Item>
-      <Menu.Item key="generate-pdf" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
-        Generar PDF
-      </Menu.Item>
-      <Menu.Item key="pdf-forma-libre" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
-        PDF Forma Libre
-      </Menu.Item>
-      <Menu.Item key="update-rate" icon={<DollarOutlined />} className="hover:bg-blue-600">
-        Actualizar Tasa
-      </Menu.Item>
-      <Menu.Item key="send-email" icon={<MailOutlined />} className="hover:bg-blue-600">
-        Enviar por Correo
-      </Menu.Item>
-    </Menu>
-  )
+  const showDrawer = () => {
+    setDrawerVisible(true)
+  }
+
+  const closeDrawer = () => {
+    setDrawerVisible(false)
+  }
+
+  const handleFormSubmit = (values: any) => {
+    console.log('Form values:', values)
+    closeDrawer()
+    // Aquí puedes manejar la lógica para agregar el producto a la cotización
+  }
 
   return (
     <>
       <div className="flex mb-4">
-        <Card title={quotation.title} bordered={false} style={{ width: '50%', marginRight: 8 }}>
+        <Card title={quotation.title} bordered={false} style={{ width: '50%', marginRight: '8px' }}>
           <Descriptions bordered column={2}>
-            <Descriptions.Item label="Número de Factura">{quotation.number}</Descriptions.Item>
-            <Descriptions.Item label="Fecha">{quotation.date}</Descriptions.Item>
-            <Descriptions.Item label="Subtotal">{`$${quotation.amount.toFixed(2)}`}</Descriptions.Item>
-            <Descriptions.Item label="IVA">{`$${quotation.totalIva.toFixed(2)}`}</Descriptions.Item>
-            <Descriptions.Item label="Total">{`$${quotation.total.toFixed(2)}`}</Descriptions.Item>
-            <Descriptions.Item label="Tasa de Cambio">{quotation.rate}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.invoiceNumber')}>{quotation.number}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.date')}>{quotation.date}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.subtotal')}>{`$${quotation.amount.toFixed(2)}`}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.tax')}>{`$${quotation.totalIva.toFixed(2)}`}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.total')}>{`$${quotation.total.toFixed(2)}`}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.exchangeRate')}>{quotation.rate}</Descriptions.Item>
           </Descriptions>
         </Card>
 
-        <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false} style={{ width: '50%', marginLeft: 8 }}>
+        <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false} style={{ width: '50%', marginLeft: '8px' }}>
           <Descriptions bordered column={2}>
-            <Descriptions.Item label="Título">{quotation.customer.title}</Descriptions.Item>
-            <Descriptions.Item label="Correo Electrónico">{quotation.customer.email}</Descriptions.Item>
-            <Descriptions.Item label="Teléfono">{quotation.customer.phone}</Descriptions.Item>
-            <Descriptions.Item label="RIF">{quotation.customer.rif}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.customerTitle')}>{quotation.customer.title}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.email')}>{quotation.customer.email}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.phone')}>{quotation.customer.phone}</Descriptions.Item>
+            <Descriptions.Item label={t('quotationDetails.taxId')}>{quotation.customer.rif}</Descriptions.Item>
           </Descriptions>
         </Card>
       </div>
 
-      <Card title="Productos" bordered={false}>
+      <Card title={
+        <div className="flex justify-between items-center">
+          <span>{t('quotationDetails.productTableTitle')}</span>
+          <Button
+            type="primary"
+            onClick={showDrawer}
+            className="bg-blue-500 text-white hover:bg-blue-600"
+          >
+            {t('quotationDetails.addProductButton')}
+          </Button>
+        </div>
+      } bordered={false}>
         <Table columns={columns} dataSource={quotation.products} rowKey="_id" />
       </Card>
 
-      <Dropdown overlay={menu} trigger={['click']}>
-        <Button
-          type="primary"
-          shape="circle"
-          icon={<MenuOutlined />}
-          size="large"
-          onClick={() => setMenuVisible(!menuVisible)}
-          className="fixed top-20 right-5 bg-blue-500 text-white hover:bg-blue-600"
-        />
-      </Dropdown>
+      <ProductFormDrawer
+        visible={drawerVisible}
+        onClose={closeDrawer}
+        onSubmit={handleFormSubmit}
+      />
+      <FloatingMenu onMenuClick={handleMenuClick} />
     </>
   )
 }

@@ -4,6 +4,7 @@ import { Table, Button, Input, Space } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
+import { Link } from 'react-router-dom'
 
 const data: Quotation[] = [
   {
@@ -88,9 +89,9 @@ const Home: React.FC = () => {
       title: t('home.actions'),
       key: 'actions',
       width: 150,
-      render: () => (
+      render: (record: Quotation) => (
         <Space>
-          <Button icon={<EditOutlined />} />
+          <Link to={`/quotation/${record._id}`}> <Button icon={<EditOutlined />} /> </Link>
           <Button icon={<FilePdfOutlined />} />
           <Button icon={<EyeOutlined />} />
           <Button icon={<DeleteOutlined />} />

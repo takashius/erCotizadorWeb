@@ -80,5 +80,35 @@
     "titleRequired": "Por favor ingrese el título",
     "dateRequired": "Por favor seleccione la fecha",
     "customerRequired": "Por favor seleccione el cliente"
+  },
+  "quotationDetails": {
+    "quotationTitle": "Título de la Cotización",
+    "invoiceNumber": "Número de Factura",
+    "date": "Fecha",
+    "subtotal": "Subtotal",
+    "tax": "IVA",
+    "total": "Total",
+    "exchangeRate": "Tasa de Cambio",
+    "customerTitle": "Título del Cliente",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "taxId": "RIF",
+    "addProductButton": "Añadir Producto",
+    "productTableTitle": "Productos"
+  },
+  "productForm": {
+    "addProductToQuotation": "Añadir Producto a la Cotización",
+    "product": "Producto",
+    "price": "Precio",
+    "quantity": "Cantidad",
+    "tax": "IVA",
+    "submitButtonText": "Añadir Producto"
+  },
+  "floatingMenu": {
+    "edit": "Editar",
+    "generatePdf": "Generar PDF",
+    "pdfFormat": "PDF Forma Libre",
+    "updateRate": "Actualizar Tasa",
+    "sendEmail": "Enviar por Correo"
   }
 }
