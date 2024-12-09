@@ -1,6 +1,6 @@
 import React from 'react'
-import { Layout, Input, Avatar, Dropdown, Switch } from 'antd'
-import { SearchOutlined, UserOutlined } from '@ant-design/icons'
+import { Layout, Avatar, Dropdown, Switch } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 import { MoonOutlined, SunFilled } from '@ant-design/icons'
 import UserMenu from './UserMenu'
 
@@ -12,12 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => (
-  <AntHeader className="bg-white dark:bg-gray-800 flex items-center justify-between p-4 shadow">
-    <Input
-      placeholder="Buscar..."
-      prefix={<SearchOutlined />}
-      className="max-w-xs"
-    />
+  <AntHeader className="bg-white dark:bg-gray-800 flex items-center justify-end p-4 shadow">
     <div className="flex items-center">
       <Switch
         checked={darkMode}

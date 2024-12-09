@@ -100,6 +100,7 @@
     "addProductToQuotation": "Add Product to Quotation",
     "product": "Product",
     "price": "Price",
+    "totalPrice": "Total Price",
     "quantity": "Quantity",
     "tax": "Tax",
     "submitButtonText": "Add Product"

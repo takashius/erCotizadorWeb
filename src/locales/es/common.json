@@ -100,6 +100,7 @@
     "addProductToQuotation": "Añadir Producto a la Cotización",
     "product": "Producto",
     "price": "Precio",
+    "totalPrice": "Precio Total",
     "quantity": "Cantidad",
     "tax": "IVA",
     "submitButtonText": "Añadir Producto"

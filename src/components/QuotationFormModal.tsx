@@ -7,12 +7,25 @@ interface QuotationFormModalProps {
   visible: boolean
   onCancel: () => void
   onOk: (values: any) => void
-  customers: Customer[]
 }
 
-const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCancel, onOk, customers }) => {
+const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCancel, onOk }) => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
+
+  const customers: Customer[] = [
+    {
+      _id: '65f46291a14af3a4a4d7be84',
+      name: 'PRODUCCIONES AURIGA',
+      lastname: 'C.A.'
+    },
+    {
+      _id: '65f46291a14af3a4a4d7be85',
+      name: 'Cliente 2',
+      lastname: 'S.A.'
+    },
+    // Agrega más clientes según sea necesario
+  ]
 
   const handleOk = () => {
     form.validateFields()

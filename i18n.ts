@@ -21,7 +21,7 @@ i18n.use(initReactI18next).init({
     en: enLocale,
     es: esLocale
   },
-  lng: 'en',
+  lng: 'es',
   interpolation: {
     escapeValue: false
   }

@@ -86,34 +86,34 @@ const QuotationDetails = () => {
 
   const columns = [
     {
-      title: 'Título',
+      title: t('quotationDetails.productTableTitle'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Precio',
+      title: t('productForm.price'),
       dataIndex: 'price',
       key: 'price',
       render: (price: number) => `$${price.toFixed(2)}`,
     },
     {
-      title: 'Cantidad',
+      title: t('productForm.quantity'),
       dataIndex: 'amount',
       key: 'amount',
     },
     {
-      title: 'Precio Total',
+      title: t('productForm.totalPrice'),
       key: 'totalPrice',
       render: (_: any, product: Product) => `$${(product.price * product.amount).toFixed(2)}`,
     },
     {
-      title: 'IVA',
+      title: t('productForm.tax'),
       dataIndex: 'iva',
       key: 'iva',
       render: (iva: boolean) => (iva ? 'Sí' : 'No'),
     },
     {
-      title: 'Acciones',
+      title: t('home.actions'),
       key: 'actions',
       render: () => (
         <Button.Group>
@@ -143,10 +143,10 @@ const QuotationDetails = () => {
   }
 
   return (
-    <>
-      <div className="flex mb-4">
-        <Card title={quotation.title} bordered={false} style={{ width: '50%', marginRight: '8px' }}>
-          <Descriptions bordered column={2}>
+    <div className="md:p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <Card title={quotation.title} bordered={false}>
+          <Descriptions bordered column={1}>
             <Descriptions.Item label={t('quotationDetails.invoiceNumber')}>{quotation.number}</Descriptions.Item>
             <Descriptions.Item label={t('quotationDetails.date')}>{quotation.date}</Descriptions.Item>
             <Descriptions.Item label={t('quotationDetails.subtotal')}>{`$${quotation.amount.toFixed(2)}`}</Descriptions.Item>
@@ -156,8 +156,8 @@ const QuotationDetails = () => {
           </Descriptions>
         </Card>
 
-        <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false} style={{ width: '50%', marginLeft: '8px' }}>
-          <Descriptions bordered column={2}>
+        <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false}>
+          <Descriptions bordered column={1}>
             <Descriptions.Item label={t('quotationDetails.customerTitle')}>{quotation.customer.title}</Descriptions.Item>
             <Descriptions.Item label={t('quotationDetails.email')}>{quotation.customer.email}</Descriptions.Item>
             <Descriptions.Item label={t('quotationDetails.phone')}>{quotation.customer.phone}</Descriptions.Item>
@@ -178,7 +178,7 @@ const QuotationDetails = () => {
           </Button>
         </div>
       } bordered={false}>
-        <Table columns={columns} dataSource={quotation.products} rowKey="_id" />
+        <Table columns={columns} dataSource={quotation.products} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
       </Card>
 
       <ProductFormDrawer
@@ -187,7 +187,7 @@ const QuotationDetails = () => {
         onSubmit={handleFormSubmit}
       />
       <FloatingMenu onMenuClick={handleMenuClick} />
-    </>
+    </div>
   )
 }
 

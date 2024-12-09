@@ -11,7 +11,7 @@ const UserMenu = () => {
         <Link to="/users">{t('menu.profile')}</Link>
       </Menu.Item>
       <Menu.Item key="2">
-        {t('menu.logout')}
+        <Link to="/login">{t('menu.logout')}</Link>
       </Menu.Item>
     </Menu>
   )

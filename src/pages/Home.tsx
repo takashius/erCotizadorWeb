@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Table, Button, Input, Space } from 'antd'
+import { Table, Button, Input, Space, List, Card } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
@@ -31,20 +31,6 @@ const data: Quotation[] = [
     typeDiscount: 'percentage'
   },
   // Agrega más cotizaciones según sea necesario
-]
-
-const customers: Customer[] = [
-  {
-    _id: '65f46291a14af3a4a4d7be84',
-    name: 'PRODUCCIONES AURIGA',
-    lastname: 'C.A.'
-  },
-  {
-    _id: '65f46291a14af3a4a4d7be85',
-    name: 'Cliente 2',
-    lastname: 'S.A.'
-  },
-  // Agrega más clientes según sea necesario
 ]
 
 const Home: React.FC = () => {
@@ -117,24 +103,43 @@ const Home: React.FC = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <Input
           placeholder={t('home.searchPlaceholder')}
           value={searchText}
           onChange={handleSearch}
-          style={{ width: 300 }}
+          className="w-full md:w-1/2 lg:w-1/3 mb-2 md:mb-0"
         />
-        <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={showModal} className="w-full md:w-auto">
           {t('home.addQuote')}
         </Button>
       </div>
-      <Table columns={columns} dataSource={filteredData} />
+      <div className="block md:hidden">
+        <List
+          dataSource={filteredData}
+          renderItem={item => (
+            <Card className="mb-2">
+              <p><strong>{t('home.title')}: </strong>{item.title}</p>
+              <p><strong>{t('home.client')}: </strong>{item.customer.name} {item.customer.lastname}</p>
+              <p><strong>{t('home.date')}: </strong>{item.date}</p>
+              <p><strong>{t('home.price')}: </strong>{item.amount}</p>
+              <div className='mt-4'>
+                <Link to={`/quotation/${item._id}`}> <Button icon={<EditOutlined />} /> </Link>
+                <Button icon={<DeleteOutlined />} />
+              </div>
+            </Card>
+          )}
+        />
+      </div>
+
+      <div className="hidden md:block">
+        <Table columns={columns} dataSource={filteredData} scroll={{ x: '100%' }} className="overflow-x-auto" />
+      </div>
 
       <QuotationFormModal
         visible={isModalVisible}
         onCancel={handleCancel}
         onOk={handleOk}
-        customers={customers}
       />
     </div>
   )
