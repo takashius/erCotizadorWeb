@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table, Button, Input, Space } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined } from '@ant-design/icons'
-import { Customer, Quotation } from '../types'
+import { Quotation, Customer } from '../types'
+import QuotationFormModal from '../components/QuotationFormModal'
 
 const data: Quotation[] = [
   {
@@ -31,9 +32,24 @@ const data: Quotation[] = [
   // Agrega más cotizaciones según sea necesario
 ]
 
+const customers: Customer[] = [
+  {
+    _id: '65f46291a14af3a4a4d7be84',
+    name: 'PRODUCCIONES AURIGA',
+    lastname: 'C.A.'
+  },
+  {
+    _id: '65f46291a14af3a4a4d7be85',
+    name: 'Cliente 2',
+    lastname: 'S.A.'
+  },
+  // Agrega más clientes según sea necesario
+]
+
 const Home: React.FC = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value)
@@ -72,7 +88,7 @@ const Home: React.FC = () => {
       title: t('home.actions'),
       key: 'actions',
       width: 150,
-      render: (_: any) => (
+      render: () => (
         <Space>
           <Button icon={<EditOutlined />} />
           <Button icon={<FilePdfOutlined />} />
@@ -83,6 +99,21 @@ const Home: React.FC = () => {
     },
   ]
 
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalVisible(false)
+  }
+
+  const handleOk = (values: any) => {
+    console.log('Form Values:', values)
+    // Aquí puedes manejar la lógica para guardar la nueva cotización
+    setIsModalVisible(false)
+  }
+
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
@@ -92,11 +123,18 @@ const Home: React.FC = () => {
           onChange={handleSearch}
           style={{ width: 300 }}
         />
-        <Button type="primary" icon={<PlusOutlined />}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
           {t('home.addQuote')}
         </Button>
       </div>
       <Table columns={columns} dataSource={filteredData} />
+
+      <QuotationFormModal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        onOk={handleOk}
+        customers={customers}
+      />
     </div>
   )
 }
