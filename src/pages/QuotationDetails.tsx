@@ -1,6 +1,6 @@
 // import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Menu, FloatButton, Dropdown } from 'antd'
-import { EditOutlined, DeleteOutlined, FilePdfOutlined, DollarOutlined, MailOutlined, PlusOutlined, MenuOutlined } from '@ant-design/icons'
+import { Table, Button, Descriptions, Card, Menu, Dropdown } from 'antd'
+import { EditOutlined, DeleteOutlined, FilePdfOutlined, DollarOutlined, MailOutlined, MenuOutlined } from '@ant-design/icons'
 import { QuotationDetail, Product } from '../types'
 import { useState } from 'react'
 
