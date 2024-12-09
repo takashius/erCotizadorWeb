@@ -7,6 +7,7 @@ import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import RecoverPassword from './pages/auth/RecoverPassword'
 import RecoveryStep2 from './pages/auth/RecoveryStep2'
+import QuotationDetails from './pages/QuotationDetails'
 
 export const routes = [
   {
@@ -17,6 +18,7 @@ export const routes = [
       { path: '/', element: <Home /> },
       { path: '/settings', element: <Settings /> },
       { path: '/users', element: <Users /> },
+      { path: '/quotation/:id', element: <QuotationDetails /> },
     ]
   },
   {

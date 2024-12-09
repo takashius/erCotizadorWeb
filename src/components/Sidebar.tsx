@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <Sider className="bg-blue-600 dark:bg-gray-800">
       <div className="flex items-center justify-center p-4">
-        <img src="./public/logoBlanco.png" alt="Logo" className="h-16" />
+        <img src="/logoBlanco.png" alt="Logo" className="h-16" />
       </div>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
         <Menu.Item key="1" icon={<HomeOutlined />}>
