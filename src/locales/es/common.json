@@ -174,5 +174,26 @@
     "validationCity": "Por favor ingrese la ciudad",
     "validationAddress1": "Por favor ingrese la dirección (Linea 1)",
     "validationPostalCode": "Por favor ingrese el código postal"
+  },
+  "AddProductModal": {
+    "addProduct": "Agregar Producto",
+    "name": "Nombre",
+    "description": "Descripción",
+    "price": "Precio",
+    "iva": "IVA",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "validationName": "Por favor ingrese el nombre del producto",
+    "validationPrice": "Por favor ingrese el precio del producto"
+  },
+  "ProductList": {
+    "searchPlaceholder": "Buscar producto",
+    "addProductButton": "Agregar Producto",
+    "name": "Nombre",
+    "price": "Precio",
+    "iva": "IVA",
+    "ivaYes": "IVA",
+    "ivaNo": "Sin IVA",
+    "actions": "Acciones"
   }
 }

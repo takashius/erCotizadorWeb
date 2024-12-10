@@ -87,7 +87,21 @@ const ClientDetail: React.FC = () => {
 
   return (
     <div className="p-4">
-      <Card title={`${client.title} - ${client.name} ${client.lastname}`} bordered={false}>
+      <Card
+        title={
+          <div className="flex justify-between items-center">
+            <span>{`${client.title} - ${client.name} ${client.lastname}`}</span>
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={handleEdit}
+              className="bg-blue-500 text-white hover:bg-blue-600"
+            >
+              {t('ClientDetail.edit')}
+            </Button>
+          </div>
+        }
+        bordered={false}>
         <Descriptions bordered column={1}>
           <Descriptions.Item label={t('ClientDetail.name')}>{client.name} {client.lastname}</Descriptions.Item>
           <Descriptions.Item label={t('ClientDetail.email')}>{client.email}</Descriptions.Item>

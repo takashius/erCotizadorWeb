@@ -174,5 +174,26 @@
     "validationCity": "Please enter the city",
     "validationAddress1": "Please enter the address (Line 1)",
     "validationPostalCode": "Please enter the postal code"
+  },
+  "AddProductModal": {
+    "addProduct": "Add Product",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "iva": "IVA",
+    "create": "Create",
+    "cancel": "Cancel",
+    "validationName": "Please enter the product name",
+    "validationPrice": "Please enter the product price"
+  },
+  "ProductList": {
+    "searchPlaceholder": "Search product",
+    "addProductButton": "Add Product",
+    "name": "Name",
+    "price": "Price",
+    "iva": "IVA",
+    "ivaYes": "IVA",
+    "ivaNo": "No IVA",
+    "actions": "Actions"
   }
 }
