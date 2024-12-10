@@ -217,5 +217,36 @@
     "validationRif": "Por favor ingrese el RIF",
     "validationCurrency": "Por favor seleccione la moneda",
     "validationRate": "Por favor seleccione la tasa"
+  },
+  "PDFSettings": {
+    "logoTitle": "Logo",
+    "watermarkTitle": "Marca de Agua",
+    "width": "Ancho",
+    "xPosition": "Posición X",
+    "yPosition": "Posición Y",
+    "logo": "Logo",
+    "uploadButton": "Subir",
+    "saveButton": "Guardar",
+    "validationWidth": "Por favor ingrese el ancho",
+    "validationXPosition": "Por favor ingrese la posición X",
+    "validationYPosition": "Por favor ingrese la posición Y"
+  },
+  "EmailSettings": {
+    "bannerTitle": "Banner",
+    "banner": "Banner",
+    "uploadButton": "Subir",
+    "colorSettingsTitle": "Configuración de Colores",
+    "backgroundColor": "Color de Fondo",
+    "primaryColor": "Color Primario",
+    "secondaryColor": "Color Secundario",
+    "titleColor": "Titulos",
+    "messageBodyTitle": "Cuerpo del Mensaje",
+    "messageBody": "Cuerpo del Mensaje",
+    "tooltip": "No se permite Html. Puede usar las siguientes etiquetas:\nSalto de Linea: {br}\nNumero de Cotizacion: {cotizaNumber}\nEmpresa: {cotizaName}\nCorreo de la empresa: {emailCompany}",
+    "saveButton": "Guardar"
+  },
+  "CompanySelection": {
+    "title": "Selección de Empresa",
+    "saveButton": "Guardar"
   }
 }

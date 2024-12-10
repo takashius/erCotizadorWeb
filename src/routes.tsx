@@ -11,6 +11,9 @@ import ClientList from './pages/ClientList'
 import ProductList from './pages/ProductList'
 import ClientDetail from './pages/ClientDetail'
 import GeneralSettings from './pages/settings/GeneralSettings'
+import PDFSettings from './pages/settings/PDFSettings'
+import EmailSettings from './pages/settings/EmailSettings'
+import CompanySelection from './pages/settings/CompanySelection'
 
 export const routes = [
   {
@@ -32,6 +35,9 @@ export const routes = [
     errorElement: <Error404 />,
     children: [
       { path: 'general', element: <GeneralSettings /> },
+      { path: 'pdf', element: <PDFSettings /> },
+      { path: 'email', element: <EmailSettings /> },
+      { path: 'company', element: <CompanySelection /> },
     ]
   },
   {

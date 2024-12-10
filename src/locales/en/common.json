@@ -217,5 +217,36 @@
     "validationRif": "Please enter the RIF",
     "validationCurrency": "Please select the currency",
     "validationRate": "Please select the rate"
+  },
+  "PDFSettings": {
+    "logoTitle": "Logo",
+    "watermarkTitle": "Watermark",
+    "width": "Width",
+    "xPosition": "X Position",
+    "yPosition": "Y Position",
+    "logo": "Logo",
+    "uploadButton": "Upload",
+    "saveButton": "Save",
+    "validationWidth": "Please enter the width",
+    "validationXPosition": "Please enter the X position",
+    "validationYPosition": "Please enter the Y position"
+  },
+  "EmailSettings": {
+    "bannerTitle": "Banner",
+    "banner": "Banner",
+    "uploadButton": "Upload",
+    "colorSettingsTitle": "Color Settings",
+    "backgroundColor": "Background Color",
+    "primaryColor": "Primary Color",
+    "secondaryColor": "Secondary Color",
+    "titleColor": "Titles",
+    "messageBodyTitle": "Message Body",
+    "messageBody": "Message Body",
+    "tooltip": "HTML is not allowed. You can use the following tags:\nLine Break: {br}\nQuotation Number: {cotizaNumber}\nCompany: {cotizaName}\nCompany Email: {emailCompany}",
+    "saveButton": "Save"
+  },
+  "CompanySelection": {
+    "title": "Company Selection",
+    "saveButton": "Save"
   }
 }
