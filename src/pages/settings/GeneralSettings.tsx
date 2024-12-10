@@ -105,8 +105,6 @@ const GeneralSettings: React.FC = () => {
                 <InputNumber
                   min={0}
                   max={100}
-                  formatter={value => `${value}%`}
-                  parser={value => (value ? Number(value.replace('%', '')) : 0)}
                 />
               </Form.Item>
             </Col>
