@@ -111,5 +111,36 @@
     "pdfFormat": "PDF Format",
     "updateRate": "Update Rate",
     "sendEmail": "Send Email"
+  },
+  "ClientList": {
+    "searchPlaceholder": "Search client",
+    "addClient": "Add Client",
+    "title": "Title",
+    "name": "Name",
+    "rif": "RIF",
+    "phone": "Phone",
+    "actions": "Actions"
+  },
+  "AddClientModal": {
+    "addClient": "Add Client",
+    "create": "Create",
+    "cancel": "Cancel",
+    "title": "Title",
+    "email": "Email",
+    "name": "Name",
+    "lastname": "Last Name",
+    "rif": "RIF",
+    "phone": "Phone",
+    "address1": "Address (Line 1)",
+    "address2": "Address (Line 2)",
+    "city": "City",
+    "postalCode": "Postal Code",
+    "validationTitle": "Please enter the title",
+    "validationEmail": "Please enter the email",
+    "validationName": "Please enter the name",
+    "validationLastname": "Please enter the last name",
+    "validationRif": "Please enter the RIF",
+    "validationAddress1": "Please enter the address (Line 1)",
+    "validationCity": "Please enter the city"
   }
 }

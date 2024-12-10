@@ -111,5 +111,36 @@
     "pdfFormat": "PDF Forma Libre",
     "updateRate": "Actualizar Tasa",
     "sendEmail": "Enviar por Correo"
+  },
+  "ClientList": {
+    "searchPlaceholder": "Buscar cliente",
+    "addClient": "Agregar Cliente",
+    "title": "Título",
+    "name": "Nombre",
+    "rif": "RIF",
+    "phone": "Teléfono",
+    "actions": "Acciones"
+  },
+  "AddClientModal": {
+    "addClient": "Agregar Cliente",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "title": "Título",
+    "email": "Correo",
+    "name": "Nombre",
+    "lastname": "Apellido",
+    "rif": "RIF",
+    "phone": "Teléfono",
+    "address1": "Dirección (Linea 1)",
+    "address2": "Dirección (Linea 2)",
+    "city": "Ciudad",
+    "postalCode": "Código Postal",
+    "validationTitle": "Por favor ingrese el título",
+    "validationEmail": "Por favor ingrese el correo",
+    "validationName": "Por favor ingrese el nombre",
+    "validationLastname": "Por favor ingrese el apellido",
+    "validationRif": "Por favor ingrese el RIF",
+    "validationAddress1": "Por favor ingrese la dirección (Linea 1)",
+    "validationCity": "Por favor ingrese la ciudad"
   }
 }

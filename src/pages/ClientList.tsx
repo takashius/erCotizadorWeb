@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import { Table, Button, Input } from 'antd'
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { clientData } from '../mocks/clientData'
+import AddClientModal from '../components/AddClientModal'
+import { useTranslation } from 'react-i18next'
 
 const ClientList = () => {
-  // const [clients, setClients] = useState(clientData.results)
+  const { t } = useTranslation()
   const clients = clientData.results
   const [searchText, setSearchText] = useState('')
   const [filteredClients, setFilteredClients] = useState(clientData.results)
+  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     setFilteredClients(
@@ -21,27 +24,27 @@ const ClientList = () => {
 
   const columns = [
     {
-      title: 'Título',
+      title: t('ClientList.title'),
       dataIndex: 'title',
       key: 'title'
     },
     {
-      title: 'Nombre',
+      title: t('ClientList.name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: 'RIF',
+      title: t('ClientList.rif'),
       dataIndex: 'rif',
       key: 'rif'
     },
     {
-      title: 'Teléfono',
+      title: t('ClientList.phone'),
       dataIndex: 'phone',
       key: 'phone'
     },
     {
-      title: 'Acciones',
+      title: t('ClientList.actions'),
       key: 'actions',
       render: (record: any) => (
         <span>
@@ -60,21 +63,27 @@ const ClientList = () => {
     console.log('Delete:', record)
   }
 
+  const handleCreate = (values: any) => {
+    console.log('Cliente creado:', values)
+    setModalVisible(false)
+  }
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <Input
-          placeholder="Buscar cliente"
+          placeholder={t('ClientList.searchPlaceholder')}
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
           prefix={<SearchOutlined />}
           className="w-full md:w-1/3"
         />
-        <Button type="primary" icon={<PlusOutlined />}>
-          Agregar Cliente
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+          {t('ClientList.addClient')}
         </Button>
       </div>
       <Table columns={columns} dataSource={filteredClients} rowKey="_id" />
+      <AddClientModal visible={modalVisible} onCreate={handleCreate} onCancel={() => setModalVisible(false)} />
     </div>
   )
 }
