@@ -10,6 +10,7 @@ import RecoveryStep2 from './pages/auth/RecoveryStep2'
 import QuotationDetails from './pages/QuotationDetails'
 import ClientList from './pages/ClientList'
 import ProductList from './pages/ProductList'
+import ClientDetail from './pages/ClientDetail'
 
 export const routes = [
   {
@@ -22,6 +23,7 @@ export const routes = [
       { path: '/users', element: <Users /> },
       { path: '/quotation/:id', element: <QuotationDetails /> },
       { path: '/clients', element: <ClientList /> },
+      { path: '/client/:id', element: <ClientDetail /> },
       { path: '/products', element: <ProductList /> },
     ]
   },

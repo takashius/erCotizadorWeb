@@ -113,7 +113,7 @@ const QuotationDetails = () => {
       render: (iva: boolean) => (iva ? 'Sí' : 'No'),
     },
     {
-      title: t('home.actions'),
+      title: t('actions'),
       key: 'actions',
       render: () => (
         <Button.Group>

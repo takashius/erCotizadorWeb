@@ -1,6 +1,7 @@
 {
   "title": "Er Cotizador",
   "search": "Search",
+  "actions": "Actions",
   "menu": {
     "home": "Home",
     "settings": "Settings",
@@ -59,7 +60,6 @@
     "client": "Client",
     "date": "Date",
     "price": "Price",
-    "actions": "Actions",
     "searchPlaceholder": "Search quotes",
     "addQuote": "Add Quote"
   },
@@ -118,12 +118,13 @@
     "title": "Title",
     "name": "Name",
     "rif": "RIF",
-    "phone": "Phone",
-    "actions": "Actions"
+    "phone": "Phone"
   },
   "AddClientModal": {
     "addClient": "Add Client",
+    "editClient": "Edit Client",
     "create": "Create",
+    "update": "Update",
     "cancel": "Cancel",
     "title": "Title",
     "email": "Email",
@@ -142,5 +143,20 @@
     "validationRif": "Please enter the RIF",
     "validationAddress1": "Please enter the address (Line 1)",
     "validationCity": "Please enter the city"
+  },
+  "ClientDetail": {
+    "name": "Name",
+    "email": "Email",
+    "rif": "RIF",
+    "edit": "Edit Client",
+    "addressesTitle": "Addresses",
+    "addAddressButton": "Add Address",
+    "addressTitle": "Title",
+    "city": "City",
+    "line1": "Address (Line 1)",
+    "zip": "Postal Code",
+    "default": "Default",
+    "yes": "Yes",
+    "no": "No"
   }
 }

@@ -1,6 +1,7 @@
 {
   "title": "Er Cotizador",
   "search": "Buscar",
+  "actions": "Acciones",
   "menu": {
     "home": "Inicio",
     "settings": "Configuración",
@@ -59,7 +60,6 @@
     "client": "Cliente",
     "date": "Fecha",
     "price": "Precio",
-    "actions": "Acciones",
     "searchPlaceholder": "Buscar cotización",
     "addQuote": "Agregar Cotización"
   },
@@ -118,12 +118,13 @@
     "title": "Título",
     "name": "Nombre",
     "rif": "RIF",
-    "phone": "Teléfono",
-    "actions": "Acciones"
+    "phone": "Teléfono"
   },
   "AddClientModal": {
     "addClient": "Agregar Cliente",
+    "editClient": "Editar Cliente",
     "create": "Crear",
+    "update": "Actualizar",
     "cancel": "Cancelar",
     "title": "Título",
     "email": "Correo",
@@ -142,5 +143,20 @@
     "validationRif": "Por favor ingrese el RIF",
     "validationAddress1": "Por favor ingrese la dirección (Linea 1)",
     "validationCity": "Por favor ingrese la ciudad"
+  },
+  "ClientDetail": {
+    "name": "Nombre",
+    "email": "Correo",
+    "rif": "RIF",
+    "edit": "Editar Cliente",
+    "addressesTitle": "Direcciones",
+    "addAddressButton": "Agregar Dirección",
+    "addressTitle": "Título",
+    "city": "Ciudad",
+    "line1": "Dirección (Linea 1)",
+    "zip": "Código Postal",
+    "default": "Por Defecto",
+    "yes": "Sí",
+    "no": "No"
   }
 }

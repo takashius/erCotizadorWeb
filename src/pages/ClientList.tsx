@@ -4,6 +4,7 @@ import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant
 import { clientData } from '../mocks/clientData'
 import AddClientModal from '../components/AddClientModal'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 const ClientList = () => {
   const { t } = useTranslation()
@@ -44,20 +45,16 @@ const ClientList = () => {
       key: 'phone'
     },
     {
-      title: t('ClientList.actions'),
+      title: t('actions'),
       key: 'actions',
       render: (record: any) => (
         <span>
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Link to={`/client/${record._id}`}> <Button icon={<EditOutlined />} /></Link>
           <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} className="ml-2" />
         </span>
       )
     }
   ]
-
-  const handleEdit = (record: any) => {
-    console.log('Edit:', record)
-  }
 
   const handleDelete = (record: any) => {
     console.log('Delete:', record)

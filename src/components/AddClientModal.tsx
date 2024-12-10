@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal, Form, Input, Row, Col } from 'antd'
 import { useTranslation } from 'react-i18next'
 
@@ -6,17 +6,25 @@ interface AddClientModalProps {
   visible: boolean
   onCreate: (values: any) => void
   onCancel: () => void
+  isEdit?: boolean
+  initialValues?: any
 }
 
-const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCancel }) => {
+const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCancel, isEdit = false, initialValues }) => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    }
+  }, [initialValues, form])
 
   return (
     <Modal
       visible={visible}
-      title={t('AddClientModal.addClient')}
-      okText={t('AddClientModal.create')}
+      title={isEdit ? t('AddClientModal.editClient') : t('AddClientModal.addClient')}
+      okText={isEdit ? t('AddClientModal.update') : t('AddClientModal.create')}
       cancelText={t('AddClientModal.cancel')}
       onCancel={onCancel}
       onOk={() => {
@@ -36,6 +44,7 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCa
         form={form}
         layout="vertical"
         name="form_in_modal"
+        initialValues={initialValues}
       >
         <Row gutter={16}>
           <Col span={12}>
@@ -96,44 +105,48 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCa
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              name="address1"
-              label={t('AddClientModal.address1')}
-              rules={[{ required: true, message: t('AddClientModal.validationAddress1') }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="address2"
-              label={t('AddClientModal.address2')}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              name="city"
-              label={t('AddClientModal.city')}
-              rules={[{ required: true, message: t('AddClientModal.validationCity') }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="postalCode"
-              label={t('AddClientModal.postalCode')}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
+        {!isEdit && (
+          <>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="address1"
+                  label={t('AddClientModal.address1')}
+                  rules={[{ required: true, message: t('AddClientModal.validationAddress1') }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="address2"
+                  label={t('AddClientModal.address2')}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="city"
+                  label={t('AddClientModal.city')}
+                  rules={[{ required: true, message: t('AddClientModal.validationCity') }]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="postalCode"
+                  label={t('AddClientModal.postalCode')}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+          </>
+        )}
       </Form>
     </Modal>
   )

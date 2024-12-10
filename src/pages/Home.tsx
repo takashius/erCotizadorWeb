@@ -72,7 +72,7 @@ const Home: React.FC = () => {
       render: (amount: number) => `$${amount.toLocaleString()}`,
     },
     {
-      title: t('home.actions'),
+      title: t('actions'),
       key: 'actions',
       width: 150,
       render: (record: Quotation) => (

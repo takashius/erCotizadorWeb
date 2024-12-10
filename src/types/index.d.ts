@@ -3,6 +3,11 @@ export interface Created {
   date: string
 }
 
+export interface CreatedExtend {
+  user: User
+  date: string
+}
+
 export interface Customer {
   _id: string
   name: string
@@ -47,7 +52,7 @@ export interface Address {
   title: string
   city: string
   line1: string
-  line2: string
+  line2?: string
   zip: string
   default: boolean
   _id: string
@@ -95,4 +100,17 @@ export interface QuotationDetail {
   products: Product[]
   totalIva: number
   total: number
+}
+
+export interface Client {
+  created: CreatedExtend
+  _id: string
+  title: string
+  name: string
+  lastname: string
+  rif: string
+  email: string
+  company: string
+  addresses: Address[]
+  active: boolean
 }
