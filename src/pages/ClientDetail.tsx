@@ -4,12 +4,14 @@ import { mockClient } from '../mocks/mockClient'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import AddClientModal from '../components/AddClientModal'
+import AddAddressDrawer from '../components/AddAddressDrawer'
 
 const ClientDetail: React.FC = () => {
   const { t } = useTranslation()
   const client = mockClient
   const [modalVisible, setModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
+  const [addressDrawerVisible, setAddressDrawerVisible] = useState(false)
   const [editingClient, setEditingClient] = useState<any>(null)
 
   const columns = [
@@ -40,7 +42,7 @@ const ClientDetail: React.FC = () => {
       render: (defaultAddr: boolean) => (defaultAddr ? t('ClientDetail.yes') : t('ClientDetail.no'))
     },
     {
-      title: t('actions'),
+      title: t('ClientDetail.actions'),
       key: 'actions',
       render: (record: any) => (
         <span>
@@ -71,24 +73,21 @@ const ClientDetail: React.FC = () => {
   }
 
   const showDrawer = () => {
-    console.log('Agregar nueva dirección')
+    setAddressDrawerVisible(true)
+  }
+
+  const handleDrawerClose = () => {
+    setAddressDrawerVisible(false)
+  }
+
+  const handleAddressCreate = (values: any) => {
+    console.log('Dirección agregada:', values)
+    setAddressDrawerVisible(false)
   }
 
   return (
     <div className="p-4">
-      <Card title={
-        <div className="flex justify-between items-center">
-          <span>{`${client.title} - ${client.name} ${client.lastname}`}</span>
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            onClick={handleEdit}
-            className="bg-blue-500 text-white hover:bg-blue-600"
-          >
-            {t('ClientDetail.edit')}
-          </Button>
-        </div>
-      } bordered={false}>
+      <Card title={`${client.title} - ${client.name} ${client.lastname}`} bordered={false}>
         <Descriptions bordered column={1}>
           <Descriptions.Item label={t('ClientDetail.name')}>{client.name} {client.lastname}</Descriptions.Item>
           <Descriptions.Item label={t('ClientDetail.email')}>{client.email}</Descriptions.Item>
@@ -126,6 +125,11 @@ const ClientDetail: React.FC = () => {
         onCancel={() => setEditModalVisible(false)}
         isEdit={true}
         initialValues={editingClient}
+      />
+      <AddAddressDrawer
+        visible={addressDrawerVisible}
+        onClose={handleDrawerClose}
+        onCreate={handleAddressCreate}
       />
     </div>
   )

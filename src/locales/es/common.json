@@ -2,6 +2,7 @@
   "title": "Er Cotizador",
   "search": "Buscar",
   "actions": "Acciones",
+  "submit": "Enviar",
   "menu": {
     "home": "Inicio",
     "settings": "Configuración",
@@ -158,5 +159,20 @@
     "default": "Por Defecto",
     "yes": "Sí",
     "no": "No"
+  },
+  "AddAddressDrawer": {
+    "title": "Agregar Dirección",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "titleLabel": "Título",
+    "city": "Ciudad",
+    "address1": "Dirección (Linea 1)",
+    "address2": "Dirección (Linea 2)",
+    "postalCode": "Código Postal",
+    "default": "Por Defecto",
+    "validationTitle": "Por favor ingrese el título",
+    "validationCity": "Por favor ingrese la ciudad",
+    "validationAddress1": "Por favor ingrese la dirección (Linea 1)",
+    "validationPostalCode": "Por favor ingrese el código postal"
   }
 }
