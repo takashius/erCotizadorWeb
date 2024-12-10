@@ -10,7 +10,8 @@
 
 .ant-menu-submenu-title:hover,
 .ant-menu-item:hover {
-  background-color: #1d4ed8 !important; /* Ajusta el color de fondo al pasar el ratón si es necesario */
+  background-color: #1d4ed8 !important;
+  color: white !important;
 }
 
 .ant-menu-submenu-open {
