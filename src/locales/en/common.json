@@ -195,5 +195,27 @@
     "ivaYes": "IVA",
     "ivaNo": "No IVA",
     "actions": "Actions"
+  },
+  "GeneralSettings": {
+    "title": "General Settings",
+    "iva": "VAT (%)",
+    "address": "Address",
+    "description": "Description",
+    "phone": "Phone",
+    "rif": "RIF",
+    "currency": "Invoice Currency",
+    "rate": "Calculate according to rate",
+    "ratePlaceholder": "For representation on the invoice only",
+    "autoCorrelatives": "Automatic Correlatives",
+    "logo": "Logo",
+    "uploadButton": "Upload",
+    "saveButton": "Save",
+    "validationIva": "Please enter the VAT value",
+    "validationAddress": "Please enter the address",
+    "validationDescription": "Please enter the description",
+    "validationPhone": "Please enter the phone",
+    "validationRif": "Please enter the RIF",
+    "validationCurrency": "Please select the currency",
+    "validationRate": "Please select the rate"
   }
 }
