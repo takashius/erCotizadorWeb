@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table, Button, Input, Space, List, Card } from 'antd'
-import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined } from '@ant-design/icons'
+import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { Link } from 'react-router-dom'
@@ -108,6 +108,7 @@ const Home: React.FC = () => {
           placeholder={t('home.searchPlaceholder')}
           value={searchText}
           onChange={handleSearch}
+          prefix={<SearchOutlined />}
           className="w-full md:w-1/2 lg:w-1/3 mb-2 md:mb-0"
         />
         <Button type="primary" icon={<PlusOutlined />} onClick={showModal} className="w-full md:w-auto">

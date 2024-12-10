@@ -1,0 +1,18 @@
+/* Forzar el texto blanco en los submenús */
+.ant-menu-submenu-title,
+.ant-menu-item {
+  color: white !important;
+}
+
+.ant-menu-item-selected {
+  color: #2563eb !important;
+}
+
+.ant-menu-submenu-title:hover,
+.ant-menu-item:hover {
+  background-color: #1d4ed8 !important; /* Ajusta el color de fondo al pasar el ratón si es necesario */
+}
+
+.ant-menu-submenu-open {
+  background-color: #1e40af !important; /* Ajusta el color de fondo del submenú abierto si es necesario */
+}
