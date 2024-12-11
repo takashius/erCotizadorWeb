@@ -114,3 +114,28 @@ export interface Client {
   addresses: Address[]
   active: boolean
 }
+
+export interface Account {
+  address?: string | undefined
+  bio: string | undefined
+  _id?: string
+  name: string | undefined
+  lastName: string | undefined
+  photo?: string
+  banner?: string
+  phone: string | undefined
+  email?: string
+  date?: string
+  companies?: CompanyAccount[]
+  role?: Role[]
+}
+
+export interface LoginResponse {
+  _id: string
+  name: string
+  lastName: string
+  photo: string
+  email: string
+  date: string
+  token: string
+}

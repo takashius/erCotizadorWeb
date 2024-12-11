@@ -1,23 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Button, Checkbox } from 'antd'
+import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useLogin } from '../../api/auth'
 
 const Login: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { login } = useAuth()
+  const loginQuery = useLogin()
+  const [messageApi, contextHolder] = message.useMessage()
 
   const onFinish = (values: any) => {
-    const mockUserData = { username: values.username, email: 'demo@example.com' }
-    login(mockUserData)
-    navigate('/')
+    loginQuery.mutate({ email: values.username, password: values.password })
   }
+
+  useEffect(() => {
+    if (loginQuery.isSuccess) {
+      localStorage.setItem('Token', loginQuery.data.token)
+      login(loginQuery.data)
+      navigate('/')
+    }
+  }, [loginQuery.isSuccess])
+
+  useEffect(() => {
+    if (loginQuery.error) {
+      messageApi.open({
+        type: 'error',
+        content: `${loginQuery.error}`,
+      })
+    }
+  }, [loginQuery.error])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      {contextHolder}
       <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
         <div className="flex justify-center mb-6">
           <img
@@ -58,7 +77,7 @@ const Login: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <div className="flex space-x-2">
-              <Button type="primary" htmlType="submit" className="w-1/2">
+              <Button type="primary" htmlType="submit" className="w-1/2" loading={loginQuery.isPending}>
                 {t('login.login')}
               </Button>
               <div className="w-1/2">

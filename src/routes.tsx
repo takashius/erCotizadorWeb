@@ -1,4 +1,5 @@
 import Layout from './components/Layout'
+import RootAuth from './components/RootAuth'
 import Error404 from './pages/Error404'
 import Home from './pages/Home'
 import Users from './pages/Users'
@@ -42,20 +43,15 @@ export const routes = [
     ]
   },
   {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-  {
-    path: '/recover-password',
-    element: <RecoverPassword />,
-  },
-  {
-    path: '/recover-password/step2',
-    element: <RecoveryStep2 />,
+    path: '/',
+    element: <RootAuth />,
+    errorElement: <Error404 />,
+    children: [
+      { path: '/login', element: <Login />, protected: false },
+      { path: '/register', element: <Register />, protected: false },
+      { path: '/recover-password', element: <RecoverPassword />, protected: false },
+      { path: '/recover-password/step2', element: <RecoveryStep2 />, protected: false },
+    ]
   }
 ]
 
