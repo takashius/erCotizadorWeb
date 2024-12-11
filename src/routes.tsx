@@ -14,6 +14,7 @@ import GeneralSettings from './pages/settings/GeneralSettings'
 import PDFSettings from './pages/settings/PDFSettings'
 import EmailSettings from './pages/settings/EmailSettings'
 import CompanySelection from './pages/settings/CompanySelection'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export const routes = [
   {
@@ -21,12 +22,12 @@ export const routes = [
     element: <Layout />,
     errorElement: <Error404 />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/users', element: <Users /> },
-      { path: '/quotation/:id', element: <QuotationDetails /> },
-      { path: '/clients', element: <ClientList /> },
-      { path: '/client/:id', element: <ClientDetail /> },
-      { path: '/products', element: <ProductList /> },
+      { path: '/', element: <Home />, protected: true },
+      { path: '/users', element: <Users />, protected: true },
+      { path: '/quotation/:id', element: <QuotationDetails />, protected: true },
+      { path: '/clients', element: <ClientList />, protected: true },
+      { path: '/client/:id', element: <ClientDetail />, protected: true },
+      { path: '/products', element: <ProductList />, protected: true },
     ]
   },
   {
@@ -34,10 +35,10 @@ export const routes = [
     element: <Layout />,
     errorElement: <Error404 />,
     children: [
-      { path: 'general', element: <GeneralSettings /> },
-      { path: 'pdf', element: <PDFSettings /> },
-      { path: 'email', element: <EmailSettings /> },
-      { path: 'company', element: <CompanySelection /> },
+      { path: 'general', element: <GeneralSettings />, protected: true },
+      { path: 'pdf', element: <PDFSettings />, protected: true },
+      { path: 'email', element: <EmailSettings />, protected: true },
+      { path: 'company', element: <CompanySelection />, protected: true },
     ]
   },
   {
@@ -57,3 +58,18 @@ export const routes = [
     element: <RecoveryStep2 />,
   }
 ]
+
+export const protectedRoutes = routes.map(route => {
+  if (route.children) {
+    route.children = route.children.map(child => {
+      if (child.protected) {
+        return {
+          ...child,
+          element: <ProtectedRoute element={child.element} path={child.path} />,
+        }
+      }
+      return child
+    })
+  }
+  return route
+})

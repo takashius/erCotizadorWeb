@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Table, Button, Input, Space, List, Card } from 'antd'
+import type { PopconfirmProps } from 'antd'
+import { Table, Button, Input, Space, List, Card, message, Popconfirm } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
@@ -37,6 +38,16 @@ const Home: React.FC = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const confirm: PopconfirmProps['onConfirm'] = (e) => {
+    console.log(e);
+    message.success('Click on Yes');
+  }
+
+  const cancel: PopconfirmProps['onCancel'] = (e) => {
+    console.log(e);
+    message.error('Click on No');
+  }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value)
@@ -80,7 +91,16 @@ const Home: React.FC = () => {
           <Link to={`/quotation/${record._id}`}> <Button icon={<EditOutlined />} /> </Link>
           <Button icon={<FilePdfOutlined />} />
           <Button icon={<EyeOutlined />} />
-          <Button icon={<DeleteOutlined />} />
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },

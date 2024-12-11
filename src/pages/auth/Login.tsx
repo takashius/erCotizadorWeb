@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { Form, Input, Button, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 const Login: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    const mockUserData = { username: values.username, email: 'demo@example.com' }
+    login(mockUserData)
     navigate('/')
   }
 
