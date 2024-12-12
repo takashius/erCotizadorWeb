@@ -98,7 +98,11 @@
     "phone": "Phone",
     "taxId": "Tax ID",
     "addProductButton": "Add Product",
-    "productTableTitle": "Products"
+    "productTableTitle": "Products",
+    "deleteConfirmTitle": "Delete the product",
+    "deleteConfirmDescription": "Are you sure to delete this product?",
+    "confirmOkText": "Yes",
+    "confirmCancelText": "No"
   },
   "productForm": {
     "addProductToQuotation": "Add Product to Quotation",

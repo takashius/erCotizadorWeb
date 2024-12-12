@@ -89,7 +89,7 @@ const Home: React.FC = () => {
           <Dropdown overlay={pdfMenu(record)} trigger={['click']}>
             <Button
               icon={<FilePdfOutlined />}
-              loading={loadingId === record._id} // Mostrar loader solo en el botón específico
+              loading={loadingId === record._id}
             />
           </Dropdown>
           <Popconfirm

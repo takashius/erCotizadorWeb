@@ -98,7 +98,11 @@
     "phone": "Teléfono",
     "taxId": "RIF",
     "addProductButton": "Añadir Producto",
-    "productTableTitle": "Productos"
+    "productTableTitle": "Productos",
+    "deleteConfirmTitle": "Eliminar el producto",
+    "deleteConfirmDescription": "¿Estás seguro de eliminar este producto?",
+    "confirmOkText": "Sí",
+    "confirmCancelText": "No"
   },
   "productForm": {
     "addProductToQuotation": "Añadir Producto a la Cotización",

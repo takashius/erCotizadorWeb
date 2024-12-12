@@ -224,3 +224,28 @@ export const useUpdateProductInQuotation = (): UseMutationResult<
     mutationFn: updateProductInQuotation
   })
 }
+const deleteProductFromQuotation = async (productDetails: {
+  id: string
+  idParent: string
+}) => {
+  const response = await ERDEAxios.delete('/cotiza/product', {
+    data: productDetails
+  })
+  return response.data
+}
+
+export const useDeleteProductFromQuotation = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  { id: string; idParent: string },
+  unknown
+> => {
+  return useMutation<
+    QuotationDetail,
+    Error,
+    { id: string; idParent: string },
+    unknown
+  >({
+    mutationFn: deleteProductFromQuotation
+  })
+}

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Skeleton, Row, Col } from 'antd'
+import { Table, Button, Descriptions, Card, Skeleton, Row, Col, Popconfirm } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Product } from '../types'
 import { useState } from 'react'
@@ -7,7 +7,7 @@ import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
-import { useCotizaDetail } from '../api/cotiza'
+import { useCotizaDetail, useDeleteProductFromQuotation } from '../api/cotiza'
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -16,6 +16,7 @@ const QuotationDetails = () => {
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const { t } = useTranslation()
+  const deleteProductMutation = useDeleteProductFromQuotation()
 
   const columns = [
     {
@@ -51,7 +52,15 @@ const QuotationDetails = () => {
       render: (record: Product) => (
         <Button.Group>
           <Button icon={<EditOutlined />} onClick={() => openEditProductDrawer(record)} />
-          <Button icon={<DeleteOutlined />} />
+          <Popconfirm
+            title={t('quotationDetails.deleteConfirmTitle')}
+            description={t('quotationDetails.deleteConfirmDescription')}
+            onConfirm={() => handleDeleteProduct(record._id)}
+            okText={t('quotationDetails.confirmOkText')}
+            cancelText={t('quotationDetails.confirmCancelText')}
+          >
+            <Button icon={<DeleteOutlined />} loading={deleteProductMutation.isPending && deleteProductMutation.variables?.id === record._id} />
+          </Popconfirm>
         </Button.Group>
       ),
     }
@@ -63,13 +72,20 @@ const QuotationDetails = () => {
     }
   }
 
+  const handleDeleteProduct = (productId: string) => {
+    deleteProductMutation.mutate({ id: productId, idParent: id! }, {
+      onSuccess: () => {
+        refetch()
+      }
+    })
+  }
+
   const showDrawer = () => {
     setEditingProduct(null)
     setDrawerVisible(true)
   }
 
   const openEditProductDrawer = (product: Product) => {
-    console.log('PRODUCT EDIT', product)
     setEditingProduct(product)
     setDrawerVisible(true)
   }
