@@ -1,17 +1,19 @@
 import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Skeleton, Col, Row } from 'antd'
+import { Table, Button, Descriptions, Card, Skeleton, Row, Col } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Product } from '../types'
 import { useState } from 'react'
 import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
+import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
 import { useCotizaDetail } from '../api/cotiza'
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: quotation, error, isLoading } = useCotizaDetail(id!)
+  const { data: quotation, error, isLoading, refetch } = useCotizaDetail(id!)
   const [drawerVisible, setDrawerVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
   const { t } = useTranslation()
 
   const columns = [
@@ -55,7 +57,9 @@ const QuotationDetails = () => {
   ]
 
   const handleMenuClick = (key: string) => {
-    console.log(`Clicked menu item: ${key}`)
+    if (key === 'edit') {
+      setModalVisible(true)
+    }
   }
 
   const showDrawer = () => {
@@ -71,19 +75,24 @@ const QuotationDetails = () => {
     closeDrawer()
   }
 
+  const closeModal = () => {
+    setModalVisible(false)
+  }
+
+  const onUpdated = () => {
+    setModalVisible(false)
+    refetch()
+  }
+
   if (isLoading) {
     return (
       <div className="md:p-4">
         <Row gutter={16} className="mb-4">
           <Col span={12}>
-            <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
-            </Card>
+            <Skeleton active title={false} paragraph={{ rows: 6 }} />
           </Col>
           <Col span={12}>
-            <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
-            </Card>
+            <Skeleton active title={false} paragraph={{ rows: 6 }} />
           </Col>
         </Row>
         <Card>
@@ -94,7 +103,7 @@ const QuotationDetails = () => {
   }
 
   if (error) {
-    return <div>Error: {`${error}`}</div>
+    return <div>Error: {error.message}</div>
   }
 
   if (!quotation) {
@@ -144,6 +153,12 @@ const QuotationDetails = () => {
         visible={drawerVisible}
         onClose={closeDrawer}
         onSubmit={handleFormSubmit}
+      />
+      <QuotationFormModal
+        visible={modalVisible}
+        onCancel={closeModal}
+        onOk={onUpdated}
+        initialValues={quotation}
       />
       <FloatingMenu onMenuClick={handleMenuClick} />
     </div>

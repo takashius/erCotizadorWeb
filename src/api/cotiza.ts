@@ -102,6 +102,48 @@ export const useCreateQuotation = (): UseMutationResult<
   })
 }
 
+const updateQuotation = async (updatedQuotation: {
+  id: string
+  title: string
+  description: string
+  number: number
+  date: string
+  customer: string
+}) => {
+  const response = await ERDEAxios.patch(`/cotiza`, updatedQuotation)
+  return response.data
+}
+
+export const useUpdateQuotation = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  {
+    id: string
+    title: string
+    description: string
+    number: number
+    date: string
+    customer: string
+  },
+  unknown
+> => {
+  return useMutation<
+    QuotationDetail,
+    Error,
+    {
+      id: string
+      title: string
+      description: string
+      number: number
+      date: string
+      customer: string
+    },
+    unknown
+  >({
+    mutationFn: updateQuotation
+  })
+}
+
 export const useDownloadPDF = (): UseMutationResult<
   void,
   Error,
