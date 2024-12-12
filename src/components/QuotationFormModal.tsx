@@ -26,7 +26,7 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
       console.log('initialValues', initialValues)
       form.setFieldsValue({
         ...initialValues,
-        date: moment(initialValues.date, 'YYYY-MM-DD'),
+        date: moment(initialValues.date, 'DD/MM/YYYY').isValid() ? moment(initialValues.date, 'DD/MM/YYYY') : null,
         customer: initialValues.customer._id
       })
     }
@@ -35,14 +35,18 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
   const handleOk = () => {
     form.validateFields()
       .then(values => {
+        const formattedValues = {
+          ...values,
+          date: values.date.format('DD/MM/YYYY')
+        }
         if (initialValues && initialValues._id) {
-          updateQuotationMutation.mutate({ ...values, id: initialValues._id }, {
+          updateQuotationMutation.mutate({ ...formattedValues, id: initialValues._id }, {
             onSuccess: (data) => {
               onOk(data)
             }
           })
         } else {
-          createQuotationMutation.mutate(values, {
+          createQuotationMutation.mutate(formattedValues, {
             onSuccess: (data) => {
               onOk(data)
               form.resetFields()
