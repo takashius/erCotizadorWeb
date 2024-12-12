@@ -63,6 +63,22 @@ const downloadPDF = async ({
   }
 }
 
+export const useDownloadPDF = (): UseMutationResult<
+  void,
+  Error,
+  { id: string; number: string; type: string },
+  unknown
+> => {
+  return useMutation<
+    void,
+    Error,
+    { id: string; number: string; type: string },
+    unknown
+  >({
+    mutationFn: downloadPDF
+  })
+}
+
 const createQuotation = async (newQuotation: {
   title: string
   description: string
@@ -144,18 +160,28 @@ export const useUpdateQuotation = (): UseMutationResult<
   })
 }
 
-export const useDownloadPDF = (): UseMutationResult<
-  void,
+const addProductToQuotation = async (productDetails: {
+  id: string
+  master: string
+  price: number
+  amount: number
+}) => {
+  const response = await ERDEAxios.post('/cotiza/product', productDetails)
+  return response.data
+}
+
+export const useAddProductToQuotation = (): UseMutationResult<
+  QuotationDetail,
   Error,
-  { id: string; number: string; type: string },
+  { id: string; master: string; price: number; amount: number },
   unknown
 > => {
   return useMutation<
-    void,
+    QuotationDetail,
     Error,
-    { id: string; number: string; type: string },
+    { id: string; master: string; price: number; amount: number },
     unknown
   >({
-    mutationFn: downloadPDF
+    mutationFn: addProductToQuotation
   })
 }

@@ -105,8 +105,10 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
               placeholder={t('quotationFormModal.customerPlaceholder')}
               loading={isLoading}
               optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.children?.join('') as unknown as string).toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) => {
+                const optionText = option?.children ? `${option.children}` : ''
+                return optionText.toLowerCase().includes(input.toLowerCase())
+              }
               }
             >
               {customers?.map(customer => (

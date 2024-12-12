@@ -70,8 +70,8 @@ const QuotationDetails = () => {
     setDrawerVisible(false)
   }
 
-  const handleFormSubmit = (values: any) => {
-    console.log('Form values:', values)
+  const handleFormSubmit = () => {
+    refetch()
     closeDrawer()
   }
 
@@ -153,7 +153,9 @@ const QuotationDetails = () => {
         visible={drawerVisible}
         onClose={closeDrawer}
         onSubmit={handleFormSubmit}
+        quotationId={id!}
       />
+
       <QuotationFormModal
         visible={modalVisible}
         onCancel={closeModal}

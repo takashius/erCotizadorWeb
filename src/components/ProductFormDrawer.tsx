@@ -1,79 +1,119 @@
-import React from 'react'
-import { Drawer, Form, Input, Select, Switch, Button } from 'antd'
+import React, { useEffect } from 'react'
+import { Drawer, Form, Input, Button, Select, Switch, Skeleton } from 'antd'
+import { useAddProductToQuotation } from '../api/cotiza'
+import { useProducts } from '../api/products'
 import { useTranslation } from 'react-i18next'
-
-const { Option } = Select;
 
 interface ProductFormDrawerProps {
   visible: boolean
   onClose: () => void
   onSubmit: (values: any) => void
+  quotationId: string
 }
 
-const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose, onSubmit }) => {
+const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose, onSubmit, quotationId }) => {
   const { t } = useTranslation()
-  const products = [
-    { id: '1', name: 'Producto 1' },
-    { id: '2', name: 'Producto 2' },
-    { id: '3', name: 'Producto 3' },
-    // Agrega más productos según sea necesario
-  ]
+  const [form] = Form.useForm()
+  const addProductMutation = useAddProductToQuotation()
+  const { data: products, isLoading } = useProducts()
+
+  useEffect(() => {
+    form.setFieldsValue({ amount: 1 })
+  }, [form])
+
+  const handleProductChange = (value: string) => {
+    const selectedProduct = products?.find(product => product.id === value)
+    if (selectedProduct) {
+      form.setFieldsValue({
+        price: selectedProduct.price,
+        iva: selectedProduct.iva
+      })
+    }
+  }
+
+  const handleSubmit = () => {
+    form.validateFields()
+      .then(values => {
+        addProductMutation.mutate({ ...values, id: quotationId }, {
+          onSuccess: (data) => {
+            onSubmit(data)
+            form.resetFields()
+            onClose()
+          }
+        })
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info)
+      })
+  }
+
   return (
     <Drawer
-      title={t('productForm.addProductToQuotation')}
+      title={t('productForm.addProductTitle')}
       width={360}
       onClose={onClose}
       visible={visible}
-      bodyStyle={{ paddingBottom: 80 }}
-    >
-      <Form layout="vertical" onFinish={onSubmit}>
-        <Form.Item
-          name="product"
-          label={t('productForm.product')}
-          rules={[{ required: true, message: t('productForm.product') }]}
-        >
-          <Select
-            showSearch
-            placeholder={t('productForm.product')}
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-            }
-          >
-            {products.map(product => (
-              <Option key={product.id} value={product.id}>
-                {product.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="price"
-          label={t('productForm.price')}
-          rules={[{ required: true, message: t('productForm.price') }]}
-        >
-          <Input type="number" step="0.01" />
-        </Form.Item>
-        <Form.Item
-          name="quantity"
-          label={t('productForm.quantity')}
-          rules={[{ required: true, message: t('productForm.quantity') }]}
-        >
-          <Input type="number" />
-        </Form.Item>
-        <Form.Item
-          name="iva"
-          label={t('productForm.tax')}
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="bg-blue-500 text-white hover:bg-blue-600">
-            {t('productForm.submitButtonText')}
+      footer={
+        <div style={{ textAlign: 'right' }}>
+          <Button onClick={onClose} style={{ marginRight: 8 }}>
+            {t('cancelButton')}
           </Button>
-        </Form.Item>
-      </Form>
+          <Button onClick={handleSubmit} type="primary" loading={addProductMutation.isPending}>
+            {t('submit')}
+          </Button>
+        </div>
+      }
+    >
+      {isLoading ? (
+        <Skeleton active />
+      ) : (
+        <Form layout="vertical" form={form}>
+          <Form.Item
+            name="master"
+            label={t('productForm.productLabel')}
+            rules={[{ required: true, message: t('productForm.productRequired') }]}
+          >
+            <Select
+              showSearch
+              placeholder={t('productForm.productPlaceholder')}
+              optionFilterProp="children"
+              filterOption={(input, option) => {
+                const optionText = option?.children ? `${option.children}` : ''
+                return optionText.toLowerCase().includes(input.toLowerCase())
+              }
+              }
+              onChange={handleProductChange}
+            >
+              {products?.map(product => (
+                <Select.Option key={product.id} value={product.id}>
+                  {product.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label={t('productForm.priceLabel')}
+            rules={[{ required: true, message: t('productForm.priceRequired') }]}
+          >
+            <Input type="number" placeholder={t('productForm.pricePlaceholder')} />
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label={t('productForm.amountLabel')}
+            rules={[{ required: true, message: t('productForm.amountRequired') }]}
+          >
+            <Input type="number" placeholder={t('productForm.amountPlaceholder')} />
+          </Form.Item>
+          <Form.Item
+            name="iva"
+            label={t('productForm.tax')}
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
+        </Form>
+      )}
     </Drawer>
   )
 }

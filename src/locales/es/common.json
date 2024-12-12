@@ -3,6 +3,7 @@
   "search": "Buscar",
   "actions": "Acciones",
   "submit": "Enviar",
+  "cancelButton": "Cancelar",
   "menu": {
     "home": "Inicio",
     "settings": "Configuración",
@@ -106,6 +107,15 @@
     "totalPrice": "Precio Total",
     "quantity": "Cantidad",
     "tax": "IVA",
+    "productLabel": "Producto",
+    "productRequired": "Por favor selecciona un producto",
+    "productPlaceholder": "Selecciona un producto",
+    "priceLabel": "Precio",
+    "priceRequired": "Por favor ingresa el precio",
+    "pricePlaceholder": "Ingresa el precio",
+    "amountLabel": "Cantidad",
+    "amountRequired": "Por favor ingresa la cantidad",
+    "amountPlaceholder": "Ingresa la cantidad",
     "submitButtonText": "Añadir Producto"
   },
   "floatingMenu": {

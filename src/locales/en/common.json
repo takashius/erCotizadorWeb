@@ -3,6 +3,7 @@
   "search": "Search",
   "actions": "Actions",
   "submit": "Submit",
+  "cancelButton": "Cancel",
   "menu": {
     "home": "Home",
     "settings": "Settings",
@@ -106,6 +107,15 @@
     "totalPrice": "Total Price",
     "quantity": "Quantity",
     "tax": "Tax",
+    "productLabel": "Product",
+    "productRequired": "Please select a product",
+    "productPlaceholder": "Select a product",
+    "priceLabel": "Price",
+    "priceRequired": "Please enter the price",
+    "pricePlaceholder": "Enter the price",
+    "amountLabel": "Amount",
+    "amountRequired": "Please enter the amount",
+    "amountPlaceholder": "Enter the amount",
     "submitButtonText": "Add Product"
   },
   "floatingMenu": {
