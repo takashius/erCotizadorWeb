@@ -28,6 +28,9 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick, loading }) => 
       <Menu.Item key="pdf-forma-libre" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
         {t('floatingMenu.pdfFormat')}
       </Menu.Item>
+      <Menu.Item key="budget" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
+        {t('floatingMenu.budget')}
+      </Menu.Item>
       <Menu.Item key="update-rate" icon={<DollarOutlined />} className="hover:bg-blue-600">
         {t('floatingMenu.updateRate')}
       </Menu.Item>

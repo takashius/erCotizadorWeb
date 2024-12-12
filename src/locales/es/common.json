@@ -127,7 +127,8 @@
     "generatePdf": "Generar PDF",
     "pdfFormat": "PDF Forma Libre",
     "updateRate": "Actualizar Tasa",
-    "sendEmail": "Enviar por Correo"
+    "sendEmail": "Enviar por Correo",
+    "budget": "Presupuesto en PDF"
   },
   "ClientList": {
     "searchPlaceholder": "Buscar cliente",

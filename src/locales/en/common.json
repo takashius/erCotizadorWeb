@@ -127,7 +127,8 @@
     "generatePdf": "Generate PDF",
     "pdfFormat": "PDF Format",
     "updateRate": "Update Rate",
-    "sendEmail": "Send Email"
+    "sendEmail": "Send Email",
+    "budget": "Budget in PDF"
   },
   "ClientList": {
     "searchPlaceholder": "Search client",

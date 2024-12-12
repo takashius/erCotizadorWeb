@@ -121,6 +121,8 @@ const QuotationDetails = () => {
       handleDownloadPDF(id!, `${quotation?.number}`, 'factura')
     } else if (key === 'pdf-forma-libre') {
       handleDownloadPDF(id!, `${quotation?.number}`, 'forma-libre')
+    } else if (key === 'budget') {
+      handleDownloadPDF(id!, `${quotation?.number}`, 'presupuesto')
     }
   }
 

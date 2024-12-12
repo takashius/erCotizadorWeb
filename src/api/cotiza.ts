@@ -51,6 +51,9 @@ const downloadPDF = async ({
       case 'forma-libre':
         endpoint = `/cotiza/pdflibre/${id}`
         break
+      case 'presupuesto':
+        endpoint = `/cotiza/pdf/presupuesto/${id}`
+        break
     }
     const response = await ERDEAxios.get(endpoint, {
       responseType: 'blob'
