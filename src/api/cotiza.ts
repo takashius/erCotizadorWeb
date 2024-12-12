@@ -292,3 +292,19 @@ export const useSendQuotationByEmail = (): UseMutationResult<
     mutationFn: sendQuotationByEmail
   })
 }
+
+const deleteQuotation = async (id: string) => {
+  const response = await ERDEAxios.delete(`/cotiza/${id}`)
+  return response.data
+}
+
+export const useDeleteQuotation = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  string,
+  unknown
+> => {
+  return useMutation<QuotationDetail, Error, string, unknown>({
+    mutationFn: deleteQuotation
+  })
+}

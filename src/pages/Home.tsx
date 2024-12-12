@@ -1,29 +1,36 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { PopconfirmProps } from 'antd'
 import { Table, Button, Input, Space, List, Card, message, Popconfirm, Dropdown, Menu } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { Link } from 'react-router-dom'
-import { useCotizaList, useDownloadPDF } from '../api/cotiza'
+import { useCotizaList, useDownloadPDF, useDeleteQuotation } from '../api/cotiza'
 
 const Home: React.FC = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loadingId, setLoadingId] = useState<string | null>(null)
-  const { data = [], error, isLoading } = useCotizaList()
+  const { data = [], error, isLoading, refetch } = useCotizaList()
+  const [messageApi, contextHolder] = message.useMessage()
   const downloadMutation = useDownloadPDF()
+  const deleteQuotationMutation = useDeleteQuotation()
 
-  const confirm: PopconfirmProps['onConfirm'] = (e) => {
-    console.log(e)
-    message.success('Click on Yes')
-  }
-
-  const cancel: PopconfirmProps['onCancel'] = (e) => {
-    console.log(e)
-    message.error('Click on No')
+  const handleDeleteQuotation = (quotationId: string) => {
+    setLoadingId(quotationId)
+    deleteQuotationMutation.mutate(quotationId, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Eliminado correctamente`,
+        })
+        refetch()
+      },
+      onSettled: () => {
+        setLoadingId(null)
+      }
+    })
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,18 +96,20 @@ const Home: React.FC = () => {
           <Dropdown overlay={pdfMenu(record)} trigger={['click']}>
             <Button
               icon={<FilePdfOutlined />}
-              loading={loadingId === record._id}
+              loading={loadingId === record._id && downloadMutation.isPending}
             />
           </Dropdown>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
+            title={t('home.deleteConfirmTitle')}
+            description={t('home.deleteConfirmDescription')}
+            onConfirm={() => handleDeleteQuotation(record._id)}
+            okText={t('home.confirmOkText')}
+            cancelText={t('home.confirmCancelText')}
           >
-            <Button icon={<DeleteOutlined />} />
+            <Button
+              icon={<DeleteOutlined />}
+              loading={loadingId === record._id && deleteQuotationMutation.isPending}
+            />
           </Popconfirm>
         </Space>
       ),
@@ -126,6 +135,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="p-4">
+      {contextHolder}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <Input
           placeholder={t('home.searchPlaceholder')}

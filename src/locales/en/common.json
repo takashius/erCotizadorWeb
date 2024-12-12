@@ -65,7 +65,11 @@
     "freeFormat": "Free format",
     "price": "Price",
     "searchPlaceholder": "Search quotes",
-    "addQuote": "Add Quote"
+    "addQuote": "Add Quote",
+    "deleteConfirmTitle": "Delete the quotation",
+    "deleteConfirmDescription": "Are you sure to delete this quotation?",
+    "confirmOkText": "Yes",
+    "confirmCancelText": "No"
   },
   "quotationFormModal": {
     "title": "Create Quotation",

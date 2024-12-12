@@ -65,7 +65,11 @@
     "freeFormat": "Forma Libre",
     "price": "Precio",
     "searchPlaceholder": "Buscar cotización",
-    "addQuote": "Agregar Cotización"
+    "addQuote": "Agregar Cotización",
+    "deleteConfirmTitle": "Eliminar la cotización",
+    "deleteConfirmDescription": "¿Estás seguro de eliminar esta cotización?",
+    "confirmOkText": "Sí",
+    "confirmCancelText": "No"
   },
   "quotationFormModal": {
     "title": "Crear Cotización",
