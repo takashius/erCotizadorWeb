@@ -5,7 +5,7 @@ import {
   UseMutationResult
 } from '@tanstack/react-query'
 import ERDEAxios from './ERDEAxios'
-import { Quotation } from '../types'
+import { Quotation, QuotationDetail } from '../types'
 
 export const useCotizaList = (): UseQueryResult<Quotation[], Error> => {
   return useQuery<Quotation[], Error>({
@@ -14,6 +14,19 @@ export const useCotizaList = (): UseQueryResult<Quotation[], Error> => {
     queryFn: async () => {
       const response = await ERDEAxios.get<Quotation[]>('/cotiza')
       return response.data as Quotation[]
+    }
+  })
+}
+
+export const useCotizaDetail = (
+  id: string
+): UseQueryResult<QuotationDetail, Error> => {
+  return useQuery<QuotationDetail, Error>({
+    queryKey: ['cotizaDetail', id],
+    retry: false,
+    queryFn: async () => {
+      const response = await ERDEAxios.get<QuotationDetail>(`/cotiza/${id}`)
+      return response.data as QuotationDetail
     }
   })
 }
