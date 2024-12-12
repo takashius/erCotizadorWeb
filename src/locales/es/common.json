@@ -60,6 +60,8 @@
     "title": "Título",
     "client": "Cliente",
     "date": "Fecha",
+    "invoice": "Factura",
+    "freeFormat": "Forma Libre",
     "price": "Precio",
     "searchPlaceholder": "Buscar cotización",
     "addQuote": "Agregar Cotización"

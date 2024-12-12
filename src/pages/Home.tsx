@@ -48,10 +48,10 @@ const Home: React.FC = () => {
   const pdfMenu = (record: Quotation) => (
     <Menu>
       <Menu.Item key="factura" onClick={() => handleDownloadPDF(record._id, record.number.toString(), 'factura')}>
-        Factura
+        {t('home.invoice')}
       </Menu.Item>
       <Menu.Item key="forma-libre" onClick={() => handleDownloadPDF(record._id, record.number.toString(), 'forma-libre')}>
-        Forma Libre
+        {t('home.freeFormat')}
       </Menu.Item>
     </Menu>
   )

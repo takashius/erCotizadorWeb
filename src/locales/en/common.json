@@ -60,6 +60,8 @@
     "title": "Title",
     "client": "Client",
     "date": "Date",
+    "invoice": "Invoice",
+    "freeFormat": "Free format",
     "price": "Price",
     "searchPlaceholder": "Search quotes",
     "addQuote": "Add Quote"
