@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Drawer, Form, Input, Button, Select, Switch, Skeleton } from 'antd'
-import { useAddProductToQuotation } from '../api/cotiza'
+import { useAddProductToQuotation, useUpdateProductInQuotation } from '../api/cotiza'
 import { useProducts } from '../api/products'
 import { useTranslation } from 'react-i18next'
 
@@ -9,17 +9,23 @@ interface ProductFormDrawerProps {
   onClose: () => void
   onSubmit: (values: any) => void
   quotationId: string
+  initialValues?: any
 }
 
-const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose, onSubmit, quotationId }) => {
+const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose, onSubmit, quotationId, initialValues }) => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const addProductMutation = useAddProductToQuotation()
+  const updateProductMutation = useUpdateProductInQuotation()
   const { data: products, isLoading } = useProducts()
 
   useEffect(() => {
-    form.setFieldsValue({ amount: 1 })
-  }, [form])
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    } else {
+      form.setFieldsValue({ amount: 1 })
+    }
+  }, [initialValues, form])
 
   const handleProductChange = (value: string) => {
     const selectedProduct = products?.find(product => product.id === value)
@@ -34,13 +40,23 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
   const handleSubmit = () => {
     form.validateFields()
       .then(values => {
-        addProductMutation.mutate({ ...values, id: quotationId }, {
-          onSuccess: (data) => {
-            onSubmit(data)
-            form.resetFields()
-            onClose()
-          }
-        })
+        if (initialValues && initialValues._id) {
+          updateProductMutation.mutate({ ...values, id: quotationId, idProduct: initialValues._id }, {
+            onSuccess: (data) => {
+              onSubmit(data)
+              form.resetFields()
+              onClose()
+            }
+          })
+        } else {
+          addProductMutation.mutate({ ...values, id: quotationId }, {
+            onSuccess: (data) => {
+              onSubmit(data)
+              form.resetFields()
+              onClose()
+            }
+          })
+        }
       })
       .catch(info => {
         console.log('Validate Failed:', info)
@@ -49,7 +65,7 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
 
   return (
     <Drawer
-      title={t('productForm.addProductTitle')}
+      title={t('productForm.addProductToQuotation')}
       width={360}
       onClose={onClose}
       visible={visible}
@@ -58,7 +74,7 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
           <Button onClick={onClose} style={{ marginRight: 8 }}>
             {t('cancelButton')}
           </Button>
-          <Button onClick={handleSubmit} type="primary" loading={addProductMutation.isPending}>
+          <Button onClick={handleSubmit} type="primary" loading={addProductMutation.isPending || updateProductMutation.isPending}>
             {t('submit')}
           </Button>
         </div>
@@ -77,10 +93,8 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
               showSearch
               placeholder={t('productForm.productPlaceholder')}
               optionFilterProp="children"
-              filterOption={(input, option) => {
-                const optionText = option?.children ? `${option.children}` : ''
-                return optionText.toLowerCase().includes(input.toLowerCase())
-              }
+              filterOption={(input, option) =>
+                (option?.children?.join('') as unknown as string).toLowerCase().includes(input.toLowerCase())
               }
               onChange={handleProductChange}
             >

@@ -185,3 +185,42 @@ export const useAddProductToQuotation = (): UseMutationResult<
     mutationFn: addProductToQuotation
   })
 }
+
+const updateProductInQuotation = async (productDetails: {
+  idProduct: string
+  price: number
+  amount: number
+  iva: boolean
+  id: string
+}) => {
+  const response = await ERDEAxios.patch('/cotiza/product', productDetails)
+  return response.data
+}
+
+export const useUpdateProductInQuotation = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  {
+    idProduct: string
+    price: number
+    amount: number
+    iva: boolean
+    id: string
+  },
+  unknown
+> => {
+  return useMutation<
+    QuotationDetail,
+    Error,
+    {
+      idProduct: string
+      price: number
+      amount: number
+      iva: boolean
+      id: string
+    },
+    unknown
+  >({
+    mutationFn: updateProductInQuotation
+  })
+}

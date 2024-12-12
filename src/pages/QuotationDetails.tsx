@@ -12,6 +12,7 @@ import { useCotizaDetail } from '../api/cotiza'
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: quotation, error, isLoading, refetch } = useCotizaDetail(id!)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const { t } = useTranslation()
@@ -47,13 +48,13 @@ const QuotationDetails = () => {
     {
       title: t('actions'),
       key: 'actions',
-      render: () => (
+      render: (record: Product) => (
         <Button.Group>
-          <Button icon={<EditOutlined />} />
+          <Button icon={<EditOutlined />} onClick={() => openEditProductDrawer(record)} />
           <Button icon={<DeleteOutlined />} />
         </Button.Group>
       ),
-    },
+    }
   ]
 
   const handleMenuClick = (key: string) => {
@@ -63,11 +64,19 @@ const QuotationDetails = () => {
   }
 
   const showDrawer = () => {
+    setEditingProduct(null)
+    setDrawerVisible(true)
+  }
+
+  const openEditProductDrawer = (product: Product) => {
+    console.log('PRODUCT EDIT', product)
+    setEditingProduct(product)
     setDrawerVisible(true)
   }
 
   const closeDrawer = () => {
     setDrawerVisible(false)
+    setEditingProduct(null)
   }
 
   const handleFormSubmit = () => {
@@ -154,6 +163,7 @@ const QuotationDetails = () => {
         onClose={closeDrawer}
         onSubmit={handleFormSubmit}
         quotationId={id!}
+        initialValues={editingProduct}
       />
 
       <QuotationFormModal
