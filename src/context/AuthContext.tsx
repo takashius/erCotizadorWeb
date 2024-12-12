@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 interface AuthContextType {
   user: any
+  token: string | null
   login: (userData: any) => void
   logout: () => void
 }
@@ -10,6 +11,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(null)
+  const token = localStorage.getItem('Token') ?? null
 
   const login = (userData: any) => {
     setUser(userData)
@@ -23,7 +25,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,67 +1,82 @@
-import { Register, useMutation, useQuery, UseQueryResult, UseMutationResult, useQueryClient } from "@tanstack/react-query"
-import ERDEAxios from "./ERDEAxios"
-import { Account, LoginResponse } from "../types"
+import {
+  Register,
+  useMutation,
+  useQuery,
+  UseQueryResult,
+  UseMutationResult,
+  useQueryClient
+} from '@tanstack/react-query'
+import ERDEAxios from './ERDEAxios'
+import { Account, LoginResponse } from '../types'
 
 export interface UserLogin {
-  name: string;
-  lastName: string;
-  email: string;
-  token: string;
-  _id: string;
+  name: string
+  lastName: string
+  email: string
+  token: string
+  _id: string
 }
 
 export interface Recovery {
-  code: Number;
-  email: string;
-  newPass: string;
+  code: Number
+  email: string
+  newPass: string
 }
 
 export interface SetCompany {
-  user: string;
-  company: string;
+  user: string
+  company: string
 }
 
 export interface Login {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface Image {
-  image: any,
+  image: any
   imageType: string
 }
 
-export const useLogin = (): UseMutationResult<LoginResponse, unknown, Login> => {
+export const useLogin = (): UseMutationResult<
+  LoginResponse,
+  unknown,
+  Login
+> => {
   return useMutation<LoginResponse, unknown, Login>({
-    mutationFn: (data: Login) => {
-      return ERDEAxios.post("/user/login", data)
+    mutationFn: async (data: Login) => {
+      const response = await ERDEAxios.post('/user/login', data)
+      return response.data
     }
   })
 }
 
 export const useAccount = (): UseQueryResult<Account, Error> => {
   return useQuery<Account, Error>({
-    queryKey: ["myAccount"],
+    queryKey: ['myAccount'],
     retry: false,
     queryFn: () => {
-      return ERDEAxios.get<Account>("/user/account").then(response => response.data)
-    },
+      return ERDEAxios.get<Account>('/user/account').then(
+        (response) => response.data
+      )
+    }
   })
 }
 
 export const useLogout = () => {
   return useMutation({
-    mutationFn: (any: any) => {
+    mutationFn: async (any: any) => {
       console.log(any)
-      return ERDEAxios.post("/user/logout")
-    },
+      const response = await ERDEAxios.post('/user/logout')
+      return response.data
+    }
   })
 }
 
 export const useRegister = () => {
   return useMutation({
     mutationFn: (data: Register) => {
-      return ERDEAxios.post("/user/register", data)
+      return ERDEAxios.post('/user/register', data)
     }
   })
 }
@@ -69,7 +84,7 @@ export const useRegister = () => {
 export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: (data: Account) => {
-      return ERDEAxios.patch("/user/profile", data)
+      return ERDEAxios.patch('/user/profile', data)
     }
   })
 }
@@ -77,7 +92,7 @@ export const useUpdateProfile = () => {
 export const useSelectCompany = () => {
   return useMutation({
     mutationFn: (data: SetCompany) => {
-      return ERDEAxios.patch("/user/select_company", data)
+      return ERDEAxios.patch('/user/select_company', data)
     }
   })
 }
@@ -85,7 +100,7 @@ export const useSelectCompany = () => {
 export const useRecoveryOne = () => {
   return useMutation({
     mutationFn: (email: String) => {
-      return ERDEAxios.get("/user/recovery/" + email)
+      return ERDEAxios.get('/user/recovery/' + email)
     }
   })
 }
@@ -93,7 +108,7 @@ export const useRecoveryOne = () => {
 export const useRecoveryTwo = () => {
   return useMutation({
     mutationFn: (data: Recovery) => {
-      return ERDEAxios.post("/user/recovery", data)
+      return ERDEAxios.post('/user/recovery', data)
     }
   })
 }
@@ -104,9 +119,9 @@ export const useUploadImage = () => {
     mutationFn: (data: Image) => {
       localStorage.setItem('contentType', 'true')
       var formData = new FormData()
-      formData.append("image", data.image)
-      formData.append("imageType", data.imageType)
-      return ERDEAxios.post("/user/upload", formData)
+      formData.append('image', data.image)
+      formData.append('imageType', data.imageType)
+      return ERDEAxios.post('/user/upload', formData)
     },
     onSuccess: () => {
       localStorage.removeItem('contentType')
@@ -118,7 +133,7 @@ export const useUploadImage = () => {
     }
   })
 
-  return mutation;
+  return mutation
 }
 
 export const useUploadBanner = () => {
@@ -127,9 +142,9 @@ export const useUploadBanner = () => {
     mutationFn: (data: Image) => {
       localStorage.setItem('contentType', 'true')
       var formData = new FormData()
-      formData.append("image", data.image)
-      formData.append("imageType", data.imageType)
-      return ERDEAxios.post("/user/uploadBanner", formData)
+      formData.append('image', data.image)
+      formData.append('imageType', data.imageType)
+      return ERDEAxios.post('/user/uploadBanner', formData)
     },
     onSuccess: () => {
       localStorage.removeItem('contentType')
@@ -139,7 +154,7 @@ export const useUploadBanner = () => {
       console.log('error useUploadBanner', error)
       localStorage.removeItem('contentType')
     }
-  });
+  })
 
   return mutation
 }
