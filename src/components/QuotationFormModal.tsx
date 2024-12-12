@@ -1,7 +1,9 @@
 import React from 'react'
 import { Modal, Form, Input, DatePicker, Select } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { Customer } from '../types'
+import { useCreateQuotation } from '../api/cotiza'
+import { useCustomers } from '../api/clients'
+import { useNavigate } from 'react-router-dom'
 
 interface QuotationFormModalProps {
   visible: boolean
@@ -12,26 +14,20 @@ interface QuotationFormModalProps {
 const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCancel, onOk }) => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-
-  const customers: Customer[] = [
-    {
-      _id: '65f46291a14af3a4a4d7be84',
-      name: 'PRODUCCIONES AURIGA',
-      lastname: 'C.A.'
-    },
-    {
-      _id: '65f46291a14af3a4a4d7be85',
-      name: 'Cliente 2',
-      lastname: 'S.A.'
-    },
-    // Agrega más clientes según sea necesario
-  ]
+  const navigate = useNavigate()
+  const createQuotationMutation = useCreateQuotation()
+  const { data: customers, isLoading } = useCustomers()
 
   const handleOk = () => {
     form.validateFields()
       .then(values => {
-        onOk(values)
-        form.resetFields()
+        createQuotationMutation.mutate(values, {
+          onSuccess: (data) => {
+            onOk(data)
+            form.resetFields()
+            navigate(`/quotation/${data._id}`)
+          }
+        })
       })
       .catch(info => {
         console.log('Validate Failed:', info)
@@ -39,7 +35,13 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
   }
 
   return (
-    <Modal title={t('quotationFormModal.title')} visible={visible} onOk={handleOk} onCancel={onCancel}>
+    <Modal
+      title={t('quotationFormModal.title')}
+      visible={visible}
+      onOk={handleOk}
+      onCancel={onCancel}
+      confirmLoading={createQuotationMutation.isPending}
+    >
       <Form layout="vertical" form={form}>
         <Form.Item
           label={t('quotationFormModal.titleLabel')}
@@ -76,14 +78,17 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
           <Select
             showSearch
             placeholder={t('quotationFormModal.customerPlaceholder')}
+            loading={isLoading}
             optionFilterProp="children"
-            filterOption={(input, option) =>
-              (option?.children?.join('') as unknown as string).toLowerCase().includes(input.toLowerCase())
+            filterOption={(input, option) => {
+              const optionText = option?.children ? `${option.children}` : ''
+              return (optionText.toLowerCase().includes(input.toLowerCase()))
+            }
             }
           >
-            {customers.map(customer => (
-              <Select.Option key={customer._id} value={customer._id}>
-                {customer.name} {customer.lastname}
+            {customers?.map(customer => (
+              <Select.Option key={customer.id} value={customer.id}>
+                {customer.title}
               </Select.Option>
             ))}
           </Select>

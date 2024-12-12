@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card } from 'antd'
+import { Table, Button, Descriptions, Card, Skeleton, Col, Row } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Product } from '../types'
 import { useState } from 'react'
@@ -13,18 +13,6 @@ const QuotationDetails = () => {
   const { data: quotation, error, isLoading } = useCotizaDetail(id!)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const { t } = useTranslation()
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
-  if (!quotation) {
-    return <div>No data found</div>
-  }
 
   const columns = [
     {
@@ -81,7 +69,36 @@ const QuotationDetails = () => {
   const handleFormSubmit = (values: any) => {
     console.log('Form values:', values)
     closeDrawer()
-    // Aquí puedes manejar la lógica para agregar el producto a la cotización
+  }
+
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Row gutter={16} className="mb-4">
+          <Col span={12}>
+            <Card>
+              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card>
+              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+            </Card>
+          </Col>
+        </Row>
+        <Card>
+          <Skeleton active title={false} paragraph={{ rows: 10 }} />
+        </Card>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div>Error: {`${error}`}</div>
+  }
+
+  if (!quotation) {
+    return <div>No data found</div>
   }
 
   return (

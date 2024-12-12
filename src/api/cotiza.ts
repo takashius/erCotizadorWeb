@@ -63,6 +63,45 @@ const downloadPDF = async ({
   }
 }
 
+const createQuotation = async (newQuotation: {
+  title: string
+  description: string
+  number: number
+  date: string
+  customer: string
+}) => {
+  const response = await ERDEAxios.post('/cotiza', newQuotation)
+  return response.data
+}
+
+export const useCreateQuotation = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  {
+    title: string
+    description: string
+    number: number
+    date: string
+    customer: string
+  },
+  unknown
+> => {
+  return useMutation<
+    QuotationDetail,
+    Error,
+    {
+      title: string
+      description: string
+      number: number
+      date: string
+      customer: string
+    },
+    unknown
+  >({
+    mutationFn: createQuotation
+  })
+}
+
 export const useDownloadPDF = (): UseMutationResult<
   void,
   Error,
