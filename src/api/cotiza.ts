@@ -266,3 +266,19 @@ export const useUpdateRate = (): UseMutationResult<
     mutationFn: updateRate
   })
 }
+
+const sendQuotationByEmail = async (id: string) => {
+  const response = await ERDEAxios.get(`/cotiza/send/${id}`)
+  return response.data
+}
+
+export const useSendQuotationByEmail = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  string,
+  unknown
+> => {
+  return useMutation<QuotationDetail, Error, string, unknown>({
+    mutationFn: sendQuotationByEmail
+  })
+}

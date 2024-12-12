@@ -7,7 +7,7 @@ import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
-import { useCotizaDetail, useDeleteProductFromQuotation, useUpdateRate } from '../api/cotiza'
+import { useCotizaDetail, useDeleteProductFromQuotation, useUpdateRate, useSendQuotationByEmail } from '../api/cotiza'
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -19,6 +19,7 @@ const QuotationDetails = () => {
   const { t } = useTranslation()
   const deleteProductMutation = useDeleteProductFromQuotation()
   const updateRateMutation = useUpdateRate()
+  const sendQuotationByEmailMutation = useSendQuotationByEmail()
 
   const columns = [
     {
@@ -80,11 +81,25 @@ const QuotationDetails = () => {
     })
   }
 
+  const handleSendEmail = () => {
+    sendQuotationByEmailMutation.mutate(id!, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Correo enviado correctamente`,
+        })
+        refetch()
+      }
+    })
+  }
+
   const handleMenuClick = (key: string) => {
     if (key === 'edit') {
       setModalVisible(true)
     } else if (key === 'update-rate') {
       handleUpdateRate()
+    } else if (key === 'send-email') {
+      handleSendEmail()
     }
   }
 
@@ -219,7 +234,7 @@ const QuotationDetails = () => {
       />
       <FloatingMenu
         onMenuClick={handleMenuClick}
-        loading={updateRateMutation.isPending}
+        loading={updateRateMutation.isPending || sendQuotationByEmailMutation.isPending}
       />
     </div>
   )
