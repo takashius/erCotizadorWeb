@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 interface FloatingMenuProps {
   onMenuClick: (key: string) => void
+  loading: boolean
 }
 
-const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick }) => {
+const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick, loading }) => {
   const [menuVisible, setMenuVisible] = useState(false)
   const { t } = useTranslation()
 
@@ -45,6 +46,7 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick }) => {
         size="large"
         onClick={() => setMenuVisible(!menuVisible)}
         className="fixed top-20 right-5 bg-blue-500 text-white hover:bg-blue-600"
+        loading={loading}
       />
     </Dropdown>
   )

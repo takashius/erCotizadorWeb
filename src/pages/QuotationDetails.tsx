@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Skeleton, Row, Col, Popconfirm } from 'antd'
+import { Table, Button, Descriptions, Card, Skeleton, Row, Col, Popconfirm, message } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Product } from '../types'
 import { useState } from 'react'
@@ -7,7 +7,7 @@ import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
-import { useCotizaDetail, useDeleteProductFromQuotation } from '../api/cotiza'
+import { useCotizaDetail, useDeleteProductFromQuotation, useUpdateRate } from '../api/cotiza'
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -15,8 +15,10 @@ const QuotationDetails = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
+  const [messageApi, contextHolder] = message.useMessage()
   const { t } = useTranslation()
   const deleteProductMutation = useDeleteProductFromQuotation()
+  const updateRateMutation = useUpdateRate()
 
   const columns = [
     {
@@ -66,15 +68,33 @@ const QuotationDetails = () => {
     }
   ]
 
+  const handleUpdateRate = () => {
+    updateRateMutation.mutate({ id: id! }, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Tasa actualizada correctamente`,
+        })
+        refetch()
+      }
+    })
+  }
+
   const handleMenuClick = (key: string) => {
     if (key === 'edit') {
       setModalVisible(true)
+    } else if (key === 'update-rate') {
+      handleUpdateRate()
     }
   }
 
   const handleDeleteProduct = (productId: string) => {
     deleteProductMutation.mutate({ id: productId, idParent: id! }, {
       onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Producto Borrado correctamente`,
+        })
         refetch()
       }
     })
@@ -96,6 +116,10 @@ const QuotationDetails = () => {
   }
 
   const handleFormSubmit = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Producto agregado correctamente`,
+    })
     refetch()
     closeDrawer()
   }
@@ -105,6 +129,10 @@ const QuotationDetails = () => {
   }
 
   const onUpdated = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Cotizacion editada correctamente`,
+    })
     setModalVisible(false)
     refetch()
   }
@@ -137,6 +165,7 @@ const QuotationDetails = () => {
 
   return (
     <div className="md:p-4">
+      {contextHolder}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <Card title={quotation.title} bordered={false}>
           <Descriptions bordered column={1}>
@@ -188,7 +217,10 @@ const QuotationDetails = () => {
         onOk={onUpdated}
         initialValues={quotation}
       />
-      <FloatingMenu onMenuClick={handleMenuClick} />
+      <FloatingMenu
+        onMenuClick={handleMenuClick}
+        loading={updateRateMutation.isPending}
+      />
     </div>
   )
 }

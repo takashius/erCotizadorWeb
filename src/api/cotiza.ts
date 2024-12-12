@@ -224,6 +224,7 @@ export const useUpdateProductInQuotation = (): UseMutationResult<
     mutationFn: updateProductInQuotation
   })
 }
+
 const deleteProductFromQuotation = async (productDetails: {
   id: string
   idParent: string
@@ -247,5 +248,21 @@ export const useDeleteProductFromQuotation = (): UseMutationResult<
     unknown
   >({
     mutationFn: deleteProductFromQuotation
+  })
+}
+
+const updateRate = async (rateDetails: { id: string }) => {
+  const response = await ERDEAxios.patch('/cotiza/updateRate', rateDetails)
+  return response.data
+}
+
+export const useUpdateRate = (): UseMutationResult<
+  QuotationDetail,
+  Error,
+  { id: string },
+  unknown
+> => {
+  return useMutation<QuotationDetail, Error, { id: string }, unknown>({
+    mutationFn: updateRate
   })
 }
