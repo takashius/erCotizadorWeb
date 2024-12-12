@@ -159,7 +159,26 @@ const Home: React.FC = () => {
               <p><strong>{t('home.price')}: </strong>{item.amount}</p>
               <div className='mt-4'>
                 <Link to={`/quotation/${item._id}`}> <Button icon={<EditOutlined />} /> </Link>
-                <Button icon={<DeleteOutlined />} />
+                <Popconfirm
+                  title={t('home.deleteConfirmTitle')}
+                  description={t('home.deleteConfirmDescription')}
+                  onConfirm={() => handleDeleteQuotation(item._id)}
+                  okText={t('home.confirmOkText')}
+                  cancelText={t('home.confirmCancelText')}
+                >
+                  <Button
+                    icon={<DeleteOutlined />}
+                    loading={loadingId === item._id && deleteQuotationMutation.isPending}
+                  />
+                </Popconfirm>
+              </div>
+              <div className='mt-4'>
+                <Dropdown overlay={pdfMenu(item)} trigger={['click']}>
+                  <Button
+                    icon={<FilePdfOutlined />}
+                    loading={loadingId === item._id && downloadMutation.isPending}
+                  />
+                </Dropdown>
               </div>
             </Card>
           )}
