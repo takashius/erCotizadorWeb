@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   const filteredData = data.filter((item) =>
     item.title.toLowerCase().includes(searchText.toLowerCase()) ||
     item.customer.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.customer.lastname.toLowerCase().includes(searchText.toLowerCase())
+    item.customer?.lastname?.toLowerCase().includes(searchText.toLowerCase())
   )
 
   const handleDownloadPDF = (id: string, number: string) => {
