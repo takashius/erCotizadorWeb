@@ -43,8 +43,15 @@ const downloadPDF = async ({
   try {
     localStorage.setItem('responseType', 'blob')
 
-    const endpoint =
-      type === 'factura' ? `/cotiza/pdf/${id}` : `/cotiza/pdflibre/${id}`
+    let endpoint = ''
+    switch (type) {
+      case 'factura':
+        endpoint = `/cotiza/pdf/${id}`
+        break
+      case 'forma-libre':
+        endpoint = `/cotiza/pdflibre/${id}`
+        break
+    }
     const response = await ERDEAxios.get(endpoint, {
       responseType: 'blob'
     })

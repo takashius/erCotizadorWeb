@@ -7,7 +7,13 @@ import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
-import { useCotizaDetail, useDeleteProductFromQuotation, useUpdateRate, useSendQuotationByEmail } from '../api/cotiza'
+import {
+  useCotizaDetail,
+  useDeleteProductFromQuotation,
+  useUpdateRate,
+  useSendQuotationByEmail,
+  useDownloadPDF
+} from '../api/cotiza'
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -20,6 +26,7 @@ const QuotationDetails = () => {
   const deleteProductMutation = useDeleteProductFromQuotation()
   const updateRateMutation = useUpdateRate()
   const sendQuotationByEmailMutation = useSendQuotationByEmail()
+  const downloadMutation = useDownloadPDF()
 
   const columns = [
     {
@@ -88,7 +95,17 @@ const QuotationDetails = () => {
           type: 'success',
           content: `Correo enviado correctamente`,
         })
-        refetch()
+      }
+    })
+  }
+
+  const handleDownloadPDF = (id: string, number: string, type: string) => {
+    downloadMutation.mutate({ id, number, type }, {
+      onSettled: () => {
+        messageApi.open({
+          type: 'success',
+          content: `PDF Generado correctamente`,
+        })
       }
     })
   }
@@ -100,6 +117,10 @@ const QuotationDetails = () => {
       handleUpdateRate()
     } else if (key === 'send-email') {
       handleSendEmail()
+    } else if (key === 'generate-pdf') {
+      handleDownloadPDF(id!, `${quotation?.number}`, 'factura')
+    } else if (key === 'pdf-forma-libre') {
+      handleDownloadPDF(id!, `${quotation?.number}`, 'forma-libre')
     }
   }
 
@@ -234,7 +255,7 @@ const QuotationDetails = () => {
       />
       <FloatingMenu
         onMenuClick={handleMenuClick}
-        loading={updateRateMutation.isPending || sendQuotationByEmailMutation.isPending}
+        loading={updateRateMutation.isPending || sendQuotationByEmailMutation.isPending || downloadMutation.isPending}
       />
     </div>
   )
