@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -13,17 +13,30 @@ const Login: React.FC = () => {
   const loginQuery = useLogin()
   const [messageApi, contextHolder] = message.useMessage()
 
+  const [initialUsername, setInitialUsername] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email')
+    if (storedEmail) {
+      setInitialUsername(storedEmail)
+    }
+  }, [])
+
   const onFinish = (values: any) => {
     loginQuery.mutate({ email: values.username, password: values.password })
+    if (values.remember) {
+      localStorage.setItem('email', values.username)
+    } else {
+      localStorage.removeItem('email')
+    }
   }
 
   useEffect(() => {
     if (loginQuery.isSuccess) {
-      localStorage.setItem('Token', loginQuery.data.token)
       login(loginQuery.data)
       navigate('/')
     }
-  }, [loginQuery.isSuccess])
+  }, [loginQuery.isSuccess, login, navigate])
 
   useEffect(() => {
     if (loginQuery.error) {
@@ -32,7 +45,7 @@ const Login: React.FC = () => {
         content: `${loginQuery.error}`,
       })
     }
-  }, [loginQuery.error])
+  }, [loginQuery.error, messageApi])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -48,7 +61,7 @@ const Login: React.FC = () => {
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-300">{t('login.title')}</h2>
         <Form
           name="login"
-          initialValues={{ remember: true }}
+          initialValues={{ remember: true, username: initialUsername }}
           onFinish={onFinish}
         >
           <Form.Item

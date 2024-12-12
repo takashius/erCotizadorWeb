@@ -13,12 +13,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = (userData: any) => {
     setUser(userData)
-    // Puedes agregar lógica adicional aquí, como guardar el usuario en localStorage
+    localStorage.setItem('Token', userData.token)
   }
 
   const logout = () => {
     setUser(null)
-    // Puedes agregar lógica adicional aquí, como eliminar el usuario de localStorage
+    localStorage.removeItem('Token')
+
   }
 
   return (
