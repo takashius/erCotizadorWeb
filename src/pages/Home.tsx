@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PopconfirmProps } from 'antd'
-import { Table, Button, Input, Space, List, Card, message, Popconfirm } from 'antd'
-import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
+import { Table, Button, Input, Space, List, Card, message, Popconfirm, Dropdown, Menu } from 'antd'
+import { PlusOutlined, EditOutlined, DeleteOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { Link } from 'react-router-dom'
@@ -36,14 +36,25 @@ const Home: React.FC = () => {
     item.customer?.lastname?.toLowerCase().includes(searchText.toLowerCase())
   )
 
-  const handleDownloadPDF = (id: string, number: string) => {
+  const handleDownloadPDF = (id: string, number: string, type: string) => {
     setLoadingId(id)
-    downloadMutation.mutate({ id, number }, {
+    downloadMutation.mutate({ id, number, type }, {
       onSettled: () => {
         setLoadingId(null)
       }
     })
   }
+
+  const pdfMenu = (record: Quotation) => (
+    <Menu>
+      <Menu.Item key="factura" onClick={() => handleDownloadPDF(record._id, record.number.toString(), 'factura')}>
+        Factura
+      </Menu.Item>
+      <Menu.Item key="forma-libre" onClick={() => handleDownloadPDF(record._id, record.number.toString(), 'forma-libre')}>
+        Forma Libre
+      </Menu.Item>
+    </Menu>
+  )
 
   const columns = [
     {
@@ -75,12 +86,12 @@ const Home: React.FC = () => {
       render: (record: Quotation) => (
         <Space>
           <Link to={`/quotation/${record._id}`}> <Button icon={<EditOutlined />} /> </Link>
-          <Button
-            icon={<FilePdfOutlined />}
-            onClick={() => handleDownloadPDF(record._id, record.number.toString())}
-            loading={loadingId === record._id}
-          />
-          <Button icon={<EyeOutlined />} />
+          <Dropdown overlay={pdfMenu(record)} trigger={['click']}>
+            <Button
+              icon={<FilePdfOutlined />}
+              loading={loadingId === record._id} // Mostrar loader solo en el botón específico
+            />
+          </Dropdown>
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"

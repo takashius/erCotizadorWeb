@@ -18,18 +18,28 @@ export const useCotizaList = (): UseQueryResult<Quotation[], Error> => {
   })
 }
 
-const downloadPDF = async ({ id, number }: { id: string; number: string }) => {
+const downloadPDF = async ({
+  id,
+  number,
+  type
+}: {
+  id: string
+  number: string
+  type: string
+}) => {
   try {
     localStorage.setItem('responseType', 'blob')
 
-    const response = await ERDEAxios.get(`/cotiza/pdf/${id}`, {
+    const endpoint =
+      type === 'factura' ? `/cotiza/pdf/${id}` : `/cotiza/pdflibre/${id}`
+    const response = await ERDEAxios.get(endpoint, {
       responseType: 'blob'
     })
 
     const url = window.URL.createObjectURL(new Blob([response.data]))
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', `cotiza_${number}.pdf`)
+    link.setAttribute('download', `cotiza_${number}_${type}.pdf`)
     document.body.appendChild(link)
     link.click()
     link.remove()
@@ -43,10 +53,15 @@ const downloadPDF = async ({ id, number }: { id: string; number: string }) => {
 export const useDownloadPDF = (): UseMutationResult<
   void,
   Error,
-  { id: string; number: string },
+  { id: string; number: string; type: string },
   unknown
 > => {
-  return useMutation<void, Error, { id: string; number: string }, unknown>({
+  return useMutation<
+    void,
+    Error,
+    { id: string; number: string; type: string },
+    unknown
+  >({
     mutationFn: downloadPDF
   })
 }
