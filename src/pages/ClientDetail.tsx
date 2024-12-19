@@ -11,10 +11,11 @@ const ClientDetail: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const { data: client, isLoading, error, refetch } = useClientDetail(id!)
-  const [modalVisible, setModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [addressDrawerVisible, setAddressDrawerVisible] = useState(false)
   const [editingClient, setEditingClient] = useState<any>(null)
+  const [editingAddress, setEditingAddress] = useState<any>(null)
+  const [isAddressEdit, setIsAddressEdit] = useState<boolean>(false)
 
   const columns = [
     {
@@ -48,7 +49,7 @@ const ClientDetail: React.FC = () => {
       key: 'actions',
       render: (record: any) => (
         <span>
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button icon={<EditOutlined />} onClick={() => handleEditAddress(record)} />
           <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} className="ml-2" />
         </span>
       )
@@ -60,12 +61,14 @@ const ClientDetail: React.FC = () => {
     setEditModalVisible(true)
   }
 
-  const handleDelete = (record: any) => {
-    console.log('Delete:', record)
+  const handleEditAddress = (record: any) => {
+    setIsAddressEdit(true)
+    setEditingAddress(record)
+    setAddressDrawerVisible(true)
   }
 
-  const handleCreate = () => {
-    setModalVisible(false)
+  const handleDelete = (record: any) => {
+    console.log('Delete:', record)
   }
 
   const handleUpdate = () => {
@@ -74,6 +77,8 @@ const ClientDetail: React.FC = () => {
   }
 
   const showDrawer = () => {
+    setIsAddressEdit(false)
+    setEditingAddress(null)
     setAddressDrawerVisible(true)
   }
 
@@ -81,8 +86,8 @@ const ClientDetail: React.FC = () => {
     setAddressDrawerVisible(false)
   }
 
-  const handleAddressCreate = (values: any) => {
-    console.log('Dirección agregada:', values)
+  const handleAddressCreate = () => {
+    refetch()
     setAddressDrawerVisible(false)
   }
 
@@ -159,12 +164,6 @@ const ClientDetail: React.FC = () => {
         <Table columns={columns} dataSource={client.addresses} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
       </Card>
       <AddClientModal
-        visible={modalVisible}
-        onCreate={handleCreate}
-        onCancel={() => setModalVisible(false)}
-        isEdit={false}
-      />
-      <AddClientModal
         visible={editModalVisible}
         onCreate={handleUpdate}
         onCancel={() => setEditModalVisible(false)}
@@ -175,6 +174,9 @@ const ClientDetail: React.FC = () => {
         visible={addressDrawerVisible}
         onClose={handleDrawerClose}
         onCreate={handleAddressCreate}
+        clientId={id!}
+        isEdit={isAddressEdit}
+        initialValues={editingAddress}
       />
     </div>
   )

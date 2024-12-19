@@ -1,20 +1,69 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Drawer, Button, Form, Input, Switch } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useAddAddress, useEditAddress } from '../api/clients'
+import { AddressForm } from '../types'
 
 interface AddAddressDrawerProps {
   visible: boolean
   onClose: () => void
   onCreate: (values: any) => void
+  clientId: string
+  isEdit?: boolean
+  initialValues?: AddressForm
 }
 
-const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, onCreate }) => {
+const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, onCreate, clientId, isEdit = false, initialValues }) => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
+  const { mutate: addAddress, isPending: isAdding } = useAddAddress()
+  const { mutate: editAddress, isPending: isEditing } = useEditAddress()
+
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    }
+  }, [initialValues, form])
+
+  const handleCreate = (values: any) => {
+    const addressData: AddressForm = {
+      ...values,
+      id: clientId,
+      title: 'Default',
+    }
+    addAddress(addressData, {
+      onSuccess: () => {
+        form.resetFields()
+        onCreate(values)
+        onClose()
+      },
+      onError: (error) => {
+        console.error('Error creating address:', error)
+      },
+    })
+  }
+
+  const handleEdit = (values: any) => {
+    const addressData: AddressForm = {
+      ...values,
+      id: clientId,
+      idAddress: initialValues?._id,
+    }
+    editAddress(addressData, {
+      onSuccess: () => {
+        form.resetFields()
+        onCreate(values)
+        onClose()
+      },
+      onError: (error) => {
+        console.error('Error editing address:', error)
+      },
+    })
+  }
 
   return (
     <Drawer
-      title={t('AddAddressDrawer.title')}
+      title={isEdit ? t('AddAddressDrawer.editTitle') : t('AddAddressDrawer.title')}
       width={360}
       onClose={onClose}
       visible={visible}
@@ -33,14 +82,14 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
               form
                 .validateFields()
                 .then(values => {
-                  form.resetFields()
-                  onCreate(values)
+                  isEdit ? handleEdit(values) : handleCreate(values)
                 })
                 .catch(info => {
                   console.log('Validation failed:', info)
                 })
             }}
             type="primary"
+            loading={isEdit ? isEditing : isAdding}
           >
             {t('submit')}
           </Button>
@@ -81,7 +130,7 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
           <Input />
         </Form.Item>
         <Form.Item
-          name="postalCode"
+          name="zip"
           label={t('AddAddressDrawer.postalCode')}
           rules={[{ required: true, message: t('AddAddressDrawer.validationPostalCode') }]}
         >

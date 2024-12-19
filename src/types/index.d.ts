@@ -173,3 +173,15 @@ export interface EditClientForm {
   email: string
   phone: string
 }
+
+export interface AddressForm {
+  id: string
+  _id?: string
+  idAddress?: string
+  title: string
+  city: string
+  line1: string
+  line2: string
+  zip: string
+  default?: boolean
+}

@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query'
 import ERDEAxios from './ERDEAxios'
 import {
+  AddressForm,
   Client,
   ClientForm,
   ClientListResponse,
@@ -102,5 +103,52 @@ export const useEditClient = (): UseMutationResult<
   return useMutation<void, Error, EditClientForm>({
     mutationFn: editClient,
     retry: false
+  })
+}
+
+const addAddress = async (addressData: AddressForm): Promise<void> => {
+  await ERDEAxios.post('/customer/address', addressData)
+}
+
+export const useAddAddress = (): UseMutationResult<
+  void,
+  Error,
+  AddressForm
+> => {
+  return useMutation<void, Error, AddressForm>({
+    mutationFn: addAddress,
+    retry: false
+  })
+}
+
+const editAddress = async (addressData: AddressForm): Promise<void> => {
+  await ERDEAxios.patch('/customer/address', addressData)
+}
+
+export const useEditAddress = (): UseMutationResult<
+  void,
+  Error,
+  AddressForm
+> => {
+  return useMutation<void, Error, AddressForm>({
+    mutationFn: editAddress,
+    retry: false
+  })
+}
+
+const deleteAddress = async (data: { id: string; idParent: string }) => {
+  const response = await ERDEAxios.delete(`/customer/address`, {
+    data: data
+  })
+  return response.data
+}
+
+export const useDeleteAddress = (): UseMutationResult<
+  void,
+  Error,
+  { id: string; idParent: string }
+> => {
+  return useMutation<void, Error, { id: string; idParent: string }>({
+    mutationFn: deleteAddress
   })
 }
