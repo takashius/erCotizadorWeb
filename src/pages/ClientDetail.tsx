@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { Card, Table, Button, Descriptions } from 'antd'
-import { mockClient } from '../mocks/mockClient'
+import { Card, Table, Button, Descriptions, Row, Col, Skeleton } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router-dom'
+import { useClientDetail } from '../api/clients'
 import AddClientModal from '../components/AddClientModal'
 import AddAddressDrawer from '../components/AddAddressDrawer'
 
 const ClientDetail: React.FC = () => {
   const { t } = useTranslation()
-  const client = mockClient
+  const { id } = useParams<{ id: string }>()
+  const { data: client, isLoading, error } = useClientDetail(id!)
   const [modalVisible, setModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [addressDrawerVisible, setAddressDrawerVisible] = useState(false)
@@ -42,7 +44,7 @@ const ClientDetail: React.FC = () => {
       render: (defaultAddr: boolean) => (defaultAddr ? t('ClientDetail.yes') : t('ClientDetail.no'))
     },
     {
-      title: t('ClientDetail.actions'),
+      title: t('actions'),
       key: 'actions',
       render: (record: any) => (
         <span>
@@ -85,16 +87,46 @@ const ClientDetail: React.FC = () => {
     setAddressDrawerVisible(false)
   }
 
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Row gutter={16} className="mb-4">
+          <Col span={12}>
+            <Card>
+              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card>
+              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+            </Card>
+          </Col>
+        </Row>
+        <Card>
+          <Skeleton active title={false} paragraph={{ rows: 10 }} />
+        </Card>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
+  if (!client) {
+    return <div>No data found</div>
+  }
+
   return (
     <div className="p-4">
       <Card
         title={
           <div className="flex justify-between items-center">
-            <span>{`${client.title} - ${client.name} ${client.lastname}`}</span>
+            <span>{`${client.title}`}</span>
             <Button
               type="primary"
               icon={<EditOutlined />}
-              onClick={handleEdit}
+              onClick={() => handleEdit(client)}
               className="bg-blue-500 text-white hover:bg-blue-600"
             >
               {t('ClientDetail.edit')}
