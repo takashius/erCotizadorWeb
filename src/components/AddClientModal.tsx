@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { Modal, Form, Input, Row, Col } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useCreateClient } from '../api/clients'
+import { ClientForm } from '../types'
 
 interface AddClientModalProps {
   visible: boolean
@@ -13,12 +15,36 @@ interface AddClientModalProps {
 const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCancel, isEdit = false, initialValues }) => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
+  const { mutate: createClient, isPending } = useCreateClient()
 
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues)
     }
   }, [initialValues, form])
+
+  const handleCreate = (values: any) => {
+    const clientData: ClientForm = {
+      ...values,
+      address: {
+        title: 'Default',
+        city: values.city,
+        line1: values.address1,
+        line2: values.address2,
+        zip: values.postalCode,
+      },
+    }
+    createClient(clientData, {
+      onSuccess: () => {
+        form.resetFields()
+        onCreate(values)
+        onCancel()
+      },
+      onError: (error) => {
+        console.error('Error creating client:', error)
+      },
+    })
+  }
 
   return (
     <Modal
@@ -30,15 +56,13 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCa
       onOk={() => {
         form
           .validateFields()
-          .then(values => {
-            form.resetFields()
-            onCreate(values)
-          })
+          .then(handleCreate)
           .catch(info => {
             console.log('Validation failed:', info)
           })
       }}
-      width={800} // Aumenta el ancho del modal
+      confirmLoading={isPending}
+      width={800}
     >
       <Form
         form={form}

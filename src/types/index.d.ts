@@ -115,6 +115,22 @@ export interface Client {
   active: boolean
 }
 
+export interface ClientForm {
+  title: string
+  name: string
+  lastname: string
+  rif: string
+  email: string
+  phone: string
+  address: {
+    title: string
+    city: string
+    line1: string
+    line2?: string
+    zip: string
+  }
+}
+
 export interface Account {
   address?: string | undefined
   bio: string | undefined
@@ -138,4 +154,12 @@ export interface LoginResponse {
   email: string
   date: string
   token: string
+}
+
+export interface ClientListResponse {
+  results: Client[]
+  totalCustomers: number
+  totalPages: number
+  currentPage: number
+  next: string | null
 }
