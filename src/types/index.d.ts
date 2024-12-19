@@ -163,3 +163,13 @@ export interface ClientListResponse {
   currentPage: number
   next: string | null
 }
+
+export interface EditClientForm {
+  id: string
+  title: string
+  name: string
+  lastname: string
+  rif: string
+  email: string
+  phone: string
+}

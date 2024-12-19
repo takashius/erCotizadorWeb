@@ -10,7 +10,7 @@ import AddAddressDrawer from '../components/AddAddressDrawer'
 const ClientDetail: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
-  const { data: client, isLoading, error } = useClientDetail(id!)
+  const { data: client, isLoading, error, refetch } = useClientDetail(id!)
   const [modalVisible, setModalVisible] = useState(false)
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [addressDrawerVisible, setAddressDrawerVisible] = useState(false)
@@ -64,13 +64,12 @@ const ClientDetail: React.FC = () => {
     console.log('Delete:', record)
   }
 
-  const handleCreate = (values: any) => {
-    console.log('Cliente creado:', values)
+  const handleCreate = () => {
     setModalVisible(false)
   }
 
-  const handleUpdate = (values: any) => {
-    console.log('Cliente actualizado:', values)
+  const handleUpdate = () => {
+    refetch()
     setEditModalVisible(false)
   }
 

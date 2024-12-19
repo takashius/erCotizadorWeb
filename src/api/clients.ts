@@ -5,7 +5,12 @@ import {
   UseQueryResult
 } from '@tanstack/react-query'
 import ERDEAxios from './ERDEAxios'
-import { Client, ClientForm, ClientListResponse } from '../types'
+import {
+  Client,
+  ClientForm,
+  ClientListResponse,
+  EditClientForm
+} from '../types'
 
 interface Customer {
   id: string
@@ -81,6 +86,21 @@ export const useClientDetail = (id: string): UseQueryResult<Client, Error> => {
   return useQuery<Client, Error>({
     queryKey: ['clientDetail', id],
     queryFn: () => fetchClientDetail(id),
+    retry: false
+  })
+}
+
+const editClient = async (clientData: EditClientForm): Promise<void> => {
+  await ERDEAxios.patch('/customer', clientData)
+}
+
+export const useEditClient = (): UseMutationResult<
+  void,
+  Error,
+  EditClientForm
+> => {
+  return useMutation<void, Error, EditClientForm>({
+    mutationFn: editClient,
     retry: false
   })
 }

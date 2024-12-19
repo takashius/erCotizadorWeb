@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Modal, Form, Input, Row, Col } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useCreateClient } from '../api/clients'
+import { useCreateClient, useEditClient } from '../api/clients'
 import { ClientForm } from '../types'
 
 interface AddClientModalProps {
@@ -15,11 +15,18 @@ interface AddClientModalProps {
 const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCancel, isEdit = false, initialValues }) => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
-  const { mutate: createClient, isPending } = useCreateClient()
+  const { mutate: createClient, isPending: isCreating } = useCreateClient()
+  const { mutate: editClient, isPending: isEditing } = useEditClient()
 
   useEffect(() => {
     if (initialValues) {
-      form.setFieldsValue(initialValues)
+      form.setFieldsValue({
+        ...initialValues,
+        address1: initialValues.address?.line1,
+        address2: initialValues.address?.line2,
+        city: initialValues.address?.city,
+        postalCode: initialValues.address?.zip
+      })
     }
   }, [initialValues, form])
 
@@ -46,6 +53,23 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCa
     })
   }
 
+  const handleEdit = (values: any) => {
+    const clientData = {
+      id: initialValues._id,
+      ...values
+    }
+    editClient(clientData, {
+      onSuccess: () => {
+        form.resetFields()
+        onCreate(values)
+        onCancel()
+      },
+      onError: (error) => {
+        console.error('Error editing client:', error)
+      },
+    })
+  }
+
   return (
     <Modal
       visible={visible}
@@ -56,12 +80,14 @@ const AddClientModal: React.FC<AddClientModalProps> = ({ visible, onCreate, onCa
       onOk={() => {
         form
           .validateFields()
-          .then(handleCreate)
+          .then(values => {
+            isEdit ? handleEdit(values) : handleCreate(values)
+          })
           .catch(info => {
             console.log('Validation failed:', info)
           })
       }}
-      confirmLoading={isPending}
+      confirmLoading={isEdit ? isEditing : isCreating}
       width={800}
     >
       <Form
