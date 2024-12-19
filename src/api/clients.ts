@@ -60,3 +60,14 @@ export const useCreateClient = (): UseMutationResult<
     retry: false
   })
 }
+
+const deleteClient = async (id: string) => {
+  const response = await ERDEAxios.delete(`/customer/${id}`)
+  return response.data
+}
+
+export const useDeleteClient = (): UseMutationResult<void, Error, string> => {
+  return useMutation<void, Error, string>({
+    mutationFn: deleteClient
+  })
+}

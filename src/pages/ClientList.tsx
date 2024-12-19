@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Input } from 'antd'
+import { Table, Button, Input, Popconfirm, message } from 'antd'
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddClientModal from '../components/AddClientModal'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { useClients } from '../api/clients'
+import { useClients, useDeleteClient } from '../api/clients'
 
 const ClientList = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const deleteClientMutation = useDeleteClient()
+  const [messageApi, contextHolder] = message.useMessage()
+  const [loadingId, setLoadingId] = useState<string | null>(null)
   const { data, isLoading, error, refetch } = useClients(currentPage, searchText)
 
   useEffect(() => {
@@ -21,10 +24,6 @@ const ClientList = () => {
   useEffect(() => {
     refetch()
   }, [currentPage])
-
-  useEffect(() => {
-    console.log('Data:', data?.results)
-  }, [data])
 
   const columns = [
     {
@@ -53,14 +52,37 @@ const ClientList = () => {
       render: (record: { _id: any }) => (
         <span>
           <Link to={`/client/${record._id}`}> <Button icon={<EditOutlined />} /></Link>
-          <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} className="ml-2" />
+          <Popconfirm
+            title={t('ClientList.deleteConfirmTitle')}
+            description={t('ClientList.deleteConfirmDescription')}
+            onConfirm={() => handleDelete(record._id)}
+            okText={t('home.confirmOkText')}
+            cancelText={t('home.confirmCancelText')}
+          >
+            <Button
+              icon={<DeleteOutlined />} className="ml-2"
+              loading={loadingId === record._id && deleteClientMutation.isPending}
+            />
+          </Popconfirm>
         </span>
       )
     }
   ]
 
-  const handleDelete = (record: { _id: any }) => {
-    console.log('Delete:', record)
+  const handleDelete = (clientId: string) => {
+    setLoadingId(clientId)
+    deleteClientMutation.mutate(clientId, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Eliminado correctamente`,
+        })
+        refetch()
+      },
+      onSettled: () => {
+        setLoadingId(null)
+      }
+    })
   }
 
   const handleCreate = () => {
@@ -78,6 +100,7 @@ const ClientList = () => {
 
   return (
     <div className="p-4">
+      {contextHolder}
       <div className="flex justify-between items-center mb-4">
         <Input
           placeholder={t('ClientList.searchPlaceholder')}

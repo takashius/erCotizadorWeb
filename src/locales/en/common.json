@@ -140,7 +140,9 @@
     "title": "Title",
     "name": "Name",
     "rif": "RIF",
-    "phone": "Phone"
+    "phone": "Phone",
+    "deleteConfirmTitle": "Delete the client",
+    "deleteConfirmDescription": "Are you sure to delete this client?"
   },
   "AddClientModal": {
     "addClient": "Add Client",
