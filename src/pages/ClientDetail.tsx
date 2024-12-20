@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, Table, Button, Descriptions, Row, Col, Skeleton, Popconfirm, message } from 'antd'
+import { Card, Table, Button, Descriptions, Skeleton, Popconfirm, message } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -122,20 +122,11 @@ const ClientDetail: React.FC = () => {
   if (isLoading) {
     return (
       <div className="md:p-4">
-        <Row gutter={16} className="mb-4">
-          <Col span={12}>
-            <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
-            </Card>
-          </Col>
-        </Row>
+        <Card className="mb-4">
+          <Skeleton active title={false} paragraph={{ rows: 7 }} />
+        </Card>
         <Card>
-          <Skeleton active title={false} paragraph={{ rows: 10 }} />
+          <Skeleton active title={false} paragraph={{ rows: 8 }} />
         </Card>
       </div>
     )

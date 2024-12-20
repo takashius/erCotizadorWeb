@@ -181,12 +181,12 @@ const QuotationDetails = () => {
         <Row gutter={16} className="mb-4">
           <Col span={12}>
             <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+              <Skeleton active title={false} paragraph={{ rows: 12 }} />
             </Card>
           </Col>
           <Col span={12}>
             <Card>
-              <Skeleton active title={false} paragraph={{ rows: 6 }} />
+              <Skeleton active title={false} paragraph={{ rows: 12 }} />
             </Card>
           </Col>
         </Row>
