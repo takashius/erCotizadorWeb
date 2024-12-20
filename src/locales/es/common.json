@@ -180,6 +180,8 @@
     "line1": "Dirección (Linea 1)",
     "zip": "Código Postal",
     "default": "Por Defecto",
+    "deleteConfirmTitle": "Eliminar la dirección",
+    "deleteConfirmDescription": "¿Estás seguro de eliminar esta dirección?",
     "yes": "Sí",
     "no": "No"
   },

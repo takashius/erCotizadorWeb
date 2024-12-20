@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Card, Table, Button, Descriptions, Row, Col, Skeleton } from 'antd'
+import { Card, Table, Button, Descriptions, Row, Col, Skeleton, Popconfirm, message } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { useClientDetail } from '../api/clients'
+import { useClientDetail, useDeleteAddress } from '../api/clients'
 import AddClientModal from '../components/AddClientModal'
 import AddAddressDrawer from '../components/AddAddressDrawer'
 
@@ -16,6 +16,8 @@ const ClientDetail: React.FC = () => {
   const [editingClient, setEditingClient] = useState<any>(null)
   const [editingAddress, setEditingAddress] = useState<any>(null)
   const [isAddressEdit, setIsAddressEdit] = useState<boolean>(false)
+  const deleteAddressMutation = useDeleteAddress()
+  const [messageApi, contextHolder] = message.useMessage()
 
   const columns = [
     {
@@ -50,7 +52,17 @@ const ClientDetail: React.FC = () => {
       render: (record: any) => (
         <span>
           <Button icon={<EditOutlined />} onClick={() => handleEditAddress(record)} />
-          <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} className="ml-2" />
+          <Popconfirm
+            title={t('ClientDetail.deleteConfirmTitle')}
+            description={t('ClientDetail.deleteConfirmDescription')}
+            onConfirm={() => handleDelete(record._id)}
+            okText={t('quotationDetails.confirmOkText')}
+            cancelText={t('quotationDetails.confirmCancelText')}
+          >
+            <Button icon={<DeleteOutlined />}
+              className="ml-2"
+              loading={deleteAddressMutation.isPending && deleteAddressMutation.variables?.id === record._id} />
+          </Popconfirm>
         </span>
       )
     }
@@ -67,11 +79,23 @@ const ClientDetail: React.FC = () => {
     setAddressDrawerVisible(true)
   }
 
-  const handleDelete = (record: any) => {
-    console.log('Delete:', record)
+  const handleDelete = (addressId: string) => {
+    deleteAddressMutation.mutate({ idParent: id!, id: addressId }, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Direccion Borrada correctamente`,
+        })
+        refetch()
+      }
+    })
   }
 
   const handleUpdate = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Cliente actualizado correctamente`,
+    })
     refetch()
     setEditModalVisible(false)
   }
@@ -87,6 +111,10 @@ const ClientDetail: React.FC = () => {
   }
 
   const handleAddressCreate = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Direccion actualizada correctamente`,
+    })
     refetch()
     setAddressDrawerVisible(false)
   }
@@ -123,6 +151,7 @@ const ClientDetail: React.FC = () => {
 
   return (
     <div className="p-4">
+      {contextHolder}
       <Card
         title={
           <div className="flex justify-between items-center">
