@@ -185,3 +185,19 @@ export interface AddressForm {
   zip: string
   default?: boolean
 }
+
+export interface Product {
+  _id?: string
+  id?: string
+  name: string
+  price: number
+  iva: boolean
+}
+
+export interface ProductListResponse {
+  results: Product[]
+  totalProducts: number
+  totalPages: number
+  currentPage: number
+  next: string | null
+}

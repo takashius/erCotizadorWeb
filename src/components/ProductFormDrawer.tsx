@@ -23,6 +23,7 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
     if (initialValues) {
       form.setFieldsValue(initialValues)
     } else {
+      form.resetFields()
       form.setFieldsValue({ amount: 1 })
     }
   }, [initialValues, form])
@@ -44,7 +45,6 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
           updateProductMutation.mutate({ ...values, id: quotationId, idProduct: initialValues._id }, {
             onSuccess: (data) => {
               onSubmit(data)
-              form.resetFields()
               onClose()
             }
           })
@@ -52,7 +52,6 @@ const ProductFormDrawer: React.FC<ProductFormDrawerProps> = ({ visible, onClose,
           addProductMutation.mutate({ ...values, id: quotationId }, {
             onSuccess: (data) => {
               onSubmit(data)
-              form.resetFields()
               onClose()
             }
           })

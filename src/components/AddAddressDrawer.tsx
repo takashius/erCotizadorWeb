@@ -22,6 +22,8 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
   useEffect(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues)
+    } else {
+      form.resetFields()
     }
   }, [initialValues, form])
 
@@ -33,7 +35,6 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
     }
     addAddress(addressData, {
       onSuccess: () => {
-        form.resetFields()
         onCreate(values)
         onClose()
       },
@@ -51,7 +52,6 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
     }
     editAddress(addressData, {
       onSuccess: () => {
-        form.resetFields()
         onCreate(values)
         onClose()
       },
@@ -100,7 +100,6 @@ const AddAddressDrawer: React.FC<AddAddressDrawerProps> = ({ visible, onClose, o
         form={form}
         layout="vertical"
         name="form_in_drawer"
-        initialValues={{ default: false }}
       >
         <Form.Item
           name="title"

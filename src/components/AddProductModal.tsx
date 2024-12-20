@@ -1,35 +1,80 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal, Form, Input, Switch } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useCreateProduct, useEditProduct } from '../api/products'
+import { Product } from '../types'
 
 interface AddProductModalProps {
   visible: boolean
   onCreate: (values: any) => void
+  onEdit: (values: any) => void
   onCancel: () => void
+  isEdit?: boolean
+  initialValues?: Product
 }
 
-const AddProductModal: React.FC<AddProductModalProps> = ({ visible, onCreate, onCancel }) => {
+const AddProductModal: React.FC<AddProductModalProps> = ({ visible, onCreate, onEdit, onCancel, isEdit = false, initialValues }) => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
+  const { mutate: createProduct, isPending: isCreating } = useCreateProduct()
+  const { mutate: editProduct, isPending: isEditing } = useEditProduct()
+
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    } else {
+      form.resetFields()
+    }
+  }, [initialValues, form])
+
+  const handleCreate = (values: any) => {
+    createProduct(values, {
+      onSuccess: () => {
+        onCreate(values)
+        onCancel()
+        form.resetFields()
+      },
+      onError: (error: any) => {
+        console.error('Error creating product:', error)
+      },
+    })
+  }
+
+  const handleEdit = (values: any) => {
+    const productData = {
+      ...values,
+      id: initialValues?._id,
+    }
+    editProduct(productData, {
+      onSuccess: () => {
+        onEdit(values)
+        onCancel()
+        form.resetFields()
+      },
+      onError: (error: any) => {
+        console.error('Error editing product:', error)
+      },
+    })
+  }
 
   return (
     <Modal
       visible={visible}
-      title={t('AddProductModal.addProduct')}
-      okText={t('AddProductModal.create')}
+      title={isEdit ? t('AddProductModal.editProduct') : t('AddProductModal.addProduct')}
+      okText={isEdit ? t('update') : t('AddProductModal.create')}
       cancelText={t('AddProductModal.cancel')}
       onCancel={onCancel}
       onOk={() => {
         form
           .validateFields()
           .then(values => {
-            form.resetFields()
-            onCreate(values)
+            isEdit ? handleEdit(values) : handleCreate(values)
           })
           .catch(info => {
             console.log('Validation failed:', info)
           })
       }}
+      confirmLoading={isEdit ? isEditing : isCreating}
     >
       <Form
         form={form}

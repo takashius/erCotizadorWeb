@@ -4,6 +4,7 @@
   "actions": "Actions",
   "submit": "Submit",
   "cancelButton": "Cancel",
+  "update": "Update",
   "menu": {
     "home": "Home",
     "settings": "Settings",

@@ -1,26 +1,28 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Input } from 'antd'
+import { Table, Button, Input, Popconfirm, message } from 'antd'
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { productData } from '../mocks/productData'
 import AddProductModal from '../components/AddProductModal'
 import { useTranslation } from 'react-i18next'
+import { useProductList } from '../api/products'
 
 const ProductList = () => {
   const { t } = useTranslation()
-  const products = productData.results
   const [searchText, setSearchText] = useState('')
-  const [filteredProducts, setFilteredProducts] = useState(productData.results)
+  const [currentPage, setCurrentPage] = useState(1)
   const [modalVisible, setModalVisible] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
+  const [messageApi, contextHolder] = message.useMessage()
+  const [initialValues, setInitialValues] = useState<any>(null)
+  const { data, isLoading, error, refetch } = useProductList(currentPage, searchText)
 
   useEffect(() => {
-    setFilteredProducts(
-      products.filter(product =>
-        `${product.name} ${product.price} ${product.iva ? t('ProductList.ivaYes') : t('ProductList.ivaNo')}`
-          .toLowerCase()
-          .includes(searchText.toLowerCase())
-      )
-    )
-  }, [searchText, products, t])
+    setCurrentPage(1)
+    refetch()
+  }, [searchText])
+
+  useEffect(() => {
+    refetch()
+  }, [currentPage])
 
   const columns = [
     {
@@ -46,27 +48,61 @@ const ProductList = () => {
       render: (record: any) => (
         <span>
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
-          <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} className="ml-2" />
+          <Popconfirm
+            title={t('quotationDetails.deleteConfirmTitle')}
+            description={t('quotationDetails.deleteConfirmDescription')}
+            onConfirm={() => handleDelete(record._id)}
+            okText={t('home.confirmOkText')}
+            cancelText={t('home.confirmCancelText')}
+          >
+            <Button
+              icon={<DeleteOutlined />} className="ml-2"
+            />
+          </Popconfirm>
         </span>
       )
     }
   ]
 
   const handleEdit = (record: any) => {
-    console.log('Edit:', record)
+    setIsEdit(true)
+    setInitialValues(record)
+    setModalVisible(true)
   }
 
   const handleDelete = (record: any) => {
     console.log('Delete:', record)
   }
 
-  const handleCreate = (values: any) => {
-    console.log('Producto creado:', values)
+  const handleCreate = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Producto creado correctamente`,
+    })
     setModalVisible(false)
+    refetch()
+  }
+
+  const handleEditSuccess = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Producto actualizado correctamente`,
+    })
+    setModalVisible(false)
+    refetch()
+  }
+
+  const handleTableChange = (pagination: any) => {
+    setCurrentPage(pagination.current)
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>
   }
 
   return (
     <div className="p-4">
+      {contextHolder}
       <div className="flex justify-between items-center mb-4">
         <Input
           placeholder={t('ProductList.searchPlaceholder')}
@@ -75,15 +111,34 @@ const ProductList = () => {
           prefix={<SearchOutlined />}
           className="w-full md:w-1/3"
         />
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => {
+          setModalVisible(true);
+          setIsEdit(false);
+          setInitialValues(null)
+        }}>
           {t('ProductList.addProductButton')}
         </Button>
       </div>
-      <Table columns={columns} dataSource={filteredProducts} rowKey="_id" />
+      <Table
+        columns={columns}
+        dataSource={data?.results || []}
+        rowKey="_id"
+        loading={isLoading}
+        pagination={{
+          total: data?.totalProducts || 0,
+          current: currentPage,
+          pageSize: 20,
+          showSizeChanger: false
+        }}
+        onChange={handleTableChange}
+      />
       <AddProductModal
         visible={modalVisible}
         onCreate={handleCreate}
+        onEdit={handleEditSuccess}
         onCancel={() => setModalVisible(false)}
+        isEdit={isEdit}
+        initialValues={initialValues}
       />
     </div>
   )
