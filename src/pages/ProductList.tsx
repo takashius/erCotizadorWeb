@@ -3,7 +3,7 @@ import { Table, Button, Input, Popconfirm, message } from 'antd'
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddProductModal from '../components/AddProductModal'
 import { useTranslation } from 'react-i18next'
-import { useProductList } from '../api/products'
+import { useDeleteProduct, useProductList } from '../api/products'
 
 const ProductList = () => {
   const { t } = useTranslation()
@@ -13,7 +13,9 @@ const ProductList = () => {
   const [isEdit, setIsEdit] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [initialValues, setInitialValues] = useState<any>(null)
+  const [loadingId, setLoadingId] = useState<string | null>(null)
   const { data, isLoading, error, refetch } = useProductList(currentPage, searchText)
+  const deleteProductMutation = useDeleteProduct()
 
   useEffect(() => {
     setCurrentPage(1)
@@ -57,6 +59,7 @@ const ProductList = () => {
           >
             <Button
               icon={<DeleteOutlined />} className="ml-2"
+              loading={loadingId === record._id && deleteProductMutation.isPending}
             />
           </Popconfirm>
         </span>
@@ -70,8 +73,20 @@ const ProductList = () => {
     setModalVisible(true)
   }
 
-  const handleDelete = (record: any) => {
-    console.log('Delete:', record)
+  const handleDelete = (productId: string) => {
+    setLoadingId(productId)
+    deleteProductMutation.mutate(productId, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Eliminado correctamente`,
+        })
+        refetch()
+      },
+      onSettled: () => {
+        setLoadingId(null)
+      }
+    })
   }
 
   const handleCreate = () => {
