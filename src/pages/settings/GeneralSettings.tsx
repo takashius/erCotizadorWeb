@@ -1,24 +1,55 @@
-import React, { useState } from 'react'
-import { Card, Form, Input, InputNumber, Button, Select, Switch, Upload, Row, Col } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Card, Form, Input, InputNumber, Button, Select, Switch, Upload, Row, Col, Skeleton, message } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { useGetCompany, useSetConfig } from '../../api/company'
+import { useAuth } from '../../context/AuthContext'
 
 const { Option } = Select
 
 const GeneralSettings: React.FC = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
   const [logo, setLogo] = useState<string | null>(null)
+  const { data: config, isLoading } = useGetCompany(true)
+  const configMutation = useSetConfig()
+  const { getUser } = useAuth();
+  const user: any = getUser();
 
-  const handleSave = (values: any) => {
-    setLoading(true)
-    console.log('Configuración guardada:', values)
-    // Simula una llamada API
-    setTimeout(() => {
-      setLoading(false)
-      form.resetFields()
-    }, 2000)
+  useEffect(() => {
+    if (config) {
+      form.setFieldsValue({
+        address: config.address,
+        description: config.description,
+        phone: config.phone,
+        rif: config.rif,
+        currencySymbol: config.currencySymbol,
+        currencyRate: config.currencyRate,
+        autoCorrelatives: config.correlatives?.manageInvoiceCorrelative,
+        iva: config.iva,
+        logo: config.logo
+      })
+      setLogo(config.logo)
+    }
+  }, [config, form])
+
+  const handleSave = () => {
+    form
+      .validateFields()
+      .then(values => {
+        values.id = user.company
+        configMutation.mutate(values, {
+          onSuccess: () => {
+            message.success(t('saveSuccess'))
+          },
+          onError: () => {
+            message.error(t('saveError'))
+          }
+        })
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info)
+      })
   }
 
   const handleLogoChange = (info: any) => {
@@ -26,6 +57,16 @@ const GeneralSettings: React.FC = () => {
       // Obtener la URL del logo subido
       setLogo(URL.createObjectURL(info.file.originFileObj))
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Card className="mb-4">
+          <Skeleton active title={false} paragraph={{ rows: 16 }} />
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -70,18 +111,18 @@ const GeneralSettings: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                name="currency"
+                name="currencySymbol"
                 label={t('GeneralSettings.currency')}
                 rules={[{ required: true, message: t('GeneralSettings.validationCurrency') }]}
               >
                 <Select>
                   <Option value="bs">Bs</Option>
-                  <Option value="euro">€</Option>
-                  <Option value="usd">$</Option>
+                  <Option value="€">€</Option>
+                  <Option value="$">$</Option>
                 </Select>
               </Form.Item>
               <Form.Item
-                name="rate"
+                name="currencyRate"
                 label={t('GeneralSettings.rate')}
                 rules={[{ required: true, message: t('GeneralSettings.validationRate') }]}
               >
@@ -129,7 +170,7 @@ const GeneralSettings: React.FC = () => {
             </Col>
             <Col span={12}>
               <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading} style={{ marginTop: '32px' }}>
+                <Button type="primary" htmlType="submit" loading={configMutation.isPending} style={{ marginTop: '32px' }}>
                   {t('GeneralSettings.saveButton')}
                 </Button>
               </Form.Item>

@@ -5,6 +5,8 @@
   "submit": "Submit",
   "cancelButton": "Cancel",
   "update": "Update",
+  "saveSuccess": "Save success",
+  "saveError": "An error occurred while saving",
   "menu": {
     "home": "Home",
     "settings": "Settings",

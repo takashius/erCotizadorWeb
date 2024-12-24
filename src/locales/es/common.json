@@ -5,6 +5,8 @@
   "submit": "Enviar",
   "cancelButton": "Cancelar",
   "update": "Actualizar",
+  "saveSuccess": "Guardado correctamente",
+  "saveError": "Ocurrio un error al guardar",
   "menu": {
     "home": "Inicio",
     "settings": "Configuración",
