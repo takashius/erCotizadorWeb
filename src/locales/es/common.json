@@ -109,7 +109,9 @@
     "deleteConfirmTitle": "Eliminar el producto",
     "deleteConfirmDescription": "¿Estás seguro de eliminar este producto?",
     "confirmOkText": "Sí",
-    "confirmCancelText": "No"
+    "confirmCancelText": "No",
+    "products": "Productos",
+    "incomeExpenses": "Movimientos"
   },
   "productForm": {
     "addProductToQuotation": "Añadir Producto a la Cotización",
@@ -276,5 +278,16 @@
   "CompanySelection": {
     "title": "Selección de Empresa",
     "saveButton": "Guardar"
+  },
+  "incomeExpenses": {
+    "description": "Descripción de ingresos y egresos",
+    "amount": "Monto",
+    "date": "Fecha",
+    "tableTitle": "Ingreso y Egreso",
+    "addButton": "Añadir Ingreso/Egreso",
+    "deleteConfirmTitle": "Confirmar eliminación",
+    "deleteConfirmDescription": "¿Está seguro de que desea eliminar este ingreso/egreso?",
+    "confirmOkText": "Sí",
+    "confirmCancelText": "No"
   }
 }

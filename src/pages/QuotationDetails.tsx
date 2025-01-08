@@ -1,5 +1,19 @@
 import { useParams } from 'react-router-dom'
-import { Table, Button, Descriptions, Card, Skeleton, Row, Col, Popconfirm, message } from 'antd'
+import {
+  Table,
+  Button,
+  Descriptions,
+  Card,
+  Skeleton,
+  Row,
+  Col,
+  Popconfirm,
+  message,
+  Tabs,
+  Statistic
+} from 'antd'
+import { Line } from 'react-chartjs-2'
+import 'chart.js/auto'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Product } from '../types'
 import { useState } from 'react'
@@ -15,18 +29,112 @@ import {
   useDownloadPDF
 } from '../api/cotiza'
 
+const sampleIncomeExpenses = [
+  {
+    _id: '1',
+    description: 'Venta de productos',
+    amount: 5000,
+    date: '2025-01-01',
+  },
+  {
+    _id: '2',
+    description: 'Alquiler de local',
+    amount: -1500,
+    date: '2025-01-03',
+  },
+  {
+    _id: '3',
+    description: 'Compra de insumos',
+    amount: -2000,
+    date: '2025-01-05',
+  },
+  {
+    _id: '4',
+    description: 'Servicio de mantenimiento',
+    amount: -800,
+    date: '2025-01-10',
+  },
+]
+const incomeExpensesSummary = {
+  totalIncome: 5000,
+  totalExpenses: 4300,
+  netProfit: 700,
+}
+
+const chartData = {
+  labels: ['2025-01-01', '2025-01-03', '2025-01-05', '2025-01-10'],
+  datasets: [
+    {
+      label: 'Ingresos',
+      data: [5000, 0, 0, 0],
+      borderColor: 'green',
+      fill: false,
+    },
+    {
+      label: 'Egresos',
+      data: [0, -1500, -2000, -800],
+      borderColor: 'red',
+      fill: false,
+    },
+  ],
+}
+
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: quotation, error, isLoading, refetch } = useCotizaDetail(id!)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
+  const [activeTab, setActiveTab] = useState('1')
   const [messageApi, contextHolder] = message.useMessage()
   const { t } = useTranslation()
   const deleteProductMutation = useDeleteProductFromQuotation()
   const updateRateMutation = useUpdateRate()
   const sendQuotationByEmailMutation = useSendQuotationByEmail()
   const downloadMutation = useDownloadPDF()
+  const { TabPane } = Tabs
+
+  const columnsIncomeExpenses = [
+    {
+      title: t('incomeExpenses.description'),
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: t('incomeExpenses.amount'),
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (amount: number) => (
+        <span style={{ color: amount < 0 ? 'red' : 'green' }}>
+          {amount < 0 ? `-$${Math.abs(amount).toFixed(2)}` : `$${amount.toFixed(2)}`}
+        </span>
+      ),
+    },
+    {
+      title: t('incomeExpenses.date'),
+      dataIndex: 'date',
+      key: 'date',
+    },
+    {
+      title: t('actions'),
+      key: 'actions',
+      render: (record: any) => (
+        <Button.Group>
+          <Button icon={<EditOutlined />} onClick={() => openEditIncomeExpenseDrawer(record)} />
+          <Popconfirm
+            title={t('incomeExpenses.deleteConfirmTitle')}
+            description={t('incomeExpenses.deleteConfirmDescription')}
+            onConfirm={() => handleDeleteIncomeExpense()}
+            okText={t('incomeExpenses.confirmOkText')}
+            cancelText={t('incomeExpenses.confirmCancelText')}
+          >
+            <Button icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Button.Group>
+      ),
+    }
+  ]
+
 
   const columns = [
     {
@@ -175,6 +283,18 @@ const QuotationDetails = () => {
     refetch()
   }
 
+  const handleDeleteIncomeExpense = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Ingreso/Egreso eliminado correctamente`,
+    })
+  }
+
+  const openEditIncomeExpenseDrawer = (record: any) => {
+    setEditingProduct(record)
+    setDrawerVisible(true)
+  }
+
   if (isLoading) {
     return (
       <div className="md:p-4">
@@ -219,31 +339,82 @@ const QuotationDetails = () => {
             <Descriptions.Item label={t('quotationDetails.exchangeRate')}>{quotation.rate}</Descriptions.Item>
           </Descriptions>
         </Card>
-
-        <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false}>
-          <Descriptions bordered column={1}>
-            <Descriptions.Item label={t('quotationDetails.customerTitle')}>{quotation.customer.title}</Descriptions.Item>
-            <Descriptions.Item label={t('quotationDetails.email')}>{quotation.customer.email}</Descriptions.Item>
-            <Descriptions.Item label={t('quotationDetails.phone')}>{quotation.customer.phone}</Descriptions.Item>
-            <Descriptions.Item label={t('quotationDetails.taxId')}>{quotation.customer.rif}</Descriptions.Item>
-          </Descriptions>
-        </Card>
+        {activeTab === '1' ? (
+          <Card title={`${quotation.customer.name} ${quotation.customer.lastname}`} bordered={false}>
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label={t('quotationDetails.customerTitle')}>{quotation.customer.title}</Descriptions.Item>
+              <Descriptions.Item label={t('quotationDetails.email')}>{quotation.customer.email}</Descriptions.Item>
+              <Descriptions.Item label={t('quotationDetails.phone')}>{quotation.customer.phone}</Descriptions.Item>
+              <Descriptions.Item label={t('quotationDetails.taxId')}>{quotation.customer.rif}</Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : (
+          <Card title="Gráfica de Ingresos y Egresos" bordered={false}>
+            <Line data={chartData} />
+          </Card>
+        )}
       </div>
 
-      <Card title={
-        <div className="flex justify-between items-center">
-          <span>{t('quotationDetails.productTableTitle')}</span>
-          <Button
-            type="primary"
-            onClick={showDrawer}
-            className="bg-blue-500 text-white hover:bg-blue-600"
-          >
-            {t('quotationDetails.addProductButton')}
-          </Button>
-        </div>
-      } bordered={false}>
-        <Table columns={columns} dataSource={quotation.products} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
-      </Card>
+      <div className="md:p-4">
+        {contextHolder}
+        <Tabs defaultActiveKey="1" onChange={setActiveTab}>
+          <TabPane tab={t('quotationDetails.products')} key="1">
+            <Card title={
+              <div className="flex justify-between items-center">
+                <span>{t('quotationDetails.productTableTitle')}</span>
+                <Button
+                  type="primary"
+                  onClick={showDrawer}
+                  className="bg-blue-500 text-white hover:bg-blue-600"
+                >
+                  {t('quotationDetails.addProductButton')}
+                </Button>
+              </div>
+            } bordered={false}>
+              <Table columns={columns} dataSource={quotation.products} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
+            </Card>
+          </TabPane>
+          <TabPane tab={t('quotationDetails.incomeExpenses')} key="2">
+            {activeTab === '2' && (
+              <>
+                {/* Resumen de ingresos y egresos */}
+                <Row gutter={16} className="mb-4">
+                  <Col span={8}>
+                    <Statistic title="Ingresos Totales" value={incomeExpensesSummary.totalIncome} precision={2} valueStyle={{ color: 'green' }} prefix="$" />
+                  </Col>
+                  <Col span={8}>
+                    <Statistic title="Egresos Totales" value={incomeExpensesSummary.totalExpenses} precision={2} valueStyle={{ color: 'red' }} prefix="$" />
+                  </Col>
+                  <Col span={8}>
+                    <Statistic title="Ganancia Neta" value={incomeExpensesSummary.netProfit} precision={2} valueStyle={{ color: incomeExpensesSummary.netProfit > 0 ? 'green' : 'red' }} prefix="$" />
+                  </Col>
+                </Row>
+
+                {/* Gráfica de ingresos y egresos */}
+
+
+                {/* Tabla de ingresos y egresos */}
+                <Card title={
+                  <div className="flex justify-between items-center">
+                    <span>{t('incomeExpenses.tableTitle')}</span>
+                    <Button
+                      type="primary"
+                      onClick={showDrawer}
+                      className="bg-blue-500 text-white hover:bg-blue-600"
+                    >
+                      {t('incomeExpenses.addButton')}
+                    </Button>
+                  </div>
+                } bordered={false}>
+                  <Table columns={columnsIncomeExpenses} dataSource={sampleIncomeExpenses} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
+                </Card>
+              </>
+            )}
+          </TabPane>
+        </Tabs>
+
+        {/* Existing Modals, Drawers, and FloatingMenu */}
+      </div>
 
       <ProductFormDrawer
         visible={drawerVisible}
