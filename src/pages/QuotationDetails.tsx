@@ -15,10 +15,11 @@ import {
 import { Line } from 'react-chartjs-2'
 import 'chart.js/auto'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Product } from '../types'
+import { MoneyFlow, Product } from '../types'
 import { useState } from 'react'
 import FloatingMenu from '../components/FloatingMenu'
 import ProductFormDrawer from '../components/ProductFormDrawer'
+import MoneyFlowFormDrawer from '../components/MoneyFlowFormDrawery'
 import QuotationFormModal from '../components/QuotationFormModal'
 import { useTranslation } from 'react-i18next'
 import {
@@ -28,77 +29,93 @@ import {
   useSendQuotationByEmail,
   useDownloadPDF
 } from '../api/cotiza'
+import { useMoneyFlowByCotiza, useDeleteMoneyFlow } from '../api/moneyFlow'
 
-const sampleIncomeExpenses = [
-  {
-    _id: '1',
-    description: 'Venta de productos',
-    amount: 5000,
-    date: '2025-01-01',
-  },
-  {
-    _id: '2',
-    description: 'Alquiler de local',
-    amount: -1500,
-    date: '2025-01-03',
-  },
-  {
-    _id: '3',
-    description: 'Compra de insumos',
-    amount: -2000,
-    date: '2025-01-05',
-  },
-  {
-    _id: '4',
-    description: 'Servicio de mantenimiento',
-    amount: -800,
-    date: '2025-01-10',
-  },
-]
-const incomeExpensesSummary = {
-  totalIncome: 5000,
-  totalExpenses: 4300,
-  netProfit: 700,
-}
+const calculateIncomeExpensesSummaryAndChartData = (moneyFlow: MoneyFlow[]) => {
+  if (!moneyFlow) return {
+    summary: { totalIncome: 0, totalExpenses: 0, netProfit: 0 },
+    chartData: { labels: [], datasets: [] }
+  };
 
-const chartData = {
-  labels: ['2025-01-01', '2025-01-03', '2025-01-05', '2025-01-10'],
-  datasets: [
-    {
-      label: 'Ingresos',
-      data: [5000, 0, 0, 0],
-      borderColor: 'green',
-      fill: false,
+  let totalIncome = 0;
+  let totalExpenses = 0;
+  const incomeByDate: { [key: string]: number } = {};
+  const expensesByDate: { [key: string]: number } = {};
+
+  moneyFlow.forEach((item) => {
+    const date = item.created.date.split('T')[0]; // Obtener solo la fecha
+    if (item.type === 'income') {
+      totalIncome += item.amount;
+      if (!incomeByDate[date]) incomeByDate[date] = 0;
+      incomeByDate[date] += item.amount;
+    } else if (item.type === 'expense') {
+      totalExpenses += item.amount;
+      if (!expensesByDate[date]) expensesByDate[date] = 0;
+      expensesByDate[date] += item.amount;
+    }
+  });
+
+  const netProfit = totalIncome - totalExpenses;
+
+  // Obtener todas las fechas únicas ordenadas
+  const labels = Array.from(new Set([...Object.keys(incomeByDate), ...Object.keys(expensesByDate)])).sort();
+
+  const incomeData = labels.map(date => incomeByDate[date] || 0);
+  const expensesData = labels.map(date => -expensesByDate[date] || 0);
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Ingresos',
+        data: incomeData,
+        borderColor: 'green',
+        fill: false,
+      },
+      {
+        label: 'Egresos',
+        data: expensesData,
+        borderColor: 'red',
+        fill: false,
+      },
+    ],
+  };
+
+  return {
+    incomeExpensesSummary: {
+      totalIncome,
+      totalExpenses,
+      netProfit,
     },
-    {
-      label: 'Egresos',
-      data: [0, -1500, -2000, -800],
-      borderColor: 'red',
-      fill: false,
-    },
-  ],
-}
+    chartData,
+  };
+};
 
 const QuotationDetails = () => {
   const { id } = useParams<{ id: string }>()
   const { data: quotation, error, isLoading, refetch } = useCotizaDetail(id!)
+  const { data: moneyFlow, error: errorFlow, isLoading: isLoadingFlow, refetch: refetchFlow } = useMoneyFlowByCotiza(id!)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [editingFlow, setEditingFlow] = useState<MoneyFlow | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
+  const [drawerFlowVisible, setDrawerFlowVisible] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [activeTab, setActiveTab] = useState('1')
   const [messageApi, contextHolder] = message.useMessage()
   const { t } = useTranslation()
   const deleteProductMutation = useDeleteProductFromQuotation()
+  const deleteFlowMutation = useDeleteMoneyFlow()
   const updateRateMutation = useUpdateRate()
   const sendQuotationByEmailMutation = useSendQuotationByEmail()
   const downloadMutation = useDownloadPDF()
   const { TabPane } = Tabs
+  const { incomeExpensesSummary, chartData } = calculateIncomeExpensesSummaryAndChartData(moneyFlow!)
 
   const columnsIncomeExpenses = [
     {
       title: t('incomeExpenses.description'),
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
       title: t('incomeExpenses.amount'),
@@ -113,18 +130,18 @@ const QuotationDetails = () => {
     {
       title: t('incomeExpenses.date'),
       dataIndex: 'date',
-      key: 'date',
+      key: 'created.date',
     },
     {
       title: t('actions'),
       key: 'actions',
-      render: (record: any) => (
+      render: (record: MoneyFlow) => (
         <Button.Group>
-          <Button icon={<EditOutlined />} onClick={() => openEditIncomeExpenseDrawer(record)} />
+          <Button icon={<EditOutlined />} onClick={() => openEditFlowDrawer(record)} />
           <Popconfirm
             title={t('incomeExpenses.deleteConfirmTitle')}
             description={t('incomeExpenses.deleteConfirmDescription')}
-            onConfirm={() => handleDeleteIncomeExpense()}
+            onConfirm={() => handleDeleteIncomeExpense(record._id)}
             okText={t('incomeExpenses.confirmOkText')}
             cancelText={t('incomeExpenses.confirmCancelText')}
           >
@@ -134,7 +151,6 @@ const QuotationDetails = () => {
       ),
     }
   ]
-
 
   const columns = [
     {
@@ -251,14 +267,29 @@ const QuotationDetails = () => {
     setDrawerVisible(true)
   }
 
+  const showDrawerFlow = () => {
+    setEditingFlow(null)
+    setDrawerFlowVisible(true)
+  }
+
   const openEditProductDrawer = (product: Product) => {
     setEditingProduct(product)
     setDrawerVisible(true)
   }
 
+  const openEditFlowDrawer = (moneyFlow: MoneyFlow) => {
+    setEditingFlow(moneyFlow)
+    setDrawerFlowVisible(true)
+  }
+
   const closeDrawer = () => {
     setDrawerVisible(false)
     setEditingProduct(null)
+  }
+
+  const closeDrawerFlow = () => {
+    setDrawerFlowVisible(false)
+    setEditingFlow(null)
   }
 
   const handleFormSubmit = () => {
@@ -268,6 +299,15 @@ const QuotationDetails = () => {
     })
     refetch()
     closeDrawer()
+  }
+
+  const handleFormFlowSubmit = () => {
+    messageApi.open({
+      type: 'success',
+      content: `Movimiento de dinero agregado correctamente`,
+    })
+    refetchFlow()
+    closeDrawerFlow()
   }
 
   const closeModal = () => {
@@ -283,19 +323,24 @@ const QuotationDetails = () => {
     refetch()
   }
 
-  const handleDeleteIncomeExpense = () => {
+  const handleDeleteIncomeExpense = (id: string) => {
     messageApi.open({
       type: 'success',
       content: `Ingreso/Egreso eliminado correctamente`,
     })
+    refetchFlow()
+    deleteFlowMutation.mutate(id, {
+      onSuccess: () => {
+        messageApi.open({
+          type: 'success',
+          content: `Ingreso/Egreso eliminado correctamente`,
+        })
+        refetchFlow()
+      }
+    })
   }
 
-  const openEditIncomeExpenseDrawer = (record: any) => {
-    setEditingProduct(record)
-    setDrawerVisible(true)
-  }
-
-  if (isLoading) {
+  if (isLoading || isLoadingFlow) {
     return (
       <div className="md:p-4">
         <Row gutter={16} className="mb-4">
@@ -317,8 +362,8 @@ const QuotationDetails = () => {
     )
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>
+  if (error || errorFlow) {
+    return <div>Error: {error ? error.message : (errorFlow ? errorFlow.message : '')}</div>
   }
 
   if (!quotation) {
@@ -380,13 +425,21 @@ const QuotationDetails = () => {
                 {/* Resumen de ingresos y egresos */}
                 <Row gutter={16} className="mb-4">
                   <Col span={8}>
-                    <Statistic title="Ingresos Totales" value={incomeExpensesSummary.totalIncome} precision={2} valueStyle={{ color: 'green' }} prefix="$" />
+                    <Statistic title="Ingresos Totales" value={incomeExpensesSummary?.totalIncome} precision={2} valueStyle={{ color: 'green' }} prefix="$" />
                   </Col>
                   <Col span={8}>
-                    <Statistic title="Egresos Totales" value={incomeExpensesSummary.totalExpenses} precision={2} valueStyle={{ color: 'red' }} prefix="$" />
+                    <Statistic title="Egresos Totales" value={incomeExpensesSummary?.totalExpenses} precision={2} valueStyle={{ color: 'red' }} prefix="$" />
                   </Col>
                   <Col span={8}>
-                    <Statistic title="Ganancia Neta" value={incomeExpensesSummary.netProfit} precision={2} valueStyle={{ color: incomeExpensesSummary.netProfit > 0 ? 'green' : 'red' }} prefix="$" />
+                    <Statistic
+                      title="Ganancia Neta"
+                      value={incomeExpensesSummary?.netProfit}
+                      precision={2}
+                      valueStyle={{
+                        color: incomeExpensesSummary?.netProfit && incomeExpensesSummary?.netProfit > 0 ? 'green' : 'red'
+                      }}
+                      prefix="$"
+                    />
                   </Col>
                 </Row>
 
@@ -399,14 +452,14 @@ const QuotationDetails = () => {
                     <span>{t('incomeExpenses.tableTitle')}</span>
                     <Button
                       type="primary"
-                      onClick={showDrawer}
+                      onClick={showDrawerFlow}
                       className="bg-blue-500 text-white hover:bg-blue-600"
                     >
                       {t('incomeExpenses.addButton')}
                     </Button>
                   </div>
                 } bordered={false}>
-                  <Table columns={columnsIncomeExpenses} dataSource={sampleIncomeExpenses} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
+                  <Table columns={columnsIncomeExpenses} dataSource={moneyFlow} rowKey="_id" scroll={{ x: '100%' }} className="overflow-x-auto" />
                 </Card>
               </>
             )}
@@ -422,6 +475,14 @@ const QuotationDetails = () => {
         onSubmit={handleFormSubmit}
         quotationId={id!}
         initialValues={editingProduct}
+      />
+
+      <MoneyFlowFormDrawer
+        visible={drawerFlowVisible}
+        onClose={closeDrawerFlow}
+        onSubmit={handleFormFlowSubmit}
+        quotationId={id!}
+        initialValues={editingFlow}
       />
 
       <QuotationFormModal

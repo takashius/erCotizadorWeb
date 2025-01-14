@@ -289,5 +289,24 @@
     "deleteConfirmDescription": "¿Está seguro de que desea eliminar este ingreso/egreso?",
     "confirmOkText": "Sí",
     "confirmCancelText": "No"
+  },
+  "moneyFlowForm": {
+    "addMoneyFlow": "Agregar Flujo de Dinero",
+    "titleLabel": "Título",
+    "titleRequired": "Por favor, ingrese un título",
+    "titlePlaceholder": "Ingrese título",
+    "amountLabel": "Cantidad",
+    "amountRequired": "Por favor, ingrese una cantidad",
+    "amountPlaceholder": "Ingrese cantidad",
+    "typeLabel": "Tipo",
+    "typeRequired": "Por favor, seleccione un tipo",
+    "typePlaceholder": "Seleccione tipo",
+    "typeIncome": "Ingreso",
+    "typeExpense": "Egreso",
+    "categoryLabel": "Categoría",
+    "categoryRequired": "Por favor, seleccione una categoría",
+    "categoryPlaceholder": "Seleccione categoría",
+    "categoryNewPlaceholder": "Nueva categoría",
+    "categoryAdd": "Agregar"
   }
 }

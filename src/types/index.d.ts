@@ -247,3 +247,31 @@ export interface Correlative {
   manageInvoiceCorrelative: boolean
   invoice: number
 }
+
+// Tipos necesarios para moneyFlow
+export interface MoneyFlow {
+  created: CreatedExtend
+  _id: string
+  title: string
+  amount: number
+  type: 'income' | 'expense'
+  category: MoneyFlowCategory
+  company: string
+}
+
+export interface MoneyFlowCategory {
+  _id?: string
+  name: string
+}
+
+export interface NewMoneyFlow {
+  title: string
+  amount: number
+  type: 'income' | 'expense'
+  category: string
+  cotiza: string
+}
+
+export interface UpdateMoneyFlow extends NewMoneyFlow {
+  id: string
+}

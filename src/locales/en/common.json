@@ -289,5 +289,24 @@
     "deleteConfirmDescription": "Are you sure you want to delete this income/expense?",
     "confirmOkText": "Yes",
     "confirmCancelText": "No"
+  },
+  "moneyFlowForm": {
+    "addMoneyFlow": "Add Money Flow",
+    "titleLabel": "Title",
+    "titleRequired": "Please enter a title",
+    "titlePlaceholder": "Enter title",
+    "amountLabel": "Amount",
+    "amountRequired": "Please enter an amount",
+    "amountPlaceholder": "Enter amount",
+    "typeLabel": "Type",
+    "typeRequired": "Please select a type",
+    "typePlaceholder": "Select type",
+    "typeIncome": "Income",
+    "typeExpense": "Expense",
+    "categoryLabel": "Category",
+    "categoryRequired": "Please select a category",
+    "categoryPlaceholder": "Select category",
+    "categoryNewPlaceholder": "New category",
+    "categoryAdd": "Add"
   }
 }
