@@ -121,16 +121,17 @@ const QuotationDetails = () => {
       title: t('incomeExpenses.amount'),
       dataIndex: 'amount',
       key: 'amount',
-      render: (amount: number) => (
-        <span style={{ color: amount < 0 ? 'red' : 'green' }}>
-          {amount < 0 ? `-$${Math.abs(amount).toFixed(2)}` : `$${amount.toFixed(2)}`}
+      render: (amount: number, record: MoneyFlow) => (
+        <span style={{ color: record.type === 'expense' ? 'red' : 'green' }}>
+          {record.type === 'expense' ? `-$${amount.toFixed(2)}` : `$${amount.toFixed(2)}`}
         </span>
       ),
     },
     {
       title: t('incomeExpenses.date'),
-      dataIndex: 'date',
+      dataIndex: 'created',
       key: 'created.date',
+      render: (created: { date: string }) => new Date(created.date).toLocaleDateString(),
     },
     {
       title: t('actions'),
@@ -149,7 +150,7 @@ const QuotationDetails = () => {
           </Popconfirm>
         </Button.Group>
       ),
-    }
+    },
   ]
 
   const columns = [
