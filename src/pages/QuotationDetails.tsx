@@ -325,10 +325,6 @@ const QuotationDetails = () => {
   }
 
   const handleDeleteIncomeExpense = (id: string) => {
-    messageApi.open({
-      type: 'success',
-      content: `Ingreso/Egreso eliminado correctamente`,
-    })
     refetchFlow()
     deleteFlowMutation.mutate(id, {
       onSuccess: () => {
