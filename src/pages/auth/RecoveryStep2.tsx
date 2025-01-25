@@ -1,16 +1,25 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Button, InputRef } from 'antd'
-import { Link } from 'react-router-dom'
+import { Form, Input, Button, InputRef, message } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { Recovery, useRecoveryTwo } from '../../api/auth'
 
 const RecoveryStep2: React.FC = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [messageApi, contextHolder] = message.useMessage()
   const [code, setCode] = useState<string[]>(new Array(6).fill(''))
   const inputsRef = useRef<(InputRef | null)[]>([])
+  const recoveryQuery = useRecoveryTwo()
 
   const onFinish = (values: any) => {
     const fullCode = code.join('')
-    console.log('Code:', fullCode, 'Values:', values)
+    const payload: Recovery = {
+      code: parseInt(fullCode),
+      email: localStorage.getItem('email') || '',
+      newPass: values.password,
+    }
+    recoveryQuery.mutate(payload)
   }
 
   const handleInputChange = (index: number, value: string) => {
@@ -42,8 +51,24 @@ const RecoveryStep2: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    if (recoveryQuery.isSuccess) {
+      navigate('/login')
+    }
+  }, [recoveryQuery.isSuccess])
+
+  useEffect(() => {
+    if (recoveryQuery.error) {
+      messageApi.open({
+        type: 'error',
+        content: `${recoveryQuery.error}`,
+      })
+    }
+  }, [recoveryQuery.error, messageApi])
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      {contextHolder}
       <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
         <div className="flex justify-center mb-6">
           <img
@@ -96,7 +121,7 @@ const RecoveryStep2: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <div className="flex space-x-2">
-              <Button type="primary" htmlType="submit" className="w-1/2">
+              <Button type="primary" htmlType="submit" className="w-1/2" loading={recoveryQuery.isPending}>
                 {t('recoverStep2.submit')}
               </Button>
               <div className="w-1/2">
