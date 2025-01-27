@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useGetCompany, useSetConfig } from '../../api/company'
 import { useAuth } from '../../context/AuthContext'
+import { useUploadImage } from '../../api/auth'
 
 const { Option } = Select
 
@@ -11,10 +12,11 @@ const GeneralSettings: React.FC = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [logo, setLogo] = useState<string | null>(null)
-  const { data: config, isLoading } = useGetCompany(true)
+  const { data: config, isLoading, refetch } = useGetCompany(true)
   const configMutation = useSetConfig()
   const { getUser } = useAuth()
   const user: any = getUser()
+  const uploadImageMutation = useUploadImage()
 
   useEffect(() => {
     if (config) {
@@ -53,11 +55,17 @@ const GeneralSettings: React.FC = () => {
   }
 
   const handleLogoChange = (info: any) => {
-    if (info.file.status === 'done') {
-      // Obtener la URL del logo subido
-      setLogo(URL.createObjectURL(info.file.originFileObj))
-    }
+    uploadImageMutation.mutate({
+      image: info.file,
+      imageType: 'logo'
+    })
   }
+
+  useEffect(() => {
+    if (uploadImageMutation.isSuccess) {
+      refetch()
+    }
+  }, [uploadImageMutation.isSuccess])
 
   if (isLoading) {
     return (
@@ -161,9 +169,10 @@ const GeneralSettings: React.FC = () => {
                   listType="picture"
                   className="upload-list-inline"
                   showUploadList={false}
+                  beforeUpload={() => { return false }}
                   onChange={handleLogoChange}
                 >
-                  <Button icon={<UploadOutlined />}>{t('GeneralSettings.uploadButton')}</Button>
+                  <Button icon={<UploadOutlined />} loading={uploadImageMutation.isPending}>{t('GeneralSettings.uploadButton')}</Button>
                 </Upload>
                 {logo && <img src={logo} alt="logo" style={{ marginTop: '10px', maxWidth: '200px' }} />}
               </Form.Item>

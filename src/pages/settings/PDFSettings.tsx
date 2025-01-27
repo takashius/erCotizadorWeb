@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useGetCompany, useSetConfig } from '../../api/company'
 import { useAuth } from '../../context/AuthContext'
+import { useUploadImage } from '../../api/auth'
 
 const PDFSettings: React.FC = () => {
   const { t } = useTranslation()
@@ -11,8 +12,9 @@ const PDFSettings: React.FC = () => {
   const [watermark, setWatermark] = useState<string | null>(null)
   const { getUser } = useAuth()
   const user: any = getUser()
-  const { data: config, isLoading } = useGetCompany(true)
+  const { data: config, isLoading, refetch } = useGetCompany(true)
   const configMutation = useSetConfig()
+  const uploadImageMutation = useUploadImage()
 
   useEffect(() => {
     if (config) {
@@ -63,10 +65,17 @@ const PDFSettings: React.FC = () => {
   }
 
   const handleWatermarkChange = (info: any) => {
-    if (info.file.status === 'done') {
-      setWatermark(URL.createObjectURL(info.file.originFileObj))
-    }
+    uploadImageMutation.mutate({
+      image: info.file,
+      imageType: 'logoAlpha'
+    })
   }
+
+  useEffect(() => {
+    if (uploadImageMutation.isSuccess) {
+      refetch()
+    }
+  }, [uploadImageMutation.isSuccess])
 
   if (isLoading) {
     return (
@@ -157,9 +166,10 @@ const PDFSettings: React.FC = () => {
               listType="picture"
               className="upload-list-inline"
               showUploadList={false}
+              beforeUpload={() => { return false }}
               onChange={handleWatermarkChange}
             >
-              <Button icon={<UploadOutlined />}>{t('PDFSettings.uploadButton')}</Button>
+              <Button icon={<UploadOutlined />} loading={uploadImageMutation.isPending}>{t('PDFSettings.uploadButton')}</Button>
             </Upload>
             {watermark && <img src={watermark} alt="watermark" style={{ marginTop: '10px', maxWidth: '200px' }} />}
           </Form.Item>

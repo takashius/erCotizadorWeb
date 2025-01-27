@@ -120,7 +120,7 @@ export const useUploadImage = () => {
       var formData = new FormData()
       formData.append('image', data.image)
       formData.append('imageType', data.imageType)
-      return ERDEAxios.post('/user/upload', formData)
+      return ERDEAxios.post('/company/upload', formData)
     },
     onSuccess: () => {
       localStorage.removeItem('contentType')
@@ -128,29 +128,6 @@ export const useUploadImage = () => {
     },
     onError: (error) => {
       console.log('error useUploadImage', error)
-      localStorage.removeItem('contentType')
-    }
-  })
-
-  return mutation
-}
-
-export const useUploadBanner = () => {
-  const queryClient = useQueryClient()
-  const mutation = useMutation({
-    mutationFn: (data: Image) => {
-      localStorage.setItem('contentType', 'true')
-      var formData = new FormData()
-      formData.append('image', data.image)
-      formData.append('imageType', data.imageType)
-      return ERDEAxios.post('/user/uploadBanner', formData)
-    },
-    onSuccess: () => {
-      localStorage.removeItem('contentType')
-      queryClient.invalidateQueries({ queryKey: ['myAccount'] })
-    },
-    onError: (error) => {
-      console.log('error useUploadBanner', error)
       localStorage.removeItem('contentType')
     }
   })

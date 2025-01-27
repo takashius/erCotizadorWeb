@@ -4,6 +4,7 @@ import { UploadOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { ChromePicker } from 'react-color'
 import { useTranslation } from 'react-i18next'
 import { useGetCompany, useSetConfig } from '../../api/company'
+import { useUploadImage } from '../../api/auth'
 import { useAuth } from '../../context/AuthContext'
 
 const EmailSettings: React.FC = () => {
@@ -14,8 +15,9 @@ const EmailSettings: React.FC = () => {
   const [primaryColor, setPrimaryColor] = useState<string>('#000000')
   const [secondaryColor, setSecondaryColor] = useState<string>('#000000')
   const [titleColor, setTitleColor] = useState<string>('#000000')
-  const { data: config, isLoading } = useGetCompany(true)
+  const { data: config, isLoading, refetch } = useGetCompany(true)
   const configMutation = useSetConfig()
+  const uploadImageMutation = useUploadImage()
   const { getUser } = useAuth()
   const user: any = getUser()
 
@@ -69,10 +71,17 @@ const EmailSettings: React.FC = () => {
   }
 
   const handleBannerChange = (info: any) => {
-    if (info.file.status === 'done') {
-      setBanner(URL.createObjectURL(info.file.originFileObj))
-    }
+    uploadImageMutation.mutate({
+      image: info.file,
+      imageType: 'banner'
+    })
   }
+
+  useEffect(() => {
+    if (uploadImageMutation.isSuccess) {
+      refetch()
+    }
+  }, [uploadImageMutation.isSuccess])
 
   if (isLoading) {
     return (
@@ -102,9 +111,10 @@ const EmailSettings: React.FC = () => {
               listType="picture"
               className="upload-list-inline"
               showUploadList={false}
+              beforeUpload={() => { return false }}
               onChange={handleBannerChange}
             >
-              <Button icon={<UploadOutlined />}>{t('EmailSettings.uploadButton')}</Button>
+              <Button icon={<UploadOutlined />} loading={uploadImageMutation.isPending}>{t('EmailSettings.uploadButton')}</Button>
             </Upload>
             {banner && <img src={banner} alt="banner" style={{ marginTop: '10px', maxWidth: '200px' }} />}
           </Form.Item>
