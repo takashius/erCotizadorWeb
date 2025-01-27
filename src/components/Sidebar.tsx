@@ -52,7 +52,7 @@ const Sidebar = () => {
           <Menu.Item key="6" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
             <Link to="/settings/email" className="text-white dark:text-gray-300">Ajustes de Email</Link>
           </Menu.Item>
-          {user._id == "64fbe61071af3ad203dba8b8" &&
+          {user?._id == "64fbe61071af3ad203dba8b8" &&
             <Menu.Item key="7" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
               <Link to="/settings/company" className="text-white dark:text-gray-300">Cambiar de Empresa</Link>
             </Menu.Item>
