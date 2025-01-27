@@ -1,22 +1,81 @@
-import React, { useState } from 'react'
-import { Card, Form, InputNumber, Button, Upload, Row, Col } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Card, Form, InputNumber, Button, Upload, Row, Col, Skeleton, message } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { useGetCompany, useSetConfig } from '../../api/company'
+import { useAuth } from '../../context/AuthContext'
 
 const PDFSettings: React.FC = () => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [watermark, setWatermark] = useState<string | null>(null)
+  const { getUser } = useAuth()
+  const user: any = getUser()
+  const { data: config, isLoading } = useGetCompany(true)
+  const configMutation = useSetConfig()
 
-  const handleSave = (values: any) => {
-    console.log('Configuración guardada:', values)
-    // Aquí puedes manejar la lógica para guardar los datos
+  useEffect(() => {
+    if (config) {
+      form.setFieldsValue({
+        logoWidth: config.configPdf?.logo.width,
+        logoXPosition: config.configPdf?.logo.x,
+        logoYPosition: config.configPdf?.logo.y,
+        watermarkWidth: config.configPdf?.logoAlpha.width,
+        watermarkXPosition: config.configPdf?.logoAlpha.x,
+        watermarkYPosition: config.configPdf?.logoAlpha.y,
+        logoAlpha: config.logo
+      })
+      setWatermark(config.logoAlpha)
+    }
+  }, [config, form])
+
+  const handleSave = () => {
+    form
+      .validateFields()
+      .then(values => {
+        const data = {
+          id: user.company,
+          pdf: {
+            logo: {
+              width: values.logoWidth,
+              x: values.logoXPosition,
+              y: values.logoYPosition
+            },
+            logoAlpha: {
+              width: values.watermarkWidth,
+              x: values.watermarkXPosition,
+              y: values.watermarkYPosition
+            }
+          }
+        }
+        configMutation.mutate(data, {
+          onSuccess: () => {
+            message.success(t('saveSuccess'))
+          },
+          onError: () => {
+            message.error(t('saveError'))
+          }
+        })
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info)
+      })
   }
 
   const handleWatermarkChange = (info: any) => {
     if (info.file.status === 'done') {
       setWatermark(URL.createObjectURL(info.file.originFileObj))
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Card className="mb-4">
+          <Skeleton active title={false} paragraph={{ rows: 16 }} />
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -107,7 +166,7 @@ const PDFSettings: React.FC = () => {
         </Card>
 
         <Form.Item style={{ textAlign: 'right', marginTop: '10px' }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={configMutation.isPending} >
             {t('PDFSettings.saveButton')}
           </Button>
         </Form.Item>

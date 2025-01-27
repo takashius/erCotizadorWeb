@@ -13,8 +13,8 @@ const GeneralSettings: React.FC = () => {
   const [logo, setLogo] = useState<string | null>(null)
   const { data: config, isLoading } = useGetCompany(true)
   const configMutation = useSetConfig()
-  const { getUser } = useAuth();
-  const user: any = getUser();
+  const { getUser } = useAuth()
+  const user: any = getUser()
 
   useEffect(() => {
     if (config) {
