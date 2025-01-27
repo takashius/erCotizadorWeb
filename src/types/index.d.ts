@@ -142,7 +142,7 @@ export interface Account {
   phone: string | undefined
   email?: string
   date?: string
-  companies?: CompanyAccount[]
+  companys?: CompanyAccount[]
   role?: Role[]
 }
 

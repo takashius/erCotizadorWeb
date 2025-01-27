@@ -24,7 +24,6 @@ export interface Recovery {
 }
 
 export interface SetCompany {
-  user: string
   company: string
 }
 

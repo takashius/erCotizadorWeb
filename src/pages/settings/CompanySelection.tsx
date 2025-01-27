@@ -1,24 +1,47 @@
-import React, { useState } from 'react'
-import { Card, Radio, Button, List } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Card, Radio, Button, List, Skeleton, message } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useAccount, useSelectCompany } from '../../api/auth'
 import './CompanySelection.css'
 
 const CompanySelection: React.FC = () => {
   const { t } = useTranslation()
   const [selectedCompany, setSelectedCompany] = useState<string>('')
+  const { data, isLoading } = useAccount()
+  const setCompanyMutation = useSelectCompany()
 
-  const companies = [
-    { id: '1', name: 'La Guachafa' },
-    { id: '2', name: 'ErDesarrollo' },
-    { id: '3', name: 'La Sazon de Axl' }
-  ]
+  useEffect(() => {
+    if (data?.companys) {
+      const defaultCompany = data.companys.find(company => company.selected);
+      if (defaultCompany) {
+        setSelectedCompany(defaultCompany.company._id);
+      }
+    }
+  }, [data]);
 
   const handleChange = (e: any) => {
     setSelectedCompany(e.target.value)
   }
 
   const handleSave = () => {
-    console.log('Empresa seleccionada:', selectedCompany)
+    setCompanyMutation.mutate({ company: selectedCompany }, {
+      onSuccess: () => {
+        message.success(t('saveSuccess'))
+      },
+      onError: () => {
+        message.error(t('saveError'))
+      }
+    })
+  }
+
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Card className="mb-4">
+          <Skeleton active title={false} paragraph={{ rows: 16 }} />
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -27,18 +50,18 @@ const CompanySelection: React.FC = () => {
         <Radio.Group onChange={handleChange} value={selectedCompany}>
           <List
             itemLayout="horizontal"
-            dataSource={companies}
+            dataSource={data?.companys!}
             renderItem={item => (
               <List.Item>
-                <Radio value={item.id} className="custom-radio">
-                  {item.name}
+                <Radio value={item.company._id} className="custom-radio">
+                  {item.company.name}
                 </Radio>
               </List.Item>
             )}
           />
         </Radio.Group>
         <div style={{ textAlign: 'right', marginTop: '16px' }}>
-          <Button type="primary" onClick={handleSave}>
+          <Button type="primary" onClick={handleSave} loading={setCompanyMutation.isPending}>
             {t('CompanySelection.saveButton')}
           </Button>
         </div>

@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { Card, Form, Input, Button, Upload, Tooltip, Row, Col } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Card, Form, Input, Button, Upload, Tooltip, Row, Col, Skeleton, message } from 'antd'
 import { UploadOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { ChromePicker } from 'react-color'
 import { useTranslation } from 'react-i18next'
+import { useGetCompany, useSetConfig } from '../../api/company'
+import { useAuth } from '../../context/AuthContext'
 
 const EmailSettings: React.FC = () => {
   const { t } = useTranslation()
@@ -12,16 +14,74 @@ const EmailSettings: React.FC = () => {
   const [primaryColor, setPrimaryColor] = useState<string>('#000000')
   const [secondaryColor, setSecondaryColor] = useState<string>('#000000')
   const [titleColor, setTitleColor] = useState<string>('#000000')
+  const { data: config, isLoading } = useGetCompany(true)
+  const configMutation = useSetConfig()
+  const { getUser } = useAuth()
+  const user: any = getUser()
 
-  const handleSave = (values: any) => {
-    console.log('Configuración guardada:', values)
-    // Aquí puedes manejar la lógica para guardar los datos
+  useEffect(() => {
+    if (config) {
+      form.setFieldsValue({
+        backgroundColor: config.configMail?.colors.background,
+        primaryColor: config.configMail?.colors.primary,
+        secondaryColor: config.configMail?.colors.secundary,
+        titleColor: config.configMail?.colors.title,
+        messageBody: config.configMail?.textBody,
+
+        banner: config.banner
+      })
+      setBanner(config.banner!)
+      setBackgroundColor(config.configMail?.colors.background!)
+      setPrimaryColor(config.configMail?.colors.primary!)
+      setSecondaryColor(config.configMail?.colors.secundary!)
+      setTitleColor(config.configMail?.colors.title!)
+    }
+  }, [config, form])
+
+  const handleSave = () => {
+    form
+      .validateFields()
+      .then(values => {
+        const data = {
+          id: user.company,
+          configMail: {
+            colors: {
+              primary: primaryColor,
+              secundary: secondaryColor,
+              background: backgroundColor,
+              title: titleColor,
+            },
+            textBody: values.messageBody
+          }
+        }
+        configMutation.mutate(data, {
+          onSuccess: () => {
+            message.success(t('saveSuccess'))
+          },
+          onError: () => {
+            message.error(t('saveError'))
+          }
+        })
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info)
+      })
   }
 
   const handleBannerChange = (info: any) => {
     if (info.file.status === 'done') {
       setBanner(URL.createObjectURL(info.file.originFileObj))
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="md:p-4">
+        <Card className="mb-4">
+          <Skeleton active title={false} paragraph={{ rows: 16 }} />
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -112,7 +172,7 @@ const EmailSettings: React.FC = () => {
         </Card>
 
         <Form.Item style={{ textAlign: 'right', marginTop: '16px' }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={configMutation.isPending}>
             {t('EmailSettings.saveButton')}
           </Button>
         </Form.Item>

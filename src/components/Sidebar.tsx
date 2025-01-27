@@ -3,12 +3,15 @@ import { Layout, Menu } from 'antd'
 import { HomeOutlined, SettingOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import SubMenu from 'antd/es/menu/SubMenu'
+import { useAuth } from '../context/AuthContext'
 import './Sidebar.css'
 
 const { Sider } = Layout;
 
 const Sidebar = () => {
   const { t } = useTranslation()
+  const { getUser } = useAuth()
+  const user: any = getUser()
 
   return (
     <Sider
@@ -49,9 +52,11 @@ const Sidebar = () => {
           <Menu.Item key="6" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
             <Link to="/settings/email" className="text-white dark:text-gray-300">Ajustes de Email</Link>
           </Menu.Item>
-          <Menu.Item key="7" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
-            <Link to="/settings/company" className="text-white dark:text-gray-300">Cambiar de Empresa</Link>
-          </Menu.Item>
+          {user._id == "64fbe61071af3ad203dba8b8" &&
+            <Menu.Item key="7" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
+              <Link to="/settings/company" className="text-white dark:text-gray-300">Cambiar de Empresa</Link>
+            </Menu.Item>
+          }
         </SubMenu>
       </Menu>
     </Sider>
