@@ -9,8 +9,14 @@
   "saveError": "An error occurred while saving",
   "menu": {
     "home": "Home",
+    "customer": "Customers",
+    "products": "Products",
     "settings": "Settings",
+    "general": "General",
+    "pdf": "PDF Settings",
+    "email": "Email Settings",
     "profile": "Profile",
+    "changeCompany": "Change Company",
     "logout": "Logout"
   },
   "login": {
@@ -308,5 +314,25 @@
     "categoryPlaceholder": "Select category",
     "categoryNewPlaceholder": "New category",
     "categoryAdd": "Add"
+  },
+  "WebSettings": {
+    "title": "Web Preferences",
+    "color": "Color",
+    "fixedHeader": "Fixed Header",
+    "saveButton": "Save Preferences",
+    "saveSuccess": "Preferences saved successfully!",
+    "colors": {
+      "blue": "Blue",
+      "indigo": "Indigo",
+      "purple": "Purple",
+      "pink": "Pink",
+      "red": "Red",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "green": "Green",
+      "teal": "Teal",
+      "cyan": "Cyan",
+      "gray": "Gray"
+    }
   }
 }

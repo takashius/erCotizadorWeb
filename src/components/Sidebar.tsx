@@ -1,66 +1,202 @@
-import { useTranslation } from 'react-i18next'
-import { Layout, Menu } from 'antd'
-import { HomeOutlined, SettingOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
-import SubMenu from 'antd/es/menu/SubMenu'
-import { useAuth } from '../context/AuthContext'
-import './Sidebar.css'
-
-const { Sider } = Layout;
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { HomeOutlined, UserOutlined, ShoppingOutlined, SettingOutlined } from '@ant-design/icons';
+import { useAuth } from '../context/AuthContext';
+import { getColorFromLocalStorage } from '../assets/colorPalette';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
-  const { t } = useTranslation()
-  const { getUser } = useAuth()
-  const user: any = getUser()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const { t } = useTranslation();
+  const { getUser } = useAuth();
+  const user: any = getUser();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const currentColor = getColorFromLocalStorage();
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleConfigMenu = () => {
+    setIsConfigOpen(!isConfigOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const isSettingsActive = () => {
+    return location.pathname.startsWith('/settings');
+  };
+
+  useEffect(() => {
+    if (isSettingsActive()) {
+      setIsConfigOpen(true);
+    } else {
+      setIsConfigOpen(false);
+    }
+  }, [location.pathname]);
 
   return (
-    <Sider
-      breakpoint="md"
-      collapsedWidth="80"
-      className="bg-blue-600 dark:bg-gray-800 text-white"
-    >
-      <div className="hidden md:flex items-center justify-center p-4">
-        <img src="/logoBlanco.png" alt="Logo" className="h-16" />
-      </div>
-      <Menu
-        theme="light"
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300"
+    <div ref={sidebarRef}>
+      <button
+        onClick={toggleSidebar}
+        className={`fixed top-4 left-4 z-50 p-2 bg-white ${currentColor.link} rounded-lg sm:hidden shadow-lg`}
       >
-        <Menu.Item key="1" icon={<HomeOutlined />}>
-          <Link to="/" className="text-white dark:text-white">{t('menu.home')}</Link>
-        </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined />}>
-          <Link to="/clients" className="text-white dark:text-gray-300">Clientes</Link>
-        </Menu.Item>
-        <Menu.Item key="3" icon={<ShoppingOutlined />}>
-          <Link to="/products" className="text-white dark:text-gray-300">Productos</Link>
-        </Menu.Item>
-        <SubMenu
-          key="sub1"
-          icon={<SettingOutlined />}
-          title={<span>Configuración</span>}
-          className="bg-blue-600 dark:bg-gray-800"
+        <svg
+          className="w-6 h-6"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <Menu.Item key="4" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
-            <Link to="/settings/general" className="text-white dark:text-gray-300">General</Link>
-          </Menu.Item>
-          <Menu.Item key="5" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
-            <Link to="/settings/pdf" className="text-white dark:text-gray-300">Ajustes de PDF</Link>
-          </Menu.Item>
-          <Menu.Item key="6" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
-            <Link to="/settings/email" className="text-white dark:text-gray-300">Ajustes de Email</Link>
-          </Menu.Item>
-          {user?._id == "64fbe61071af3ad203dba8b8" &&
-            <Menu.Item key="7" className="bg-blue-600 dark:bg-gray-800 text-white dark:text-gray-300">
-              <Link to="/settings/company" className="text-white dark:text-gray-300">Cambiar de Empresa</Link>
-            </Menu.Item>
-          }
-        </SubMenu>
-      </Menu>
-    </Sider>
-  )
-}
+          <path
+            clipRule="evenodd"
+            fillRule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+          ></path>
+        </svg>
+      </button>
 
-export default Sidebar
+      <aside
+        id="sidebar-multi-level-sidebar"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } sm:translate-x-0 mt-16 sm:mt-0`}
+        aria-label="Sidebar"
+      >
+        <div className={`h-full px-3 py-4 overflow-y-auto ${currentColor.bg} dark:bg-gray-800`}>
+          <div className="flex items-center justify-center p-4">
+            <img src="/logoBlanco.png" alt="Logo" className="h-16" />
+          </div>
+
+          <ul className="space-y-2 font-medium">
+            <li>
+              <Link
+                to="/"
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/') ? currentColor.menuActive : currentColor.bg
+                  } dark:hover:bg-gray-700 group`}
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                <HomeOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
+                <span className="ms-3 group-hover:text-white">{t('menu.home')}</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/clients"
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/clients') ? currentColor.menuActive : currentColor.bg
+                  } dark:hover:bg-gray-700 group`}
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                <UserOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
+                <span className="ms-3 group-hover:text-white">{t('menu.customer')}</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/products"
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/products') ? currentColor.menuActive : currentColor.bg
+                  } dark:hover:bg-gray-700 group`}
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                <ShoppingOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
+                <span className="ms-3 group-hover:text-white">{t('menu.products')}</span>
+              </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                className={`flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group ${currentColor.hover} ${isActive('/settings') ? currentColor.menuActive : currentColor.bg
+                  } dark:hover:bg-gray-700`}
+                onClick={toggleConfigMenu}
+              >
+                <SettingOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
+                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">{t('menu.settings')}</span>
+                <svg
+                  className={`w-3 h-3 transition-transform ${isConfigOpen ? 'rotate-180' : ''
+                    }`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
+                </svg>
+              </button>
+              <ul
+                id="dropdown-config"
+                className={`${isConfigOpen ? 'block' : 'hidden'} py-2 space-y-2`}
+              >
+                <li>
+                  <Link
+                    to="/settings/general"
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/general') ? currentColor.menuActive : currentColor.bg
+                      } dark:hover:bg-gray-700`}
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    {t('menu.general')}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/settings/pdf"
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/pdf') ? currentColor.menuActive : currentColor.bg
+                      } dark:hover:bg-gray-700`}
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    {t('menu.pdf')}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/settings/email"
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/email') ? currentColor.menuActive : currentColor.bg
+                      } dark:hover:bg-gray-700`}
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    {t('menu.email')}
+                  </Link>
+                </li>
+                {user?._id === '64fbe61071af3ad203dba8b8' && (
+                  <li>
+                    <Link
+                      to="/settings/company"
+                      className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/company') ? currentColor.menuActive : currentColor.bg
+                        } dark:hover:bg-gray-700`}
+                      onClick={() => setIsSidebarOpen(false)}
+                    >
+                      {t('menu.changeCompany')}
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  );
+};
+
+export default Sidebar;

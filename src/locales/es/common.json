@@ -9,8 +9,14 @@
   "saveError": "Ocurrio un error al guardar",
   "menu": {
     "home": "Inicio",
+    "customer": "Clientes",
+    "products": "Productos",
     "settings": "Configuración",
+    "general": "General",
+    "pdf": "Ajustes de PDF",
+    "email": "Ajustes de Email",
     "profile": "Perfil",
+    "changeCompany": "Cambiar de Empresa",
     "logout": "Cerrar Sesión"
   },
   "login": {
@@ -308,5 +314,25 @@
     "categoryPlaceholder": "Seleccione categoría",
     "categoryNewPlaceholder": "Nueva categoría",
     "categoryAdd": "Agregar"
+  },
+  "WebSettings": {
+    "title": "Preferencias web",
+    "color": "Color",
+    "fixedHeader": "Encabezado fijo",
+    "saveButton": "Guardar preferencias",
+    "saveSuccess": "¡Preferencias guardadas exitosamente!",
+    "colors": {
+      "blue": "Azul",
+      "indigo": "Índigo",
+      "purple": "Morado",
+      "pink": "Rosa",
+      "red": "Rojo",
+      "orange": "Naranja",
+      "yellow": "Amarillo",
+      "green": "Verde",
+      "teal": "Verde azulado",
+      "cyan": "Cian",
+      "gray": "Gris"
+    }
   }
 }

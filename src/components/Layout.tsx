@@ -11,6 +11,7 @@ const Layout = () => {
   const [darkMode, setDarkMode] = useState(false)
   const toggleDarkMode = () => { setDarkMode(!darkMode) }
   const [client] = useState(new QueryClient())
+  const isFixed = localStorage.getItem('isHeaderFixed') === 'true'
 
   return (
     <QueryClientProvider client={client}>
@@ -18,8 +19,8 @@ const Layout = () => {
         <AntLayout className="min-h-screen">
           <Sidebar />
           <AntLayout>
-            <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-            <Content className="p-4">
+            <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} isFixed={isFixed} />
+            <Content className={`p-4 sm:ml-64 ${isFixed ? 'mt-16' : ''}`}>
               <Outlet />
             </Content>
           </AntLayout>
