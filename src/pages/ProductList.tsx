@@ -1,30 +1,69 @@
-import { useState, useEffect } from 'react'
-import { Table, Button, Input, Popconfirm, message } from 'antd'
+import { useState, useEffect, useRef } from 'react'
+import { Table, Button, Input, Popconfirm, message, List, Card } from 'antd'
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddProductModal from '../components/AddProductModal'
 import { useTranslation } from 'react-i18next'
 import { useDeleteProduct, useProductList } from '../api/products'
+import { Product } from 'src/types'
 
 const ProductList = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [mobilePage, setMobilePage] = useState(1)
+  const [mobileData, setMobileData] = useState<Product[]>([])
+  const loaderRef = useRef(null)
   const [modalVisible, setModalVisible] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [initialValues, setInitialValues] = useState<any>(null)
   const [loadingId, setLoadingId] = useState<string | null>(null)
-  const { data, isLoading, error, refetch } = useProductList(currentPage, searchText)
+  const { data, isLoading, isSuccess, error, refetch } = useProductList(currentPage, searchText)
   const deleteProductMutation = useDeleteProduct()
 
   useEffect(() => {
     setCurrentPage(1)
+    setMobilePage(1)
+    setMobileData([])
     refetch()
   }, [searchText])
 
   useEffect(() => {
     refetch()
   }, [currentPage])
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      if (mobileData !== undefined && mobileData.length <= 0) {
+        setMobileData(data?.results || [])
+      } else {
+        setMobileData((prevData) => [...prevData, ...(data?.results || [])])
+      }
+    }
+  }, [isSuccess, data])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading) {
+          loadMoreData();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current)
+    } else {
+      console.log('loaderRef.current no está definido')
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current)
+      }
+    };
+  }, [mobilePage, isLoading])
 
   const columns = [
     {
@@ -48,7 +87,7 @@ const ProductList = () => {
       title: t('ProductList.actions'),
       key: 'actions',
       render: (record: any) => (
-        <span>
+        <Button.Group>
           <Button icon={<EditOutlined />} type='primary' onClick={() => handleEdit(record)} />
           <Popconfirm
             title={t('quotationDetails.deleteConfirmTitle')}
@@ -63,7 +102,7 @@ const ProductList = () => {
               loading={loadingId === record._id && deleteProductMutation.isPending}
             />
           </Popconfirm>
-        </span>
+        </Button.Group>
       )
     }
   ]
@@ -112,6 +151,14 @@ const ProductList = () => {
     setCurrentPage(pagination.current)
   }
 
+  const loadMoreData = () => {
+    if (!isLoading && data?.results && data.results.length > 0) {
+      const nextPage = currentPage + 1
+      setMobilePage(nextPage)
+      setCurrentPage(nextPage)
+    }
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>
   }
@@ -119,15 +166,15 @@ const ProductList = () => {
   return (
     <div className="p-4">
       {contextHolder}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <Input
           placeholder={t('ProductList.searchPlaceholder')}
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
           prefix={<SearchOutlined />}
-          className="w-full md:w-1/3"
+          className="w-full md:w-1/2 lg:w-1/3 mb-2 md:mb-0"
         />
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => {
+        <Button type="primary" icon={<PlusOutlined />} className={`w-full md:w-auto`} onClick={() => {
           setModalVisible(true);
           setIsEdit(false);
           setInitialValues(null)
@@ -135,19 +182,58 @@ const ProductList = () => {
           {t('ProductList.addProductButton')}
         </Button>
       </div>
-      <Table
-        columns={columns}
-        dataSource={data?.results || []}
-        rowKey="_id"
-        loading={isLoading}
-        pagination={{
-          total: data?.totalProducts || 0,
-          current: currentPage,
-          pageSize: 20,
-          showSizeChanger: false
-        }}
-        onChange={handleTableChange}
-      />
+      <div className="hidden md:block">
+        <Table
+          columns={columns}
+          dataSource={data?.results || []}
+          rowKey="_id"
+          loading={isLoading}
+          pagination={{
+            total: data?.totalProducts || 0,
+            current: currentPage,
+            pageSize: 20,
+            showSizeChanger: false
+          }}
+          onChange={handleTableChange}
+        />
+      </div>
+      <div className="block md:hidden">
+        {mobileData.length > 0 &&
+          <>
+            <List
+              dataSource={mobileData}
+              renderItem={item => (
+                <Card className="mb-2">
+                  <p><strong>{t('home.title')}: </strong>{item.name}</p>
+                  {(item.description != undefined && item.description) &&
+                    <p><strong>{t('GeneralSettings.description')}: </strong>{item.description}</p>
+                  }
+                  <p><strong>{t('AddProductModal.price')}: </strong>{item.price}</p>
+                  <div className='mt-4'>
+                    <Button icon={<EditOutlined />} type='primary' onClick={() => handleEdit(item)} />
+                    <Popconfirm
+                      title={t('quotationDetails.deleteConfirmTitle')}
+                      description={t('quotationDetails.deleteConfirmDescription')}
+                      onConfirm={() => handleDelete(item._id)}
+                      okText={t('home.confirmOkText')}
+                      cancelText={t('home.confirmCancelText')}
+                    >
+                      <Button
+                        icon={<DeleteOutlined />} className="ml-2"
+                        type='primary'
+                        loading={loadingId === item._id && deleteProductMutation.isPending}
+                      />
+                    </Popconfirm>
+                  </div>
+                </Card>
+              )}
+            />
+          </>
+        }
+        <div ref={loaderRef} className="text-center mt-4">
+          {isLoading && <Button loading></Button>}
+        </div>
+      </div>
       <AddProductModal
         visible={modalVisible}
         onCreate={handleCreate}

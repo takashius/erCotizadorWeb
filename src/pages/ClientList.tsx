@@ -140,7 +140,7 @@ const ClientList = () => {
       setMobilePage(nextPage)
       setCurrentPage(nextPage)
     }
-  };
+  }
 
   if (error) {
     return <div>Error: {error.message}</div>
@@ -189,14 +189,14 @@ const ClientList = () => {
                   <div className='mt-4'>
                     <Link to={`/client/${item._id}`}> <Button type='primary' icon={<EditOutlined />} /> </Link>
                     <Popconfirm
-                      title={t('home.deleteConfirmTitle')}
-                      description={t('home.deleteConfirmDescription')}
+                      title={t('ClientList.deleteConfirmTitle')}
+                      description={t('ClientList.deleteConfirmDescription')}
                       onConfirm={() => handleDelete(item._id)}
                       okText={t('home.confirmOkText')}
                       cancelText={t('home.confirmCancelText')}
                     >
                       <Button
-                        icon={<DeleteOutlined />}
+                        icon={<DeleteOutlined />} className="ml-2"
                         type='primary'
                         loading={loadingId === item._id && deleteClientMutation.isPending}
                       />
