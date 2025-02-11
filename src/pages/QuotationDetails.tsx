@@ -402,7 +402,7 @@ const QuotationDetails = () => {
         <Tabs defaultActiveKey="1" onChange={setActiveTab}>
           <TabPane tab={t('quotationDetails.products')} key="1">
             <Card title={
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center md:gap-x-4">
                 <span>{t('quotationDetails.productTableTitle')}</span>
                 <Button
                   type="primary"
@@ -444,7 +444,7 @@ const QuotationDetails = () => {
 
                 {/* Tabla de ingresos y egresos */}
                 <Card title={
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center md:gap-x-4">
                     <span>{t('incomeExpenses.tableTitle')}</span>
                     <Button
                       type="primary"

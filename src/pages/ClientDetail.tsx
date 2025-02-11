@@ -50,8 +50,8 @@ const ClientDetail: React.FC = () => {
       title: t('actions'),
       key: 'actions',
       render: (record: any) => (
-        <span>
-          <Button icon={<EditOutlined />} onClick={() => handleEditAddress(record)} />
+        <Button.Group>
+          <Button icon={<EditOutlined />} onClick={() => handleEditAddress(record)} type='primary' />
           <Popconfirm
             title={t('ClientDetail.deleteConfirmTitle')}
             description={t('ClientDetail.deleteConfirmDescription')}
@@ -61,9 +61,10 @@ const ClientDetail: React.FC = () => {
           >
             <Button icon={<DeleteOutlined />}
               className="ml-2"
+              type='primary'
               loading={deleteAddressMutation.isPending && deleteAddressMutation.variables?.id === record._id} />
           </Popconfirm>
-        </span>
+        </Button.Group>
       )
     }
   ]
@@ -145,7 +146,7 @@ const ClientDetail: React.FC = () => {
       {contextHolder}
       <Card
         title={
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center md:gap-x-4">
             <span>{`${client.title}`}</span>
             <Button
               type="primary"
@@ -165,7 +166,7 @@ const ClientDetail: React.FC = () => {
       </Card>
       <Card
         title={
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center md:gap-x-4">
             <span>{t('ClientDetail.addressesTitle')}</span>
             <Button
               type="primary"
