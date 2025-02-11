@@ -187,7 +187,7 @@ const ClientList = () => {
                   <p><strong>{t('register.name')}: </strong>{item.name} {item.lastname}</p>
                   <p><strong>{t('register.rif')}: </strong>{item.rif}</p>
                   <div className='mt-4'>
-                    <Link to={`/quotation/${item._id}`}> <Button type='primary' icon={<EditOutlined />} /> </Link>
+                    <Link to={`/client/${item._id}`}> <Button type='primary' icon={<EditOutlined />} /> </Link>
                     <Popconfirm
                       title={t('home.deleteConfirmTitle')}
                       description={t('home.deleteConfirmDescription')}
