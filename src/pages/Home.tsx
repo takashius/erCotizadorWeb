@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Table, Button, Input, Space, List, Card, message, Popconfirm, Dropdown, Menu } from 'antd'
+import { Table, Input, Space, List, Card, message, Popconfirm, Dropdown, Menu, Button } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, FilePdfOutlined, SearchOutlined } from '@ant-design/icons'
 import { Quotation, Customer } from '../types'
 import QuotationFormModal from '../components/QuotationFormModal'
@@ -92,11 +92,12 @@ const Home: React.FC = () => {
       width: 150,
       render: (record: Quotation) => (
         <Space>
-          <Link to={`/quotation/${record._id}`}> <Button icon={<EditOutlined />} /> </Link>
+          <Link to={`/quotation/${record._id}`}> <Button icon={<EditOutlined />} type='primary' /> </Link>
           <Dropdown overlay={pdfMenu(record)} trigger={['click']}>
             <Button
               icon={<FilePdfOutlined />}
               loading={loadingId === record._id && downloadMutation.isPending}
+              type='primary'
             />
           </Dropdown>
           <Popconfirm
@@ -108,6 +109,7 @@ const Home: React.FC = () => {
           >
             <Button
               icon={<DeleteOutlined />}
+              type='primary'
               loading={loadingId === record._id && deleteQuotationMutation.isPending}
             />
           </Popconfirm>
@@ -144,7 +146,7 @@ const Home: React.FC = () => {
           prefix={<SearchOutlined />}
           className="w-full md:w-1/2 lg:w-1/3 mb-2 md:mb-0"
         />
-        <Button type="primary" icon={<PlusOutlined />} onClick={showModal} className="w-full md:w-auto">
+        <Button type="primary" icon={<PlusOutlined />} onClick={showModal} className={`w-full md:w-auto`}>
           {t('home.addQuote')}
         </Button>
       </div>
@@ -158,7 +160,7 @@ const Home: React.FC = () => {
               <p><strong>{t('home.date')}: </strong>{item.date}</p>
               <p><strong>{t('home.price')}: </strong>{item.amount}</p>
               <div className='mt-4'>
-                <Link to={`/quotation/${item._id}`}> <Button icon={<EditOutlined />} /> </Link>
+                <Link to={`/quotation/${item._id}`}> <Button type='primary' icon={<EditOutlined />} /> </Link>
                 <Popconfirm
                   title={t('home.deleteConfirmTitle')}
                   description={t('home.deleteConfirmDescription')}
@@ -168,14 +170,14 @@ const Home: React.FC = () => {
                 >
                   <Button
                     icon={<DeleteOutlined />}
+                    type='primary'
                     loading={loadingId === item._id && deleteQuotationMutation.isPending}
                   />
                 </Popconfirm>
-              </div>
-              <div className='mt-4'>
-                <Dropdown overlay={pdfMenu(item)} trigger={['click']}>
+                <Dropdown overlay={pdfMenu(item)} trigger={['click']} className='ml-1'>
                   <Button
                     icon={<FilePdfOutlined />}
+                    type='primary'
                     loading={loadingId === item._id && downloadMutation.isPending}
                   />
                 </Dropdown>

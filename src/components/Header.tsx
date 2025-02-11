@@ -3,7 +3,7 @@ import { Layout, Avatar, Dropdown, Switch } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { MoonOutlined, SunFilled } from '@ant-design/icons';
 import UserMenu from './UserMenu';
-import { getColorFromLocalStorage } from '../assets/colorPalette';
+import { getColorFromLocalStorage } from '../theme/colorPalette';
 
 const { Header: AntHeader } = Layout;
 

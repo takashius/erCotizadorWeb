@@ -151,7 +151,6 @@ const ClientDetail: React.FC = () => {
               type="primary"
               icon={<EditOutlined />}
               onClick={() => handleEdit(client)}
-              className="bg-blue-500 text-white hover:bg-blue-600"
             >
               {t('ClientDetail.edit')}
             </Button>
@@ -172,7 +171,6 @@ const ClientDetail: React.FC = () => {
               type="primary"
               icon={<PlusOutlined />}
               onClick={showDrawer}
-              className="bg-blue-500 text-white hover:bg-blue-600"
             >
               {t('ClientDetail.addAddressButton')}
             </Button>

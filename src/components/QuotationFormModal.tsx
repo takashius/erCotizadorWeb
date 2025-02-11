@@ -23,7 +23,6 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
 
   useEffect(() => {
     if (initialValues) {
-      console.log('initialValues', initialValues)
       form.setFieldsValue({
         ...initialValues,
         date: moment(initialValues.date, 'DD/MM/YYYY').isValid() ? moment(initialValues.date, 'DD/MM/YYYY') : null,

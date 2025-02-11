@@ -51,7 +51,7 @@ const ClientList = () => {
       key: 'actions',
       render: (record: { _id: any }) => (
         <span>
-          <Link to={`/client/${record._id}`}> <Button icon={<EditOutlined />} /></Link>
+          <Link to={`/client/${record._id}`}> <Button icon={<EditOutlined />} type='primary' /></Link>
           <Popconfirm
             title={t('ClientList.deleteConfirmTitle')}
             description={t('ClientList.deleteConfirmDescription')}
@@ -61,6 +61,7 @@ const ClientList = () => {
           >
             <Button
               icon={<DeleteOutlined />} className="ml-2"
+              type='primary'
               loading={loadingId === record._id && deleteClientMutation.isPending}
             />
           </Popconfirm>

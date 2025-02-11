@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Form, Input, InputNumber, Button, Select, Switch, Upload, Row, Col, Skeleton, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
-import { useGetCompany, useSetConfig } from '../../api/company';
-import { useAuth } from '../../context/AuthContext';
-import { useUploadImage } from '../../api/auth';
+import React, { useState, useEffect } from 'react'
+import { Card, Form, Input, InputNumber, Select, Switch, Upload, Row, Col, Skeleton, message, Button } from 'antd'
+import { UploadOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+import { useGetCompany, useSetConfig } from '../../api/company'
+import { useAuth } from '../../context/AuthContext'
+import { useUploadImage } from '../../api/auth'
 
 const { Option } = Select;
 
 const GeneralSettings: React.FC = () => {
-  const { t } = useTranslation();
-  const [form] = Form.useForm();
-  const [logo, setLogo] = useState<string | null>(null);
-  const { data: config, isLoading, refetch } = useGetCompany(true);
-  const configMutation = useSetConfig();
-  const { getUser } = useAuth();
-  const user: any = getUser();
-  const uploadImageMutation = useUploadImage();
+  const { t } = useTranslation()
+  const [form] = Form.useForm()
+  const [logo, setLogo] = useState<string | null>(null)
+  const { data: config, isLoading, refetch } = useGetCompany(true)
+  const configMutation = useSetConfig()
+  const { getUser } = useAuth()
+  const user: any = getUser()
+  const uploadImageMutation = useUploadImage()
 
-  const [webColor, setWebColor] = useState<string>(localStorage.getItem('webColor') || 'blue');
+  const [webColor, setWebColor] = useState<string>(localStorage.getItem('webColor') || 'blue')
   const [isHeaderFixed, setIsHeaderFixed] = useState<boolean>(
     localStorage.getItem('isHeaderFixed') === 'true'
   );
@@ -36,14 +36,15 @@ const GeneralSettings: React.FC = () => {
         iva: config.iva,
         logo: config.logo,
       });
-      setLogo(config.logo);
+      setLogo(config.logo)
     }
-  }, [config, form]);
+  }, [config, form])
 
   const saveWebPreferences = () => {
-    localStorage.setItem('webColor', webColor);
-    localStorage.setItem('isHeaderFixed', isHeaderFixed.toString());
-    message.success(t('WebSettings.saveSuccess'));
+    localStorage.setItem('webColor', webColor)
+    localStorage.setItem('isHeaderFixed', isHeaderFixed.toString())
+    message.success(t('WebSettings.saveSuccess'))
+    window.location.reload()
   };
 
   const handleSave = () => {
@@ -53,15 +54,15 @@ const GeneralSettings: React.FC = () => {
         values.id = user.company;
         configMutation.mutate(values, {
           onSuccess: () => {
-            message.success(t('saveSuccess'));
+            message.success(t('saveSuccess'))
           },
           onError: () => {
-            message.error(t('saveError'));
+            message.error(t('saveError'))
           },
         });
       })
       .catch((info) => {
-        console.log('Validate Failed:', info);
+        console.log('Validate Failed:', info)
       });
   };
 
@@ -76,7 +77,7 @@ const GeneralSettings: React.FC = () => {
     if (uploadImageMutation.isSuccess) {
       refetch();
     }
-  }, [uploadImageMutation.isSuccess]);
+  }, [uploadImageMutation.isSuccess])
 
   if (isLoading) {
     return (
@@ -92,8 +93,8 @@ const GeneralSettings: React.FC = () => {
     <div className="p-4">
       <Card title={t('GeneralSettings.title')} bordered={false}>
         <Form form={form} layout="vertical" name="general_settings_form" onFinish={handleSave}>
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="address"
                 label={t('GeneralSettings.address')}
@@ -123,7 +124,7 @@ const GeneralSettings: React.FC = () => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 name="currencySymbol"
                 label={t('GeneralSettings.currency')}
@@ -161,8 +162,8 @@ const GeneralSettings: React.FC = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item name="logo" label={t('GeneralSettings.logo')}>
                 <Upload
                   name="logo"
@@ -172,16 +173,16 @@ const GeneralSettings: React.FC = () => {
                   beforeUpload={() => false}
                   onChange={handleLogoChange}
                 >
-                  <Button icon={<UploadOutlined />} loading={uploadImageMutation.isPending}>
+                  <Button icon={<UploadOutlined />} type='primary' loading={uploadImageMutation.isPending}>
                     {t('GeneralSettings.uploadButton')}
                   </Button>
                 </Upload>
                 {logo && <img src={logo} alt="logo" style={{ marginTop: '10px', maxWidth: '200px' }} />}
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item>
-                <Button type="primary" htmlType="submit" loading={configMutation.isPending} style={{ marginTop: '32px' }}>
+                <Button type="primary" htmlType="submit" loading={configMutation.isPending} className={`mt-8`}>
                   {t('GeneralSettings.saveButton')}
                 </Button>
               </Form.Item>
@@ -192,8 +193,8 @@ const GeneralSettings: React.FC = () => {
 
       {/* Nuevo Card para las preferencias web */}
       <Card title={t('WebSettings.title')} bordered={false} className="mt-4">
-        <Row gutter={16}>
-          <Col span={12}>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={24} md={12}>
             <Form.Item label={t('WebSettings.color')}>
               <Select
                 value={webColor}
@@ -213,7 +214,7 @@ const GeneralSettings: React.FC = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={24} md={12}>
             <Form.Item label={t('WebSettings.fixedHeader')} valuePropName="checked">
               <Switch
                 checked={isHeaderFixed}

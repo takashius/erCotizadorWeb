@@ -49,7 +49,7 @@ const ProductList = () => {
       key: 'actions',
       render: (record: any) => (
         <span>
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button icon={<EditOutlined />} type='primary' onClick={() => handleEdit(record)} />
           <Popconfirm
             title={t('quotationDetails.deleteConfirmTitle')}
             description={t('quotationDetails.deleteConfirmDescription')}
@@ -59,6 +59,7 @@ const ProductList = () => {
           >
             <Button
               icon={<DeleteOutlined />} className="ml-2"
+              type='primary'
               loading={loadingId === record._id && deleteProductMutation.isPending}
             />
           </Popconfirm>

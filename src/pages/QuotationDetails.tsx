@@ -138,7 +138,7 @@ const QuotationDetails = () => {
       key: 'actions',
       render: (record: MoneyFlow) => (
         <Button.Group>
-          <Button icon={<EditOutlined />} onClick={() => openEditFlowDrawer(record)} />
+          <Button type='primary' icon={<EditOutlined />} onClick={() => openEditFlowDrawer(record)} />
           <Popconfirm
             title={t('incomeExpenses.deleteConfirmTitle')}
             description={t('incomeExpenses.deleteConfirmDescription')}
@@ -146,7 +146,7 @@ const QuotationDetails = () => {
             okText={t('incomeExpenses.confirmOkText')}
             cancelText={t('incomeExpenses.confirmCancelText')}
           >
-            <Button icon={<DeleteOutlined />} />
+            <Button type='primary' icon={<DeleteOutlined />} />
           </Popconfirm>
         </Button.Group>
       ),
@@ -186,7 +186,7 @@ const QuotationDetails = () => {
       key: 'actions',
       render: (record: Product) => (
         <Button.Group>
-          <Button icon={<EditOutlined />} onClick={() => openEditProductDrawer(record)} />
+          <Button type='primary' icon={<EditOutlined />} onClick={() => openEditProductDrawer(record)} />
           <Popconfirm
             title={t('quotationDetails.deleteConfirmTitle')}
             description={t('quotationDetails.deleteConfirmDescription')}
@@ -194,7 +194,7 @@ const QuotationDetails = () => {
             okText={t('quotationDetails.confirmOkText')}
             cancelText={t('quotationDetails.confirmCancelText')}
           >
-            <Button icon={<DeleteOutlined />} loading={deleteProductMutation.isPending && deleteProductMutation.variables?.id === record._id} />
+            <Button type='primary' icon={<DeleteOutlined />} loading={deleteProductMutation.isPending && deleteProductMutation.variables?.id === record._id} />
           </Popconfirm>
         </Button.Group>
       ),
@@ -407,7 +407,6 @@ const QuotationDetails = () => {
                 <Button
                   type="primary"
                   onClick={showDrawer}
-                  className="bg-blue-500 text-white hover:bg-blue-600"
                 >
                   {t('quotationDetails.addProductButton')}
                 </Button>
@@ -450,7 +449,6 @@ const QuotationDetails = () => {
                     <Button
                       type="primary"
                       onClick={showDrawerFlow}
-                      className="bg-blue-500 text-white hover:bg-blue-600"
                     >
                       {t('incomeExpenses.addButton')}
                     </Button>

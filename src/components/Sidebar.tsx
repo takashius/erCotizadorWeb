@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { HomeOutlined, UserOutlined, ShoppingOutlined, SettingOutlined } from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
-import { getColorFromLocalStorage } from '../assets/colorPalette';
+import { getColorFromLocalStorage } from '../theme/colorPalette';
 import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {

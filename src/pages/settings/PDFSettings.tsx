@@ -96,8 +96,8 @@ const PDFSettings: React.FC = () => {
         onFinish={handleSave}
       >
         <Card title={t('PDFSettings.logoTitle')} bordered={false} className="mb-4">
-          <Row gutter={16}>
-            <Col span={8}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="logoWidth"
                 label={t('PDFSettings.width')}
@@ -106,7 +106,7 @@ const PDFSettings: React.FC = () => {
                 <InputNumber min={0} max={1000} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="logoXPosition"
                 label={t('PDFSettings.xPosition')}
@@ -115,7 +115,7 @@ const PDFSettings: React.FC = () => {
                 <InputNumber min={0} max={1000} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="logoYPosition"
                 label={t('PDFSettings.yPosition')}
@@ -128,8 +128,8 @@ const PDFSettings: React.FC = () => {
         </Card>
 
         <Card title={t('PDFSettings.watermarkTitle')} bordered={false}>
-          <Row gutter={16}>
-            <Col span={8}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="watermarkWidth"
                 label={t('PDFSettings.width')}
@@ -138,7 +138,7 @@ const PDFSettings: React.FC = () => {
                 <InputNumber min={0} max={1000} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="watermarkXPosition"
                 label={t('PDFSettings.xPosition')}
@@ -147,7 +147,7 @@ const PDFSettings: React.FC = () => {
                 <InputNumber min={0} max={1000} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item
                 name="watermarkYPosition"
                 label={t('PDFSettings.yPosition')}
@@ -173,13 +173,13 @@ const PDFSettings: React.FC = () => {
             </Upload>
             {watermark && <img src={watermark} alt="watermark" style={{ marginTop: '10px', maxWidth: '200px' }} />}
           </Form.Item>
-        </Card>
 
-        <Form.Item style={{ textAlign: 'right', marginTop: '10px' }}>
-          <Button type="primary" htmlType="submit" loading={configMutation.isPending} >
-            {t('PDFSettings.saveButton')}
-          </Button>
-        </Form.Item>
+          <Form.Item style={{ textAlign: 'right', marginTop: '10px' }}>
+            <Button type="primary" htmlType="submit" loading={configMutation.isPending} >
+              {t('PDFSettings.saveButton')}
+            </Button>
+          </Form.Item>
+        </Card>
       </Form>
     </div>
   )
