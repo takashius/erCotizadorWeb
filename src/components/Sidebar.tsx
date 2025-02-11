@@ -37,7 +37,21 @@ const Sidebar = () => {
   }, []);
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    const currentPath = location.pathname;
+
+    if (currentPath === path) {
+      return true
+    }
+
+    if (path === '/clients' && currentPath.startsWith('/client/')) {
+      return true
+    }
+
+    if (path === '/' && currentPath.startsWith('/quotation/')) {
+      return true
+    }
+
+    return false
   };
 
   const isSettingsActive = () => {
