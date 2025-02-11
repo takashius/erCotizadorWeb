@@ -10,7 +10,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
   const { token } = useAuth()
-  console.log('TOKEN', token)
   return token ? element : (
     <Navigate to="/login" />
   )
