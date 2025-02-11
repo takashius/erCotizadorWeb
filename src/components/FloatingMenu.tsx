@@ -18,23 +18,23 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick, loading }) => 
   }
 
   const menu = (
-    <Menu onClick={handleMenuClick} className="bg-blue-500 text-white">
-      <Menu.Item key="edit" icon={<EditOutlined />} className="hover:bg-blue-600">
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="edit" icon={<EditOutlined />}>
         {t('floatingMenu.edit')}
       </Menu.Item>
-      <Menu.Item key="generate-pdf" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
+      <Menu.Item key="generate-pdf" icon={<FilePdfOutlined />}>
         {t('floatingMenu.generatePdf')}
       </Menu.Item>
-      <Menu.Item key="pdf-forma-libre" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
+      <Menu.Item key="pdf-forma-libre" icon={<FilePdfOutlined />}>
         {t('floatingMenu.pdfFormat')}
       </Menu.Item>
-      <Menu.Item key="budget" icon={<FilePdfOutlined />} className="hover:bg-blue-600">
+      <Menu.Item key="budget" icon={<FilePdfOutlined />}>
         {t('floatingMenu.budget')}
       </Menu.Item>
-      <Menu.Item key="update-rate" icon={<DollarOutlined />} className="hover:bg-blue-600">
+      <Menu.Item key="update-rate" icon={<DollarOutlined />}>
         {t('floatingMenu.updateRate')}
       </Menu.Item>
-      <Menu.Item key="send-email" icon={<MailOutlined />} className="hover:bg-blue-600">
+      <Menu.Item key="send-email" icon={<MailOutlined />}>
         {t('floatingMenu.sendEmail')}
       </Menu.Item>
     </Menu>
@@ -48,7 +48,7 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({ onMenuClick, loading }) => 
         icon={<MenuOutlined />}
         size="large"
         onClick={() => setMenuVisible(!menuVisible)}
-        className="fixed top-20 right-5 bg-blue-500 text-white hover:bg-blue-600"
+        className="fixed top-20 right-5"
         loading={loading}
       />
     </Dropdown>
