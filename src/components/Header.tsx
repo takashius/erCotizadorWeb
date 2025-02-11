@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <AntHeader
-      className={`${fixedClasses} ${currentColor.bg} top-0 left-0 right-0 flex items-center justify-end p-4 shadow sm:ml-64`}
+      className={`${fixedClasses} ${currentColor.bg} top-0 left-0 right-0 flex items-center justify-end p-4 shadow sm:ml-64 dark:bg-gray-800`}
     >
       <div className="flex items-center">
         <Switch

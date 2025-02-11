@@ -88,8 +88,10 @@ const Sidebar = () => {
             <li>
               <Link
                 to="/"
-                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/') ? currentColor.menuActive : currentColor.bg
-                  } dark:hover:bg-gray-700 group`}
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} 
+                ${isActive('/') ? currentColor.menuActive : currentColor.bg} 
+                ${isActive('/') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                dark:hover:bg-gray-700 group`}
                 onClick={() => setIsSidebarOpen(false)}
               >
                 <HomeOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
@@ -99,8 +101,10 @@ const Sidebar = () => {
             <li>
               <Link
                 to="/clients"
-                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/clients') ? currentColor.menuActive : currentColor.bg
-                  } dark:hover:bg-gray-700 group`}
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} 
+                ${isActive('/clients') ? currentColor.menuActive : currentColor.bg} 
+                ${isActive('/clients') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                dark:hover:bg-gray-700 group`}
                 onClick={() => setIsSidebarOpen(false)}
               >
                 <UserOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
@@ -110,8 +114,10 @@ const Sidebar = () => {
             <li>
               <Link
                 to="/products"
-                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} ${isActive('/products') ? currentColor.menuActive : currentColor.bg
-                  } dark:hover:bg-gray-700 group`}
+                className={`flex items-center p-2 text-white rounded-lg ${currentColor.hover} 
+                ${isActive('/products') ? currentColor.menuActive : currentColor.bg} 
+                ${isActive('/products') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                dark:hover:bg-gray-700 group`}
                 onClick={() => setIsSidebarOpen(false)}
               >
                 <ShoppingOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
@@ -121,8 +127,10 @@ const Sidebar = () => {
             <li>
               <button
                 type="button"
-                className={`flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group ${currentColor.hover} ${isActive('/settings') ? currentColor.menuActive : currentColor.bg
-                  } dark:hover:bg-gray-700`}
+                className={`flex items-center w-full p-2 text-base text-white transition duration-75 rounded-lg group ${currentColor.hover} 
+                ${isActive('/settings') ? currentColor.menuActive : currentColor.bg} 
+                ${isActive('/settings') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                dark:hover:bg-gray-700`}
                 onClick={toggleConfigMenu}
               >
                 <SettingOutlined className="w-5 h-5 text-gray-300 transition duration-75 group-hover:text-white" />
@@ -151,8 +159,10 @@ const Sidebar = () => {
                 <li>
                   <Link
                     to="/settings/general"
-                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/general') ? currentColor.menuActive : currentColor.bg
-                      } dark:hover:bg-gray-700`}
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} 
+                    ${isActive('/settings/general') ? currentColor.menuActive : currentColor.bg} 
+                    ${isActive('/settings/general') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                    dark:hover:bg-gray-700`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     {t('menu.general')}
@@ -161,8 +171,10 @@ const Sidebar = () => {
                 <li>
                   <Link
                     to="/settings/pdf"
-                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/pdf') ? currentColor.menuActive : currentColor.bg
-                      } dark:hover:bg-gray-700`}
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} 
+                    ${isActive('/settings/pdf') ? currentColor.menuActive : currentColor.bg} 
+                    ${isActive('/settings/pdf') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                    dark:hover:bg-gray-700`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     {t('menu.pdf')}
@@ -171,8 +183,10 @@ const Sidebar = () => {
                 <li>
                   <Link
                     to="/settings/email"
-                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/email') ? currentColor.menuActive : currentColor.bg
-                      } dark:hover:bg-gray-700`}
+                    className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} 
+                    ${isActive('/settings/email') ? currentColor.menuActive : currentColor.bg} 
+                    ${isActive('/settings/email') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                    dark:hover:bg-gray-700`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     {t('menu.email')}
@@ -182,8 +196,10 @@ const Sidebar = () => {
                   <li>
                     <Link
                       to="/settings/company"
-                      className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} ${isActive('/settings/company') ? currentColor.menuActive : currentColor.bg
-                        } dark:hover:bg-gray-700`}
+                      className={`flex items-center w-full p-2 text-white hover:text-white transition duration-75 rounded-lg pl-11 ${currentColor.hover} 
+                      ${isActive('/settings/company') ? currentColor.menuActive : currentColor.bg}
+                      ${isActive('/settings/company') ? 'dark:bg-gray-700' : 'dark:bg-gray-800'}
+                       dark:hover:bg-gray-700`}
                       onClick={() => setIsSidebarOpen(false)}
                     >
                       {t('menu.changeCompany')}
