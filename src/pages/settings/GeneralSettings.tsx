@@ -131,7 +131,7 @@ const GeneralSettings: React.FC = () => {
                 rules={[{ required: true, message: t('GeneralSettings.validationCurrency') }]}
               >
                 <Select>
-                  <Option value="bs">Bs</Option>
+                  <Option value="Bs">Bs</Option>
                   <Option value="€">€</Option>
                   <Option value="$">$</Option>
                 </Select>
