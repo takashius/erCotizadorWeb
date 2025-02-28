@@ -1,17 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Form, Input, Button, message } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { useRecoveryOne } from '../../api/auth'
 
 const RecoverPassword: React.FC = () => {
   const { t } = useTranslation()
+  const recoveryQuery = useRecoveryOne()
+  const navigate = useNavigate()
+  const [messageApi, contextHolder] = message.useMessage()
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    recoveryQuery.mutate(values.email)
+    localStorage.setItem('email', values.email)
   }
+
+  useEffect(() => {
+    if (recoveryQuery.isSuccess) {
+      navigate('/recover-password/step2')
+    }
+  }, [recoveryQuery.isSuccess])
+
+  useEffect(() => {
+    if (recoveryQuery.error) {
+      messageApi.open({
+        type: 'error',
+        content: `${recoveryQuery.error}`,
+      })
+    }
+  }, [recoveryQuery.error, messageApi])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      {contextHolder}
       <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
         <div className="flex justify-center mb-6">
           <img
@@ -33,7 +54,7 @@ const RecoverPassword: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <div className="flex space-x-2">
-              <Button type="primary" htmlType="submit" className="w-1/2">
+              <Button type="primary" htmlType="submit" className="w-1/2" loading={recoveryQuery.isPending}>
                 {t('recoverPassword.recover')}
               </Button>
               <div className="w-1/2">

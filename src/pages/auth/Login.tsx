@@ -1,18 +1,66 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Button, Checkbox } from 'antd'
+import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
+import { useLogin } from '../../api/auth'
 
 const Login: React.FC = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const loginQuery = useLogin()
+  const [messageApi, contextHolder] = message.useMessage()
+
+  const [initialUsername, setInitialUsername] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email')
+    if (storedEmail) {
+      setInitialUsername(storedEmail)
+    }
+  }, [])
 
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    loginQuery.mutate({ email: values.username, password: values.password })
+    if (values.remember) {
+      localStorage.setItem('email', values.username)
+    } else {
+      localStorage.removeItem('email')
+    }
   }
+
+  useEffect(() => {
+    const successRegister = localStorage.getItem('registerSuccess')
+    if (successRegister === 'true') {
+      messageApi.open({
+        type: 'success',
+        content: t('register.registerSuccess'),
+      })
+      localStorage.removeItem('registerSuccess')
+    }
+  }, [])
+
+  useEffect(() => {
+    if (loginQuery.isSuccess) {
+      login(loginQuery.data)
+      navigate('/')
+    }
+  }, [loginQuery.isSuccess, login, navigate])
+
+  useEffect(() => {
+    if (loginQuery.error) {
+      messageApi.open({
+        type: 'error',
+        content: `${loginQuery.error}`,
+      })
+    }
+  }, [loginQuery.error, messageApi])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      {contextHolder}
       <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-md">
         <div className="flex justify-center mb-6">
           <img
@@ -24,7 +72,7 @@ const Login: React.FC = () => {
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-300">{t('login.title')}</h2>
         <Form
           name="login"
-          initialValues={{ remember: true }}
+          initialValues={{ remember: true, username: initialUsername }}
           onFinish={onFinish}
         >
           <Form.Item
@@ -53,7 +101,7 @@ const Login: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <div className="flex space-x-2">
-              <Button type="primary" htmlType="submit" className="w-1/2">
+              <Button type="primary" htmlType="submit" className="w-1/2" loading={loginQuery.isPending}>
                 {t('login.login')}
               </Button>
               <div className="w-1/2">
