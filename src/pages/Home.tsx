@@ -7,20 +7,6 @@ import QuotationFormModal from '../components/QuotationFormModal'
 import { Link } from 'react-router-dom'
 import { useCotizaList, useDownloadPDF, useDeleteQuotation } from '../api/cotiza'
 
-const customers: Customer[] = [
-  {
-    _id: '65f46291a14af3a4a4d7be84',
-    name: 'PRODUCCIONES AURIGA',
-    lastname: 'C.A.'
-  },
-  {
-    _id: '65f46291a14af3a4a4d7be85',
-    name: 'Cliente 2',
-    lastname: 'S.A.'
-  },
-  // Agrega más clientes según sea necesario
-]
-
 const Home: React.FC = () => {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
