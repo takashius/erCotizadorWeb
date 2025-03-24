@@ -142,8 +142,8 @@ const GeneralSettings: React.FC = () => {
                 rules={[{ required: true, message: t('GeneralSettings.validationRate') }]}
               >
                 <Select placeholder={t('GeneralSettings.ratePlaceholder')}>
-                  <Option value="usd">$</Option>
-                  <Option value="euro">€</Option>
+                  <Option value="$">$</Option>
+                  <Option value="€">€</Option>
                 </Select>
               </Form.Item>
               <Form.Item
