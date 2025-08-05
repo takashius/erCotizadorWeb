@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Form, InputNumber, Button, Upload, Row, Col, Skeleton, message } from 'antd'
+import { Card, Form, InputNumber, Button, Upload, Row, Col, Skeleton, message, Switch, Input } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useGetCompany, useSetConfig } from '../../api/company'
 import { useAuth } from '../../context/AuthContext'
 import { useUploadImage } from '../../api/auth'
+
+const { TextArea } = Input
 
 const PDFSettings: React.FC = () => {
   const { t } = useTranslation()
@@ -16,6 +18,8 @@ const PDFSettings: React.FC = () => {
   const configMutation = useSetConfig()
   const uploadImageMutation = useUploadImage()
 
+  const showFooter = Form.useWatch('showFooter', form) // Watch the value of the 'showFooter' switch
+
   useEffect(() => {
     if (config) {
       form.setFieldsValue({
@@ -25,9 +29,13 @@ const PDFSettings: React.FC = () => {
         watermarkWidth: config.configPdf?.logoAlpha.width,
         watermarkXPosition: config.configPdf?.logoAlpha.x,
         watermarkYPosition: config.configPdf?.logoAlpha.y,
-        logoAlpha: config.logo
+        logoAlpha: config.logo,
+        showFooter: config.configPdf?.footer?.show || false,
+        textFooter: config.configPdf?.footer?.text || ''
       })
-      setWatermark(config.logoAlpha)
+      if (config.logoAlpha) {
+        setWatermark(config.logoAlpha)
+      }
     }
   }, [config, form])
 
@@ -47,6 +55,10 @@ const PDFSettings: React.FC = () => {
               width: values.watermarkWidth,
               x: values.watermarkXPosition,
               y: values.watermarkYPosition
+            },
+            footer: {
+              show: values.showFooter,
+              text: values.textFooter,
             }
           }
         }
@@ -127,7 +139,7 @@ const PDFSettings: React.FC = () => {
           </Row>
         </Card>
 
-        <Card title={t('PDFSettings.watermarkTitle')} bordered={false}>
+        <Card title={t('PDFSettings.watermarkTitle')} bordered={false} className="mb-4">
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={8}>
               <Form.Item
@@ -172,6 +184,23 @@ const PDFSettings: React.FC = () => {
               <Button icon={<UploadOutlined />} loading={uploadImageMutation.isPending}>{t('PDFSettings.uploadButton')}</Button>
             </Upload>
             {watermark && <img src={watermark} alt="watermark" style={{ marginTop: '10px', maxWidth: '200px' }} />}
+          </Form.Item>
+        </Card>
+
+        <Card title={t('PDFSettings.footerTitle')} bordered={false}>
+          <Form.Item
+            name="showFooter"
+            label={t('PDFSettings.showFooter')}
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
+          <Form.Item
+            name="textFooter"
+            label={t('PDFSettings.footerText')}
+            rules={[{ required: showFooter, message: t('PDFSettings.validationFooterText') }]}
+          >
+            <TextArea rows={4} disabled={!showFooter} />
           </Form.Item>
 
           <Form.Item style={{ textAlign: 'right', marginTop: '10px' }}>

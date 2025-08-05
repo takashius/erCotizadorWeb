@@ -37,17 +37,6 @@ export interface User {
   lastname: string
 }
 
-export interface Company {
-  _id: string
-  name: string
-  email: string
-  phone: string
-  rif: string
-  address: string
-  logo: string
-  logoAlpha: string
-}
-
 export interface Address {
   title: string
   city: string
@@ -241,6 +230,12 @@ export interface ConfigPDF {
   id?: string
   logo: Logo
   logoAlpha: Logo
+  footer?: FooterPdf
+}
+
+export interface FooterPdf {
+  show: boolean
+  text: string
 }
 
 export interface Correlative {

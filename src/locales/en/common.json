@@ -266,7 +266,11 @@
     "saveButton": "Save",
     "validationWidth": "Please enter the width",
     "validationXPosition": "Please enter the X position",
-    "validationYPosition": "Please enter the Y position"
+    "validationYPosition": "Please enter the Y position",
+    "footerTitle": "Footer Settings",
+    "showFooter": "Show Footer",
+    "footerText": "Footer Text",
+    "validationFooterText": "Please enter the footer text"
   },
   "EmailSettings": {
     "bannerTitle": "Banner",
