@@ -206,7 +206,7 @@ const Sidebar = () => {
                     {t('menu.email')}
                   </Link>
                 </li>
-                {user?._id === '64fbe61071af3ad203dba8b8' && (
+                {(user?._id === '64fbe61071af3ad203dba8b8' || user?._id === '65e8688766bf56f2228cbe83') && (
                   <li>
                     <Link
                       to="/settings/company"
