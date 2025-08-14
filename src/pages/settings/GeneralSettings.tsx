@@ -36,7 +36,7 @@ const GeneralSettings: React.FC = () => {
         iva: config.iva,
         logo: config.logo,
       });
-      setLogo(config.logo)
+      setLogo(config?.logo ? config.logo : null)
     }
   }, [config, form])
 
