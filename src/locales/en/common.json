@@ -235,6 +235,7 @@
   },
   "GeneralSettings": {
     "title": "General Settings",
+    "name": "Name",
     "iva": "VAT (%)",
     "address": "Address",
     "description": "Description",
@@ -253,7 +254,8 @@
     "validationPhone": "Please enter the phone",
     "validationRif": "Please enter the RIF",
     "validationCurrency": "Please select the currency",
-    "validationRate": "Please select the rate"
+    "validationRate": "Please select the rate",
+    "validationName": "Please enter the company name"
   },
   "PDFSettings": {
     "logoTitle": "Logo",

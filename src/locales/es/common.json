@@ -235,6 +235,7 @@
   },
   "GeneralSettings": {
     "title": "Configuración General",
+    "name": "Nombre",
     "iva": "IVA (%)",
     "address": "Dirección",
     "description": "Descripción",
@@ -253,7 +254,8 @@
     "validationPhone": "Por favor ingrese el teléfono",
     "validationRif": "Por favor ingrese el RIF",
     "validationCurrency": "Por favor seleccione la moneda",
-    "validationRate": "Por favor seleccione la tasa"
+    "validationRate": "Por favor seleccione la tasa",
+    "validationName": "Por favor ingrese el nombre de la empresa"
   },
   "PDFSettings": {
     "logoTitle": "Logo",

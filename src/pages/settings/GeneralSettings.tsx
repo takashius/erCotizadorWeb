@@ -26,6 +26,7 @@ const GeneralSettings: React.FC = () => {
   useEffect(() => {
     if (config) {
       form.setFieldsValue({
+        name: config.name,
         address: config.address,
         description: config.description,
         phone: config.phone,
@@ -95,6 +96,13 @@ const GeneralSettings: React.FC = () => {
         <Form form={form} layout="vertical" name="general_settings_form" onFinish={handleSave}>
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={12}>
+              <Form.Item
+                name="name"
+                label={t('GeneralSettings.name')}
+                rules={[{ required: true, message: t('GeneralSettings.validationName') }]}
+              >
+                <Input />
+              </Form.Item>
               <Form.Item
                 name="address"
                 label={t('GeneralSettings.address')}
