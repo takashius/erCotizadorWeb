@@ -79,7 +79,8 @@
     "deleteConfirmTitle": "Eliminar la cotización",
     "deleteConfirmDescription": "¿Estás seguro de eliminar esta cotización?",
     "confirmOkText": "Sí",
-    "confirmCancelText": "No"
+    "confirmCancelText": "No",
+    "number": "Número"
   },
   "quotationFormModal": {
     "title": "Crear Cotización",

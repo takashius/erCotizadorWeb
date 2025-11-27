@@ -79,7 +79,8 @@
     "deleteConfirmTitle": "Delete the quotation",
     "deleteConfirmDescription": "Are you sure to delete this quotation?",
     "confirmOkText": "Yes",
-    "confirmCancelText": "No"
+    "confirmCancelText": "No",
+    "number": "Number"
   },
   "quotationFormModal": {
     "title": "Create Quotation",

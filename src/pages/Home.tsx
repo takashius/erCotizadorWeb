@@ -70,6 +70,11 @@ const Home: React.FC = () => {
       key: 'title',
     },
     {
+      title: t('home.number'),
+      dataIndex: 'number',
+      key: 'number',
+    },
+    {
       title: t('home.client'),
       dataIndex: 'customer',
       key: 'customer',
