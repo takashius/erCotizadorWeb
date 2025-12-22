@@ -36,7 +36,8 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
       .then(values => {
         const formattedValues = {
           ...values,
-          date: values.date.format('DD/MM/YYYY')
+          date: values.date.format('DD/MM/YYYY'),
+          rate: values.rate ? Number(values.rate) : undefined
         }
         if (initialValues && initialValues._id) {
           updateQuotationMutation.mutate({ ...formattedValues, id: initialValues._id }, {
@@ -120,6 +121,12 @@ const QuotationFormModal: React.FC<QuotationFormModalProps> = ({ visible, onCanc
                 </Select.Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            label={t('quotationFormModal.rateLabel')}
+            name="rate"
+          >
+            <Input type="number" step="any" placeholder={t('quotationFormModal.ratePlaceholder')} />
           </Form.Item>
         </Form>
       )}

@@ -94,6 +94,8 @@
     "datePlaceholder": "Select the date",
     "customerLabel": "Customer",
     "customerPlaceholder": "Select Customer",
+    "rateLabel": "Exchange Rate",
+    "ratePlaceholder": "Enter the exchange rate (optional)",
     "okButton": "Create",
     "cancelButton": "Cancel",
     "titleRequired": "Please enter the title",

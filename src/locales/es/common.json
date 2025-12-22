@@ -94,6 +94,8 @@
     "datePlaceholder": "Seleccione la fecha",
     "customerLabel": "Cliente",
     "customerPlaceholder": "Seleccionar Cliente",
+    "rateLabel": "Tasa de Cambio",
+    "ratePlaceholder": "Ingrese la tasa de cambio (opcional)",
     "okButton": "Crear",
     "cancelButton": "Cancelar",
     "titleRequired": "Por favor ingrese el título",

@@ -135,6 +135,7 @@ const updateQuotation = async (updatedQuotation: {
   number: number
   date: string
   customer: string
+  rate?: number
 }) => {
   const response = await ERDEAxios.patch(`/cotiza`, updatedQuotation)
   return response.data
@@ -150,6 +151,7 @@ export const useUpdateQuotation = (): UseMutationResult<
     number: number
     date: string
     customer: string
+    rate?: number
   },
   unknown
 > => {
@@ -163,6 +165,7 @@ export const useUpdateQuotation = (): UseMutationResult<
       number: number
       date: string
       customer: string
+      rate?: number
     },
     unknown
   >({

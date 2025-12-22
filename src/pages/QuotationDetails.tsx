@@ -173,7 +173,7 @@ const QuotationDetails = () => {
     {
       title: t('productForm.totalPrice'),
       key: 'totalPrice',
-      render: (_: any, product: Product) => `$${(product.price * product.amount).toFixed(2)}`,
+      render: (_: unknown, product: Product) => `$${(product.price * product.amount).toFixed(2)}`,
     },
     {
       title: t('productForm.tax'),
