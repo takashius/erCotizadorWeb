@@ -273,6 +273,10 @@
     "validationXPosition": "Please enter the X position",
     "validationYPosition": "Please enter the Y position",
     "footerTitle": "Footer Settings",
+    "language": "PDF Language",
+    "languageSpanish": "Spanish",
+    "languageEnglish": "English",
+    "validationLanguage": "Please select the language",
     "showFooter": "Show Footer",
     "footerText": "Footer Text",
     "validationFooterText": "Please enter the footer text"

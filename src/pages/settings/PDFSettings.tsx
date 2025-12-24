@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Form, InputNumber, Button, Upload, Row, Col, Skeleton, message, Switch, Input } from 'antd'
+import { Card, Form, InputNumber, Button, Upload, Row, Col, Skeleton, message, Switch, Input, Select } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useGetCompany, useSetConfig } from '../../api/company'
@@ -30,6 +30,7 @@ const PDFSettings: React.FC = () => {
         watermarkXPosition: config.configPdf?.logoAlpha.x,
         watermarkYPosition: config.configPdf?.logoAlpha.y,
         logoAlpha: config.logo,
+        language: config.configPdf?.language || 'es',
         showFooter: config.configPdf?.footer?.show || false,
         textFooter: config.configPdf?.footer?.text || ''
       })
@@ -56,6 +57,7 @@ const PDFSettings: React.FC = () => {
               x: values.watermarkXPosition,
               y: values.watermarkYPosition
             },
+            language: values.language || 'es',
             footer: {
               show: values.showFooter,
               text: values.textFooter,
@@ -188,6 +190,16 @@ const PDFSettings: React.FC = () => {
         </Card>
 
         <Card title={t('PDFSettings.footerTitle')} bordered={false}>
+          <Form.Item
+            name="language"
+            label={t('PDFSettings.language')}
+            rules={[{ required: true, message: t('PDFSettings.validationLanguage') }]}
+          >
+            <Select>
+              <Select.Option value="es">{t('PDFSettings.languageSpanish')}</Select.Option>
+              <Select.Option value="en">{t('PDFSettings.languageEnglish')}</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item
             name="showFooter"
             label={t('PDFSettings.showFooter')}

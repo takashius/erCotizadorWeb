@@ -273,6 +273,10 @@
     "validationXPosition": "Por favor ingrese la posición X",
     "validationYPosition": "Por favor ingrese la posición Y",
     "footerTitle": "Configuración del pie de página",
+    "language": "Idioma del PDF",
+    "languageSpanish": "Español",
+    "languageEnglish": "Inglés",
+    "validationLanguage": "Por favor seleccione el idioma",
     "showFooter": "Mostrar pie de página",
     "footerText": "Texto del pie de página",
     "validationFooterText": "Por favor, introduce el texto del pie de página"

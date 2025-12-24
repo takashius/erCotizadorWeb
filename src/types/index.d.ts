@@ -230,6 +230,7 @@ export interface ConfigPDF {
   id?: string
   logo: Logo
   logoAlpha: Logo
+  language?: 'en' | 'es'
   footer?: FooterPdf
 }
 
